@@ -1,0 +1,16 @@
+package com.dfh.support.activity.support;
+
+import android.os.Bundle;
+
+import com.dfh.support.R;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class BuyingShopsListActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_buying_shops_list);
+    }
+}

@@ -2,9 +2,23 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/vp_banner"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="20dp"
+        android:src="@color/colorPrimary"/>
+    <ListView
+        android:id="@+id/lv_advertisement"
+        android:layout_width="match_parent"
+        android:divider="#00000000"
+        android:dividerHeight="20dp"
+        android:background="@color/colorPrimaryDark"
+        android:layout_height="match_parent"/>
     <TextView
         android:id="@+id/recommend_info"
         android:layout_width="match_parent"
+        android:visibility="gone"
         android:layout_height="match_parent"
         android:text="1111111"/>
 </LinearLayout>

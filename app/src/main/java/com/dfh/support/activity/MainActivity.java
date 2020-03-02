@@ -1,23 +1,32 @@
-package com.dfh.support;
+package com.dfh.support.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 
-import com.dfh.support.fragment.PolicyFragment;
-import com.dfh.support.fragment.RecommendFragment;
-import com.dfh.support.fragment.SupportFragment;
-import com.umeng.message.PushAgent;
+import com.dfh.support.R;
+import com.dfh.support.activity.fragment.*;
+import com.dfh.support.activity.fragment.RecommendFragment;
+import com.dfh.support.activity.fragment.SupportFragment;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getSupportActionBar().hide();
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
-        PushAgent.getInstance(this).onAppStart();
-        showSupportFragment();
+        showRecommendFragment();
     }
 
     @Override
@@ -34,9 +43,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.main_nav_support:
                 showSupportFragment();
                 break;
-            case R.id.main_nav_policy:
-                showPolicyFragment();
-                break;
         }
     }
 
@@ -48,7 +54,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         getSupportFragmentManager().beginTransaction().replace(R.id.main_container, SupportFragment.newInstance()).commit();
     }
 
-    private void showPolicyFragment(){
-        getSupportFragmentManager().beginTransaction().replace(R.id.main_container, PolicyFragment.newInstance()).commit();
-    }
 }

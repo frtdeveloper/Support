@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/rl_advertisement_top"
+                android:layout_width="match_parent"
+                android:layout_height="150dp" >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_alignParentBottom="true">
+                    <TextView
+                        android:id="@+id/tv_advertisement_top_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:text="手机分身/两个系统分身双重加密，切换工作生活游刃有余"/>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        <ImageView
+                        />
+                </LinearLayout>
+            </RelativeLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

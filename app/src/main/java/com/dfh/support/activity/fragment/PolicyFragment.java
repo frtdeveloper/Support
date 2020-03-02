@@ -1,4 +1,4 @@
-package com.dfh.support.fragment;
+package com.dfh.support.activity.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,18 +13,17 @@ import androidx.fragment.app.Fragment;
 import com.dfh.support.R;
 import com.dfh.support.utils.LogUtil;
 
-public class SupportFragment extends Fragment {
-
+public class PolicyFragment extends Fragment {
     private View mFragmentView, mFragmentInfo;
 
-    private static SupportFragment s_instance;
+    private static PolicyFragment s_instance;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        LogUtil.printFragmentLog("SupportFragment::onCreateView================");
-        mFragmentView = inflater.inflate(R.layout.support_layout, null);
-        mFragmentInfo = mFragmentView.findViewById(R.id.support_info);
+        LogUtil.printFragmentLog("PolicyFragment::onCreateView================");
+        mFragmentView = inflater.inflate(R.layout.policy_layout, null);
+        mFragmentInfo = mFragmentView.findViewById(R.id.policy_info);
         Toast.makeText(getActivity(), String.valueOf(mFragmentInfo.getId()), Toast.LENGTH_LONG).show();
         return mFragmentView;
     }
@@ -32,18 +31,18 @@ public class SupportFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        LogUtil.printFragmentLog("SupportFragment::onResume================");
+        LogUtil.printFragmentLog("PolicyFragment::onResume================");
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        LogUtil.printFragmentLog("SupportFragment::onDetach================");
+        LogUtil.printFragmentLog("PolicyFragment::onDetach================");
     }
 
-    public static SupportFragment newInstance(){
+    public static PolicyFragment newInstance(){
         if (null == s_instance)
-            s_instance = new SupportFragment();
+            s_instance = new PolicyFragment();
 
         return s_instance;
     }

@@ -1,4 +1,4 @@
-package com.dfh.support.fragment;
+package com.dfh.support.activity.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,17 +13,18 @@ import androidx.fragment.app.Fragment;
 import com.dfh.support.R;
 import com.dfh.support.utils.LogUtil;
 
-public class PolicyFragment extends Fragment {
+public class SupportFragment extends Fragment {
+
     private View mFragmentView, mFragmentInfo;
 
-    private static PolicyFragment s_instance;
+    private static SupportFragment s_instance;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        LogUtil.printFragmentLog("PolicyFragment::onCreateView================");
-        mFragmentView = inflater.inflate(R.layout.policy_layout, null);
-        mFragmentInfo = mFragmentView.findViewById(R.id.policy_info);
+        LogUtil.printFragmentLog("SupportFragment::onCreateView================");
+        mFragmentView = inflater.inflate(R.layout.support_layout, null);
+        mFragmentInfo = mFragmentView.findViewById(R.id.support_info);
         Toast.makeText(getActivity(), String.valueOf(mFragmentInfo.getId()), Toast.LENGTH_LONG).show();
         return mFragmentView;
     }
@@ -31,18 +32,18 @@ public class PolicyFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        LogUtil.printFragmentLog("PolicyFragment::onResume================");
+        LogUtil.printFragmentLog("SupportFragment::onResume================");
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        LogUtil.printFragmentLog("PolicyFragment::onDetach================");
+        LogUtil.printFragmentLog("SupportFragment::onDetach================");
     }
 
-    public static PolicyFragment newInstance(){
+    public static SupportFragment newInstance(){
         if (null == s_instance)
-            s_instance = new PolicyFragment();
+            s_instance = new SupportFragment();
 
         return s_instance;
     }

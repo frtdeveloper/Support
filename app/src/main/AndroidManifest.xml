@@ -23,14 +23,25 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".activity.MainActivity">
+        </activity>
+
+        <activity android:name=".activity.support.DebuggingDetailActivity"></activity>
+        <activity android:name=".activity.support.DebuggingListActivity" />
+        <activity android:name=".activity.support.SparePartsDetailActivity" />
+        <activity android:name=".activity.support.SparePartsListActivity" />
+        <activity android:name=".activity.support.ServiceDetailActivity" />
+        <activity android:name=".activity.support.ServiceListActivity" />
+        <activity android:name=".activity.support.BuyingShopsDetailActivity" />
+        <activity android:name=".activity.support.BuyingShopsListActivity" />
+        <activity android:name=".activity.WebViewActivity" />
+        <activity android:name=".activity.LoadingActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <receiver
             android:name=".compose.UmentBroadcastReceiver">
             <intent-filter>
