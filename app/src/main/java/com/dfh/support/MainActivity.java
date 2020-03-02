@@ -8,6 +8,7 @@ import android.view.View;
 import com.dfh.support.fragment.PolicyFragment;
 import com.dfh.support.fragment.RecommendFragment;
 import com.dfh.support.fragment.SupportFragment;
+import com.umeng.message.PushAgent;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -15,6 +16,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        PushAgent.getInstance(this).onAppStart();
         showSupportFragment();
     }
 
