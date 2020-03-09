@@ -1,9 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.service.SparePartsDetailActivity">
+    android:orientation="vertical"
+    tools:context=".activity.support.SparePartsDetailActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/main_bottom"
+                android:layout_alignParentBottom="true">
+
+                <ImageView
+                    android:id="@+id/iv_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dp"
+                    android:src="@mipmap/img_back" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="16sp"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/iv_back"
+                    android:textColor="@color/ad_item_title_text"
+                    android:text="@string/spare_parts_detail"
+                    android:layout_marginLeft="20dp"
+                    android:layout_height="wrap_content"/>
+
+                <ImageView
+                    android:id="@+id/iv_contact_us"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="20dp"
+                    android:src="@mipmap/img_contact_us" />
+            </RelativeLayout>
+        </RelativeLayout>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
+    android:orientation="vertical">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp">
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/ad_item_title_text"
+                android:textSize="18sp"
+                android:text="电池"/>
+            <TextView
+                android:id="@+id/tv_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/service_list_item_distance"
+                android:textSize="16sp"
+                android:layout_alignParentRight="true"
+                android:text="￥99.99"/>
+        </RelativeLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="25dp"
+            android:text="备件规格"
+            android:textColor="@color/service_list_item_title"
+            android:textSize="16sp"
+            android:layout_height="wrap_content"/>
+    <TextView
+        android:id="@+id/tv_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="说明文本说明文本说明文本说明文本说明文本说明文本说明文本说明文本说明文本说明文本说明
+        文本说明文本说明文本说明文本说明文本说明文本说明文本说明文本说明文本"
+        android:layout_marginTop="15dp"
+        android:textColor="@color/service_list_item_title"
+        android:textSize="14sp"/>
+        <com.dfh.support.activity.widget.ChildrenListView
+            android:id="@+id/lv_spare_parts_pic_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="@color/white"
+            android:dividerHeight="8dp"
+            android:layout_marginTop="15dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/ad_item_title_text"
+            android:textSize="18sp"
+            android:layout_marginTop="30dp"
+            android:text="@string/special_reminder"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/tv_remark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="特别提醒XXXXXXXXXXXXXXXXXXXXXXXXX"
+            android:layout_marginTop="15dp"
+            android:textColor="@color/history_item_text"
+            android:textSize="16sp"/>
+    </LinearLayout>
+    </LinearLayout>
+</ScrollView>

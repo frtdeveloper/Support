@@ -10,6 +10,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.dfh.support.R;
+import com.dfh.support.utils.ActionBarUtil;
 import com.dfh.support.utils.LogUtil;
 import com.dfh.support.utils.PermissionUtil;
 
@@ -40,9 +41,7 @@ public class LoadingActivity extends AppCompatActivity implements PermissionUtil
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        ActionBarUtil.transparencyBar(this);
         getSupportActionBar().hide();
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_loading);

@@ -1,5 +1,6 @@
 package com.dfh.support.activity.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -17,8 +18,10 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.dfh.support.R;
+import com.dfh.support.activity.WebViewActivity;
 import com.dfh.support.activity.adapter.AdvertisementListAdapter;
 import com.dfh.support.activity.adapter.BannerPagerAdapter;
+import com.dfh.support.activity.widget.ChildrenListView;
 import com.dfh.support.anmi.ZoomOutPageTransformer;
 import com.dfh.support.utils.LogUtil;
 
@@ -26,9 +29,9 @@ import java.util.ArrayList;
 
 public class RecommendFragment extends Fragment {
 
-    private View mFragmentView, mFragmentInfo;
+    private View mFragmentView;
     private ViewPager mVpBanner;
-    private ListView mLvAdvertisement;//lv_advertisement
+    private ChildrenListView mLvAdvertisement;//lv_advertisement
     private AdvertisementListAdapter mAdvertisementListAdapter;
     private ArrayList<String> mAdvertisementList;
     private ArrayList<View> mViewList;
@@ -64,8 +67,6 @@ public class RecommendFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         LogUtil.printFragmentLog("RecommendFragment::onCreateView================");
         mFragmentView = inflater.inflate(R.layout.recommend_layout, null);
-        mFragmentInfo = mFragmentView.findViewById(R.id.recommend_info);
-        Toast.makeText(getActivity(), String.valueOf(mFragmentInfo.getId()), Toast.LENGTH_LONG).show();
         initViewPage();
         initView();
         return mFragmentView;
@@ -94,22 +95,20 @@ public class RecommendFragment extends Fragment {
         mVpBanner = (ViewPager) mFragmentView.findViewById(R.id.vp_banner);
         mVpBanner.setPageTransformer(true,new ZoomOutPageTransformer());
         LayoutInflater inflater = getLayoutInflater();
-        View view1 = inflater.inflate(R.layout.banner_layout, null);
-        ImageView ivBanner1 = (ImageView) view1.findViewById(R.id.iv_banner);
-        ivBanner1.setImageResource(R.mipmap.bg_loading);
-
-        View view2 = inflater.inflate(R.layout.banner_layout, null);
-        ImageView ivBanner2 = (ImageView) view2.findViewById(R.id.iv_banner);
-        ivBanner2.setImageResource(R.mipmap.ic_launcher);
-
-        View view3 = inflater.inflate(R.layout.banner_layout, null);
-        ImageView ivBanner3 = (ImageView) view3.findViewById(R.id.iv_banner);
-        ivBanner3.setImageResource(R.mipmap.ic_launcher_round);
-
         mViewList = new ArrayList<View>();
-        mViewList.add(view1);
-        mViewList.add(view2);
-        mViewList.add(view3);
+        for(int i = 0 ;i<3;i++) {
+            View view = inflater.inflate(R.layout.banner_layout, null);
+            ImageView ivBanner = (ImageView) view.findViewById(R.id.iv_banner);
+            ivBanner.setImageResource(R.mipmap.show_banner);
+            ivBanner.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getActivity(), WebViewActivity.class);
+                    getActivity().startActivity(intent);
+                }
+            });
+            mViewList.add(view);
+        }
         mBannerPagerAdapter = new BannerPagerAdapter(mViewList);
         mVpBanner.setAdapter(mBannerPagerAdapter);
         mHandler.sendEmptyMessageDelayed(BANNER_START_SLITHER,slither_time);
@@ -124,7 +123,7 @@ public class RecommendFragment extends Fragment {
         mAdvertisementList.add("");
         mAdvertisementList.add("");
         mAdvertisementList.add("");
-        mLvAdvertisement = (ListView) mFragmentView.findViewById(R.id.lv_advertisement);
+        mLvAdvertisement = (ChildrenListView) mFragmentView.findViewById(R.id.lv_advertisement);
         mAdvertisementListAdapter = new AdvertisementListAdapter(getActivity(),mAdvertisementList);
         mLvAdvertisement.setAdapter(mAdvertisementListAdapter);
     }

@@ -31,10 +31,11 @@ public class SupportApplication extends Application implements IUmengRegisterCal
     @Override
     public void onCreate() {
         super.onCreate();
+        UMConfigure.init(this, "5e5bc092570df3a9fc0000bb", "Umeng",
+                UMConfigure.DEVICE_TYPE_PHONE, "26c496679dab7728c41b76620e90faf9");//nojtgbprhi2w5yoyludz2vplramuqktf
         mInstance = this;
         context = getApplicationContext();
         initImageLoader(this);
-        UMConfigure.init(this, "", "Umeng", UMConfigure.DEVICE_TYPE_PHONE, "");
         mPushAgent = PushAgent.getInstance(this);
         mPushAgent.register(this);
 

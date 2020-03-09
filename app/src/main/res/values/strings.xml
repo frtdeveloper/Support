@@ -3,6 +3,31 @@
     <string name="main_nav_recommend">推荐</string>
     <string name="main_nav_support">服务</string>
     <string name="main_nav_policy">政策</string>
+    <string name="common_support">服务</string>
+    <string name="common_search">搜索</string>
+    <string name="your_personal_cell_phone_assistant">你的私人手机助理</string>
+
+    <string name="spare_parts_management">备件管理</string>
+    <string name="contact_us">联系我们</string>
+    <string name="common_troubleshooting">故障排查</string>
+    <string name="common_more">更多</string>
+    <string name="after_sale_service">售后服务</string>
+    <string name="change_of_purchase_service">换购服务</string>
+    <string name="after_sale_service_detail">售后服务详情</string>
+    <string name="change_of_purchase_service_detail">换购服务详情</string>
+    <string name="service_time">服务时间</string>
+    <string name="after_sales_policy">售后政策</string>
+    <string name="service_content">服务内容</string>
+    <string name="special_reminder">特殊提醒</string>
+    <string name="about_us">关于我们</string>
+    <string name="about_company">公司简介</string>
+    <string name="selection_of_equipment">选取设备</string>
+    <string name="spare_parts_detail">备件详情</string>
+    <string name="your_personal_phone_assistant">您的私人手机助理</string>
+    <string name="search_history">搜索历史</string>
+    <string name="common_clear">清除</string>
+
+
     <string name="network_connection_failed">网络连接失败</string>
     <string name="failed_to_obtain_network_information">获取网络信息失败</string>
 </resources>

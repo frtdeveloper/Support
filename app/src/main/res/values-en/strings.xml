@@ -3,6 +3,41 @@
     <string name="main_nav_recommend">Recommend</string>
     <string name="main_nav_support">Support</string>
     <string name="main_nav_policy">Policy</string>
+    <string name="common_support">Support</string>
+    <string name="common_search">Search</string>
+    <string name="your_personal_cell_phone_assistant">Your personal cell phone assistant</string>
+
+    <string name="spare_parts_management">Spare parts management</string>
+    <string name="contact_us">Contact us</string>
+    <string name="common_troubleshooting">Troubleshooting</string>
+    <string name="common_more">More</string>
+    <string name="after_sale_service">After sale service</string>
+    <string name="change_of_purchase_service">Change of purchase service</string>
+    <string name="after_sale_service_detail">After sale service detail</string>
+    <string name="change_of_purchase_service_detail">Change of purchase service detail</string>
+    <string name="service_time">Service time</string>
+    <string name="after_sales_policy">After sale policy</string>
+    <string name="service_content">Service content</string>
+    <string name="special_reminder">Special reminder</string>
+    <string name="about_us">About us</string>
+    <string name="about_company">About company</string>
+    <string name="selection_of_equipment">Selection of equipment</string>
+    <string name="spare_parts_detail">Spare parts detail</string>
+    <string name="your_personal_phone_assistant">Your Personal Phone Assistant</string>
+    <string name="search_history">Search history</string>
+    <string name="common_clear">Clear</string>
+
+
+
+
+
+
+
+
+
+
+
+
     <string name="network_connection_failed">网络连接失败</string>
     <string name="failed_to_obtain_network_information">获取网络信息失败</string>
 </resources>

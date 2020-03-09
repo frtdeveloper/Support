@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#03DAC5</color>
+    <color name="colorPrimary">#FFFFFF</color>
+    <color name="colorPrimaryDark">#FFFFFF</color>
+    <color name="colorAccent">#FFFFFF</color>
 
     <color name="white">#FFFFFF</color>
     <!-- 白色 -->
@@ -435,4 +435,14 @@
 
     <color name="black">#000000</color>
     <!-- 黑色 -->
+    <color name="loading_hint_text">#666666</color>
+    <color name="main_bottom">#F2F2F2</color>
+    <color name="ad_item_title_text">#1A1A1A</color>
+    <color name="ad_item_hint_text">#999999</color>
+    <color name="service_list_item_title">#4D4D4D</color>
+    <color name="service_list_item_distance">#2A9EF7</color>
+    <color name="history_item_text">#333333</color>
+    <color name="item_line">#E6E6E6</color>
+    <color name="remark_color">#808080</color>
+    <color name="view_line">#F7F7F7</color>
 </resources>
