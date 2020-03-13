@@ -29,6 +29,11 @@
     <string name="is_it_helpful_to_you">Is it helpful to you?</string>
     <string name="thank_you_for_your_feedback">Thank you for your feedback！</string>
 
+    <string name="common_name">Name：</string>
+    <string name="common_value">￥</string>
+    <string name="common_specs">Specs：</string>
+    <string name="common_explain">Explain：</string>
+    <string name="common_remark">Remark：</string>
 
 
 

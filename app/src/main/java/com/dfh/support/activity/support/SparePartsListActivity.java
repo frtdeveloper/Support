@@ -113,6 +113,7 @@ public class SparePartsListActivity extends AppCompatActivity implements View.On
         });
         mIvContactUs.setOnClickListener(this);
         mIvBack.setOnClickListener(this);
+        mIvPic.setOnClickListener(this);
     }
 
     private String image = "";
@@ -131,6 +132,9 @@ public class SparePartsListActivity extends AppCompatActivity implements View.On
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.iv_pic:
+                finish();
+                break;
             case R.id.iv_back:
                 finish();
                 break;

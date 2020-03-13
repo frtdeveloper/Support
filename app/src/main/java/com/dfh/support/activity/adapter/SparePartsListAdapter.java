@@ -64,11 +64,11 @@ public class SparePartsListAdapter extends BaseAdapter {
             holder = (HolderView) v.getTag();
         }
         PartsData partsData = mList.get(position);
-        holder.tvName.setText(partsData.getName());
-        holder.tvValue.setText(partsData.getPpPrice());
-        holder.tvContent.setText(partsData.getSpecs());
-        holder.tvText.setText(partsData.getIntro());
-        holder.tvRemark.setText(partsData.getTips());
+        holder.tvName.setText(cxt.getResources().getString(R.string.common_name)+partsData.getName());
+        holder.tvValue.setText(cxt.getResources().getString(R.string.common_value)+partsData.getPpPrice());
+        holder.tvContent.setText(cxt.getResources().getString(R.string.common_specs)+partsData.getSpecs());
+        holder.tvText.setText(cxt.getResources().getString(R.string.common_explain)+partsData.getIntro());
+        holder.tvRemark.setText(cxt.getResources().getString(R.string.common_remark)+partsData.getTips());
         ImageLoader.getInstance().displayImage(partsData.getIcon(),holder.ivPic);
         return v;
     }

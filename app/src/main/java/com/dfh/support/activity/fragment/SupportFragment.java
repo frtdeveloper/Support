@@ -309,7 +309,7 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
             case R.id.rl_after_sales_policy:
                 intent = new Intent(getActivity(), TitleWebViewActivity.class);
                 intent.putExtra("title", mPolicyData.getTitle());
-                intent.putExtra("url", mPolicyData.getUrl());
+                intent.putExtra("url", HttpConfig.GetHttpPolicyAdress()+mPolicyData.getUrl());
                 intent.putExtra("id", mPolicyData.getId());
                 startActivity(intent);
                 break;
