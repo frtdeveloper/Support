@@ -98,7 +98,7 @@
                 android:background="@null"/>
         </LinearLayout>
     </LinearLayout>
-    <ListView
+    <com.dfh.support.activity.widget.LoadListView
         android:id="@+id/lv_buying_shops_list"
         android:layout_width="match_parent"
         android:layout_marginLeft="20dp"

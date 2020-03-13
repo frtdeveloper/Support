@@ -31,6 +31,8 @@ public class TitleWebViewActivity extends AppCompatActivity implements View.OnCl
     private WebView mWebView;
     private WebSettings mWebSettings;
     private String baseUrl = "http://218.28.95.84:3000";
+    private String id = "";
+    @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +51,8 @@ public class TitleWebViewActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void initView() {
+        id = getIntent().getStringExtra("id");
+        if(getIntent().hasExtra("url")) baseUrl = getIntent().getStringExtra("url");
         mTitle = getIntent().getStringExtra("title");
         mWebView = (WebView) findViewById(R.id.wv_content);
         mIvBack = (ImageView) findViewById(R.id.iv_back);

@@ -5,24 +5,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.TextView;
 
 import com.dfh.support.R;
+import com.dfh.support.entity.ServeData;
 
 import java.util.ArrayList;
 
 
 public class BuyingShopsListAdapter extends BaseAdapter {
-    private ArrayList<String> mList = new ArrayList<String>();
+    private ArrayList<ServeData> mList = new ArrayList<ServeData>();
     protected LayoutInflater mInflater;
     protected Context cxt;
 
-    public BuyingShopsListAdapter(Context context, ArrayList<String> list) {
+    public BuyingShopsListAdapter(Context context, ArrayList<ServeData> list) {
         cxt = context;
         mInflater = LayoutInflater.from(this.cxt);
         mList = list;
     }
 
-    public void setList(ArrayList<String> list) {
+    public void setList(ArrayList<ServeData> list) {
         mList = list;
         notifyDataSetChanged();
     }
@@ -34,7 +36,7 @@ public class BuyingShopsListAdapter extends BaseAdapter {
     }
 
     @Override
-    public String getItem(int position) {
+    public ServeData getItem(int position) {
         return mList.get(position);
     }
 
@@ -49,19 +51,31 @@ public class BuyingShopsListAdapter extends BaseAdapter {
         if (null == v) {
             v = mInflater.inflate(R.layout.buying_shops_list_adapter, null);
             holder = new HolderView();
-//            holder.tvContent = (TextView) v.findViewById(R.id.tv_content_title);
-//            holder.vLine = (View) v.findViewById(R.id.v_chooes_line);
+            holder.tvName = (TextView) v.findViewById(R.id.tv_name);
+            holder.tvDistance = (TextView) v.findViewById(R.id.tv_distance);
+            holder.tvAddress = (TextView) v.findViewById(R.id.tv_address);
+            holder.tvTime = (TextView) v.findViewById(R.id.tv_time);
+            holder.tvPhone = (TextView) v.findViewById(R.id.tv_phone);
             v.setTag(holder);
         } else {
             holder = (HolderView) v.getTag();
         }
+        ServeData serveData = mList.get(position);
+        holder.tvName.setText(serveData.getName());
+        holder.tvDistance.setText(serveData.getDistance());
+        holder.tvAddress.setText(serveData.getAddress());
+        holder.tvTime.setText(serveData.getTime());
+        holder.tvPhone.setText(serveData.getTel());
         return v;
     }
 
 
     public class HolderView {
-//        private TextView tvContent;
-//        private View vLine;
+        private TextView tvName;
+        private TextView tvDistance;
+        private TextView tvAddress;
+        private TextView tvTime;
+        private TextView tvPhone;
     }
 }
 

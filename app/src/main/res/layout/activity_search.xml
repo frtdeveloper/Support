@@ -41,6 +41,8 @@
                 android:layout_marginLeft="10dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="10dp"
+                android:imeOptions="actionSearch"
+                android:singleLine="true"
                 android:hint="@string/common_search"
                 android:textSize="14sp"
                 android:textColor="@color/ad_item_title_text"

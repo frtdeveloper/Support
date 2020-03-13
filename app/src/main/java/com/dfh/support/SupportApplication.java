@@ -1,10 +1,20 @@
 package com.dfh.support;
 
+import android.Manifest;
 import android.app.Application;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
+import android.os.AsyncTask;
 
+import com.dfh.support.activity.support.ServiceListActivity;
 import com.dfh.support.compose.UmentBroadcastReceiver;
+import com.dfh.support.http.HttpJsonSend;
 import com.dfh.support.utils.LogUtil;
+import com.dfh.support.utils.ToastUtils;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -16,6 +26,11 @@ import com.umeng.message.PushAgent;
 import com.umeng.message.UmengMessageHandler;
 import com.umeng.message.entity.UMessage;
 
+import java.io.IOException;
+import java.util.List;
+
+import androidx.core.app.ActivityCompat;
+
 public class SupportApplication extends Application implements IUmengRegisterCallback {
 
     private PushAgent mPushAgent;
@@ -26,7 +41,12 @@ public class SupportApplication extends Application implements IUmengRegisterCal
     public static String USER_TOKEN = "";
     public static final String ACTION_HTTP_RESULT = "com.dfh.action.http.result";
     public static final String ACTION_UPDATE_DATA_RESULT = "com.dfh.action.update.data";
-    public static final String ACTION_FINISH_ACTIVITY= "com.dfh.action.finish.activity";
+    public static final String ACTION_FINISH_ACTIVITY = "com.dfh.action.finish.activity";
+
+    private LocationManager locationManager;
+    private double latitude = 0;
+    private double longitude = 0;
+    private String gpsCity = "";
 
     @Override
     public void onCreate() {
@@ -38,6 +58,7 @@ public class SupportApplication extends Application implements IUmengRegisterCal
         initImageLoader(this);
         mPushAgent = PushAgent.getInstance(this);
         mPushAgent.register(this);
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
     }
 
@@ -56,11 +77,12 @@ public class SupportApplication extends Application implements IUmengRegisterCal
     public static Context getContext() {
         return context;
     }
+
     @Override
     public void onSuccess(String s) {
         mUmentKey = s;
         LogUtil.printPushLog("SupportApplication::onSuccess= " + s + " key= " + mUmentKey);
-        mUmengMessageHandler = new UmengMessageHandler(){
+        mUmengMessageHandler = new UmengMessageHandler() {
             @Override
             public void dealWithNotificationMessage(Context context, UMessage uMessage) {
                 super.dealWithNotificationMessage(context, uMessage);
@@ -82,5 +104,45 @@ public class SupportApplication extends Application implements IUmengRegisterCal
     public void onFailure(String s, String s1) {
         LogUtil.printPushLog("SupportApplication::onFailure= " + s + " cause= " + s1);
         mUmentKey = null;
+    }
+
+    private void initLocation() {
+
+        if (ActivityCompat.checkSelfPermission(SupportApplication.this,
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(SupportApplication.this,
+                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            LogUtil.printPushLog("LocationTask checkSelfPermission :" + false);
+            ToastUtils.shortToast(SupportApplication.this, getResources().getString(R.string.check_your_permission));
+        } else {
+            LogUtil.printPushLog("LocationTask checkSelfPermission :" + true);
+            Location location = locationManager
+                    .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            if (location != null) {
+                LogUtil.printPushLog("LocationTask location != null ");
+                latitude = location.getLatitude(); // 经度
+                longitude = location.getLongitude(); // 纬度
+                LogUtil.printPushLog("LocationTask latitude :" + latitude);
+                LogUtil.printPushLog("LocationTask longitude :" + longitude);
+                double[] data = {latitude, longitude};
+                List<Address> addList = null;
+                Geocoder ge = new Geocoder(getApplicationContext());
+                try {
+                    addList = ge.getFromLocation(data[0], data[1], 1);
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                if (addList != null && addList.size() > 0) {
+                    for (int i = 0; i < addList.size(); i++) {
+                        Address ad = addList.get(i);
+                        gpsCity = ad.getLocality();
+                        LogUtil.printPushLog("LocationTask gpsCity :" + gpsCity);
+                    }
+                }
+            } else {
+                LogUtil.printPushLog("LocationTask location == null ");
+            }
+        }
     }
 }

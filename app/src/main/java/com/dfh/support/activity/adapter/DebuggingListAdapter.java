@@ -5,24 +5,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.TextView;
 
 import com.dfh.support.R;
+import com.dfh.support.entity.DebugDetailData;
 
 import java.util.ArrayList;
 
 
 public class DebuggingListAdapter extends BaseAdapter {
-    private ArrayList<String> mList = new ArrayList<String>();
+    private ArrayList<DebugDetailData> mList = new ArrayList<DebugDetailData>();
     protected LayoutInflater mInflater;
     protected Context cxt;
 
-    public DebuggingListAdapter(Context context, ArrayList<String> list) {
+    public DebuggingListAdapter(Context context, ArrayList<DebugDetailData> list) {
         cxt = context;
         mInflater = LayoutInflater.from(this.cxt);
         mList = list;
     }
 
-    public void setList(ArrayList<String> list) {
+    public void setList(ArrayList<DebugDetailData> list) {
         mList = list;
         notifyDataSetChanged();
     }
@@ -34,7 +36,7 @@ public class DebuggingListAdapter extends BaseAdapter {
     }
 
     @Override
-    public String getItem(int position) {
+    public DebugDetailData getItem(int position) {
         return mList.get(position);
     }
 
@@ -49,19 +51,19 @@ public class DebuggingListAdapter extends BaseAdapter {
         if (null == v) {
             v = mInflater.inflate(R.layout.debugging_list_adapter, null);
             holder = new HolderView();
-//            holder.tvContent = (TextView) v.findViewById(R.id.tv_content_title);
-//            holder.vLine = (View) v.findViewById(R.id.v_chooes_line);
+            holder.tvContent = (TextView) v.findViewById(R.id.tv_content);
             v.setTag(holder);
         } else {
             holder = (HolderView) v.getTag();
         }
+        DebugDetailData debugDetailData = mList.get(position);
+        holder.tvContent.setText(debugDetailData.getTitle());
         return v;
     }
 
 
     public class HolderView {
-//        private TextView tvContent;
-//        private View vLine;
+        private TextView tvContent;
     }
 }
 

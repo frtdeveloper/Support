@@ -3,7 +3,10 @@ package com.dfh.support.activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.WebChromeClient;
@@ -11,11 +14,20 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.dfh.support.R;
 import com.dfh.support.activity.support.CallPhoneActivity;
+import com.dfh.support.activity.widget.LoadingProgressDialog;
+import com.dfh.support.entity.AdvertisementListData;
+import com.dfh.support.http.HttpJsonAnaly;
+import com.dfh.support.http.HttpJsonSend;
 import com.dfh.support.utils.ActionBarUtil;
+import com.dfh.support.utils.LogUtil;
+import com.dfh.support.utils.ToastUtils;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class WebViewActivity extends AppCompatActivity implements View.OnClickListener {
@@ -23,7 +35,44 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
     private WebView mWebView;
     private WebSettings mWebSettings;
     private String baseUrl = "http://218.28.95.84:3000";
+    private String id = "";
+    private static final int AD_BROWSE_SUCCESS = 1;
+    private static final int AD_BROWSE_FALSE = 2;
+    private static final int REPECT_GET = 30*1000;
+    private static final int GET_BROWSE_UP = 3;
+    private static final int AD_LIKE_SUCCESS = 4;
+    private static final int AD_LIKE_FALSE = 5;
 
+    private RelativeLayout mRlNoZan,mRlHasZan;
+    private RelativeLayout mRlZanNo,mRlZanYes;
+
+
+    private Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case AD_BROWSE_SUCCESS:
+                    break;
+                case AD_BROWSE_FALSE:
+                    mHandler.sendEmptyMessageDelayed(GET_BROWSE_UP,REPECT_GET);
+                    break;
+                case GET_BROWSE_UP:
+                    mAdsBrowseInfoTask = new AdsBrowseInfoTask();
+                    mAdsBrowseInfoTask.execute("");
+                    break;
+                case AD_LIKE_SUCCESS:
+                    LoadingProgressDialog.Dissmiss();
+                    mRlNoZan.setVisibility(View.GONE);
+                    mRlHasZan.setVisibility(View.VISIBLE);
+                    break;
+                case AD_LIKE_FALSE:
+                    LoadingProgressDialog.Dissmiss();
+                    ToastUtils.shortToast(WebViewActivity.this,  HttpJsonAnaly.lastError);
+                    break;
+            }
+        }
+    };
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,17 +84,26 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
         initView();
         initListener();
         initWebView();
+        mHandler.sendEmptyMessage(GET_BROWSE_UP);
     }
 
     private void initView() {
+        id = getIntent().getStringExtra("id");
+        //if(getIntent().hasExtra("url")) baseUrl = getIntent().getStringExtra("url");
         mIvCancel = (ImageView) findViewById(R.id.iv_cancel);
         mIvContactUs = (ImageView) findViewById(R.id.iv_contact_us);
         mWebView = (WebView) findViewById(R.id.wv_content);
+        mRlNoZan = (RelativeLayout) findViewById(R.id.rl_not_zan);
+        mRlHasZan = (RelativeLayout) findViewById(R.id.rl_has_zan);
+        mRlZanNo = (RelativeLayout) findViewById(R.id.rl_zan_no);
+        mRlZanYes = (RelativeLayout) findViewById(R.id.rl_zan_yes);
     }
 
     private void initListener() {
         mIvContactUs.setOnClickListener(this);
         mIvCancel.setOnClickListener(this);
+        mRlZanYes.setOnClickListener(this);
+        mRlZanNo.setOnClickListener(this);
     }
 
     @Override
@@ -58,6 +116,15 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
                 Intent intent = new Intent(WebViewActivity.this, CallPhoneActivity.class);
                 startActivity(intent);
                 finish();
+                break;
+            case R.id.rl_zan_yes:
+                LoadingProgressDialog.show(WebViewActivity.this, false, true, 30000);
+                mAdsLikeTask = new AdsLikeTask();
+                mAdsLikeTask.execute("");
+                break;
+            case R.id.rl_zan_no:
+                mRlNoZan.setVisibility(View.GONE);
+                mRlHasZan.setVisibility(View.VISIBLE);
                 break;
         }
     }
@@ -91,6 +158,7 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
         //设置WebChromeClient类
         mWebView.setWebChromeClient(new WebChromeClient());
         mWebView.loadUrl(baseUrl);
+
     }
 
     @Override
@@ -114,5 +182,39 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
         }
         return super.onKeyDown(keyCode, event);//退出H5界面
 
+    }
+    private AdvertisementListData advertisementListData;
+    private AdsBrowseInfoTask mAdsBrowseInfoTask;
+
+    private class AdsBrowseInfoTask extends AsyncTask<String, Void, Void> {
+
+        @Override
+        protected Void doInBackground(String... params) {
+            boolean flag =  HttpJsonSend.adsBrowseInfo(WebViewActivity.this,id);
+            if (flag) {
+                mHandler.sendEmptyMessage(AD_BROWSE_SUCCESS);
+            } else {
+                mHandler.sendEmptyMessage(AD_BROWSE_FALSE);
+            }
+            LogUtil.printPushLog("httpGet adsBrowseInfo flag" + flag);
+            return null;
+        }
+    }
+
+    private AdsLikeTask mAdsLikeTask;
+
+    private class AdsLikeTask extends AsyncTask<String, Void, Void> {
+
+        @Override
+        protected Void doInBackground(String... params) {
+            boolean flag = HttpJsonSend.adsLike(WebViewActivity.this,id);
+            if (flag) {
+                mHandler.sendEmptyMessage(AD_LIKE_SUCCESS);
+            } else {
+                mHandler.sendEmptyMessage(AD_LIKE_FALSE);
+            }
+            LogUtil.printPushLog("httpGet adsLike flag" + flag);
+            return null;
+        }
     }
 }

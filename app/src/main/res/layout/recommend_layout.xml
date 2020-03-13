@@ -17,7 +17,7 @@
             android:layout_marginTop="40dp"
             android:src="@color/colorPrimary" />
 
-        <com.dfh.support.activity.widget.ChildrenListView
+        <com.dfh.support.activity.widget.LoadListView
             android:id="@+id/lv_advertisement"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

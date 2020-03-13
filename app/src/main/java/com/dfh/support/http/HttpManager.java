@@ -42,7 +42,7 @@ public class HttpManager {
             connection.setRequestProperty("authorization", SupportApplication.USER_TOKEN);
             connection.setRequestProperty("appVersion", VersionUtil.getVersionName(context));
             connection.setRequestProperty("osVersion", Build.VERSION.RELEASE);
-            connection.setRequestProperty("imei", Settings.System.getString(context.getContentResolver(), Settings.System.ANDROID_ID));
+            connection.setRequestProperty("token", Settings.System.getString(context.getContentResolver(), Settings.System.ANDROID_ID));
             connection.setRequestProperty("Content-type", "application/json");
 
             OutputStreamWriter osw = new OutputStreamWriter(connection.getOutputStream());
@@ -85,7 +85,7 @@ public class HttpManager {
             connection.setRequestProperty("authorization", SupportApplication.USER_TOKEN);
             connection.setRequestProperty("appVersion", VersionUtil.getVersionName(context));
             connection.setRequestProperty("osVersion", Build.VERSION.RELEASE);
-            connection.setRequestProperty("imei", Settings.System.getString(context.getContentResolver(), Settings.System.ANDROID_ID));
+            connection.setRequestProperty("token", Settings.System.getString(context.getContentResolver(), Settings.System.ANDROID_ID));
             connection.setRequestProperty("Content-type", "application/json");
             //获得结果码
             int responseCode = connection.getResponseCode();
@@ -119,7 +119,7 @@ public class HttpManager {
         headers.put("authorization", SupportApplication.USER_TOKEN);
         headers.put("appVersion", VersionUtil.getVersionName(context));
         headers.put("osVersion", Build.VERSION.RELEASE);
-        headers.put("imei", Settings.System.getString(context.getContentResolver(), Settings.System.ANDROID_ID));
+        headers.put("token", Settings.System.getString(context.getContentResolver(), Settings.System.ANDROID_ID));
         //headers.put("osVersion", QHApplication.mDeviceUtil.getDeviceData().getDeviceVersion());
 //        headers.put("userId", userId);
 //        headers.put("sessionId", sessionId);

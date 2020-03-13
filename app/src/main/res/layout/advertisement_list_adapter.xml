@@ -20,8 +20,14 @@
             <RelativeLayout
                 android:id="@+id/rl_advertisement_top"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:background="@mipmap/show_ad_top_pic">
+                android:layout_height="150dp">
+                <ImageView
+                    android:id="@+id/iv_pic"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/show_ad_top_pic"/>
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -52,10 +58,11 @@
                             android:src="@mipmap/btn_see_normal" />
 
                         <TextView
+                            android:id="@+id/tv_see"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:text="66666"
+                            android:text="0"
                             android:textColor="@color/white"
                             android:layout_marginLeft="6dp"
                             android:textSize="14sp" />
@@ -68,11 +75,12 @@
                             android:src="@mipmap/btn_zan_normal" />
 
                         <TextView
+                            android:id="@+id/tv_zan"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="6dp"
                             android:layout_gravity="center_vertical"
-                            android:text="2333"
+                            android:text="0"
                             android:textColor="@color/white"
                             android:textSize="14sp" />
                     </LinearLayout>

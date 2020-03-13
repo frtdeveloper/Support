@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.dfh.support">
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
     <application
         android:name=".SupportApplication"
         android:allowBackup="true"
@@ -18,8 +21,9 @@
         <activity android:name=".activity.support.SparePartsMenuActivity" />
         <activity android:name=".activity.support.DebuggingMenuActivity" />
         <activity android:name=".activity.MainActivity" />
-        <activity android:name=".activity.support.DebuggingDetailActivity" />
+
         <activity android:name=".activity.support.DebuggingListActivity" />
+        <activity android:name=".activity.support.DebuggingSearchListActivity" />
         <activity android:name=".activity.support.SparePartsDetailActivity" />
         <activity android:name=".activity.support.SparePartsListActivity" />
         <activity android:name=".activity.support.ServiceDetailActivity" />

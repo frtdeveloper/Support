@@ -2,7 +2,7 @@ package com.dfh.support.http;
 
 public class HttpConfig {
 	public static boolean DevelopMode=false;
-	private static final String HttpIP="http://39.108.182.174:8080/";//测试
+	private static final String HttpIP="http://101.37.168.242:8080/";//测试
 	//private static final String HttpIP="http://pyex.pymeitan.com/";//正式
 
 
@@ -11,28 +11,22 @@ public class HttpConfig {
 		return HttpIP;
 	}
 	public static String url_login = "vip/info/login";
-	public static String url_register = "vip/info/register";
-	public static String url_send_sms = "oth/send";
-	public static String url_check_sms = "oth/valid";
-	public static String url_find_password = "vip/info/forget/pwd";
-	public static String url_update_single_info = "vip/info/auth/single/update";
-	public static String url_update_multi_info ="vip/info/auth/multi/update";
-	public static String url_info_msg = "vip/info/auth/msg";
+	public static String url_ads_find_carousel_all = "ads/find/carousel/all";
+	public static String url_ads_find_general_pager = "ads/find/general/pager";
+	public static String url_ads_browse = "ads/browse/";//ads/browse/{id}/info
+	public static String url_ads_like = "ads/like/";//ads/like/{id}
+	public static String url_parts_find_classify = "parts/find/classify";
+	public static String url_parts_find_classify_id_pager = "parts/find/";//parts/find/{partsClassifyId}/pager
+	public static String url_parts_id_detail = "parts/";//parts/{id}/detail
 
-	public static String url_vip_branch_list = "auth/vip/branch/list";//GET学习学科范围列表
-	public static String url_vip_branch_modify = "auth/vip/branch/modify";//PUT添加学习学科
-	public static String url_sub_branch_list = "auth/sub/branch/list";//GET学科列表
-	public static String url_vip_grade_list = "auth/vip/grade/list";//GET学习年级列表
-	public static String url_vip_grade_modify = "auth/vip/grade/modify";//PUT修改学习年级
-	public static String url_sub_grade_list = "auth/sub/grade/list";//GET年级列表
-	public static String url_sub_grade_all_list = "auth/sub/grade/all/list";//GET年级列表
+	public static String urL_serve_pager = "serve/pager";
+	public static String url_serve_id_detail = "serve/";//serve/{id}/detail
+	public static String url_policy_find_name = "policy/find/";//policy/find/{name}
 
-	public static String url_sub_resource_list = "auth/sub/resource/list";//资源搜索 ;
-	public static String url_sub_resource_browse = "auth/sub/resource/browse/";//资源详情 {id}
-	public static String url_oth_upload = "oth/upload";//
-	public static String url_sub_question_search = "auth/sub/question/search";//题目搜索 ;
-	public static String url_sub_question_finished = "auth/sub/question/finished";//完成答题
-	public static String url_sub_question_analysis = "auth/sub/question/analysis/";//题目解析{questionId}
-	public static String url_vip_mistakes_collection_search = "auth/vip/mistakes/collection/search";//错题搜索
-	public static String url_auth_vip_mistakes_collection_search = "auth/sub/question/bealike";//举一反三
+	public static String url_fault_find_classify = "fault/find/classify";//fault/find/classify
+	public static String url_fault_find_id_list = "fault/find/";//fault/find/{faultClassifyId}/list
+	public static String url_fault_search = "fault/search";//fault/search
+	public static String url_fault_id_detail = "fault/";//fault/{id}/detail
+
+
 }

@@ -1,6 +1,7 @@
 package com.dfh.support.activity.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.dfh.support.R;
+import com.dfh.support.activity.support.DebuggingSearchListActivity;
+import com.dfh.support.activity.support.SearchActivity;
+import com.dfh.support.activity.support.ServiceDetailActivity;
 
 import java.util.ArrayList;
 
@@ -46,7 +50,7 @@ public class SearchHistoryAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View v, ViewGroup parent) {
+    public View getView(final int position, View v, ViewGroup parent) {
         HolderView holder;
         if (null == v) {
             v = mInflater.inflate(R.layout.search_history_adapter, null);
@@ -58,12 +62,14 @@ public class SearchHistoryAdapter extends BaseAdapter {
             holder = (HolderView) v.getTag();
         }
         holder.tvHistory.setText(mList.get(position));
-        holder.rlHistory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
+//        holder.rlHistory.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(cxt, DebuggingSearchListActivity.class);
+//                intent.putExtra("keyword",mList.get(position));
+//                cxt.startActivity(intent);
+//            }
+//        });
         return v;
     }
 

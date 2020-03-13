@@ -16,6 +16,9 @@ import android.widget.TextView;
 import com.dfh.support.R;
 import com.dfh.support.activity.WebViewActivity;
 import com.dfh.support.activity.widget.ChildrenListView;
+import com.dfh.support.entity.AdvertisementData;
+import com.dfh.support.utils.LogUtil;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,19 +26,19 @@ import java.util.HashMap;
 
 public class AdvertisementListAdapter extends BaseAdapter {
 
-    private ArrayList<String> mList = new ArrayList<String>();
-    private ArrayList<String> mItemList = new ArrayList<String>();
+    private ArrayList<AdvertisementData> mList = new ArrayList<AdvertisementData>();
+    //private ArrayList<AdvertisementData> mItemList = new ArrayList<AdvertisementData>();
     protected LayoutInflater mInflater;
     protected Context cxt;
     private AdvertisementListItemAdapter adapter;
 
-    public AdvertisementListAdapter(Context context, ArrayList<String> list) {
+    public AdvertisementListAdapter(Context context, ArrayList<AdvertisementData> list) {
         cxt = context;
         mInflater = LayoutInflater.from(this.cxt);
         mList = list;
     }
 
-    public void setList(ArrayList<String> list) {
+    public void setList(ArrayList<AdvertisementData> list) {
         mList = list;
         notifyDataSetChanged();
     }
@@ -46,7 +49,7 @@ public class AdvertisementListAdapter extends BaseAdapter {
     }
 
     @Override
-    public String getItem(int position) {
+    public AdvertisementData getItem(int position) {
         return mList.get(position);
     }
 
@@ -63,40 +66,52 @@ public class AdvertisementListAdapter extends BaseAdapter {
             holder = new HolderView();
             holder.lvItem = (ChildrenListView) v.findViewById(R.id.lv_item);
             holder.rlAdTop = (RelativeLayout) v.findViewById(R.id.rl_advertisement_top);
-//            holder.ivHead = (ImageView) v.findViewById(R.id.iv_head);
-//            holder.rlBg = (RelativeLayout) v.findViewById(R.id.rl_test_bg);
+            holder.ivPic = (ImageView) v.findViewById(R.id.iv_pic);
+            holder.tvTitle = (TextView) v.findViewById(R.id.tv_advertisement_top_title);
+            holder.tvSee = (TextView) v.findViewById(R.id.tv_see);
+            holder.tvZan = (TextView) v.findViewById(R.id.tv_zan);
             v.setTag(holder);
         } else {
             holder = (HolderView) v.getTag();
         }
-        mItemList = new ArrayList<String>();
-        mItemList.add("");
-        mItemList.add("");
-        mItemList.add("");
+        final AdvertisementData advertisementData = mList.get(position);
+        final ArrayList<AdvertisementData> mItemList = advertisementData.getAdsVOList();
+        LogUtil.printPushLog("mItemList mItemList.size()" + mItemList.size());
         adapter = new AdvertisementListItemAdapter(cxt, mItemList);
         holder.lvItem.setAdapter(adapter);
         holder.rlAdTop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(cxt, WebViewActivity.class);
+                intent.putExtra("url",advertisementData.getLink());
+                intent.putExtra("id",advertisementData.getId());
                 cxt.startActivity(intent);
             }
         });
         holder.lvItem.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                LogUtil.printPushLog("mItemList i" + i);
                 Intent intent = new Intent(cxt, WebViewActivity.class);
+                intent.putExtra("url",mItemList.get(i).getLink());
+                intent.putExtra("id",mItemList.get(i).getId());
                 cxt.startActivity(intent);
             }
         });
+        holder.tvTitle.setText(advertisementData.getTitle());
+        holder.tvSee.setText(advertisementData.getBrowses());
+        holder.tvZan.setText(advertisementData.getLikes());
+        ImageLoader.getInstance().displayImage(advertisementData.getIcon(),holder.ivPic);
         return v;
     }
 
     public class HolderView {
         private ChildrenListView lvItem;
         private RelativeLayout rlAdTop;
-//        private ImageView ivHead;
-//        private RelativeLayout rlBg;
+        private TextView tvTitle;
+        private TextView tvSee;
+        private TextView tvZan;
+        private ImageView ivPic;
     }
 
 

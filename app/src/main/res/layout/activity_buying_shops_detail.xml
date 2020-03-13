@@ -53,14 +53,13 @@
                     android:src="@mipmap/img_contact_us" />
             </RelativeLayout>
         </RelativeLayout>
-        <ImageView
+        <com.dfh.support.activity.widget.ChildrenListView
+            android:id="@+id/lv_pic"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scaleType="fitXY"
-            android:layout_marginTop="15dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:src="@mipmap/show_service_detail"/>
+            android:divider="@color/white"
+            android:dividerHeight="8dp"
+            android:layout_marginTop="15dp"/>
 
         <RelativeLayout
             android:layout_width="match_parent"

@@ -41,6 +41,7 @@
     </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/ll_call_phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -83,14 +84,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:text="888888"
+                    android:text="400-168-8848"
                     android:textColor="@color/service_list_item_title"
                     android:textSize="14sp" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:text="9:00-17:00(周一至周日）"
+                    android:text="@string/common_service_time"
                     android:textColor="@color/service_list_item_title"
                     android:textSize="14sp" />
             </LinearLayout>

@@ -5,8 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.dfh.support.R;
+import com.dfh.support.entity.AdvertisementData;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,18 +18,18 @@ import java.util.HashMap;
 
 public class AdvertisementListItemAdapter extends BaseAdapter {
 
-    private ArrayList<String> mList = new ArrayList<String>();
+    private ArrayList<AdvertisementData> mList = new ArrayList<AdvertisementData>();
     protected LayoutInflater mInflater;
     protected Context cxt;
     private HashMap<Integer, Boolean> clickMap = new HashMap<Integer, Boolean>();
 
-    public AdvertisementListItemAdapter(Context context, ArrayList<String> list) {
+    public AdvertisementListItemAdapter(Context context, ArrayList<AdvertisementData> list) {
         cxt = context;
         mInflater = LayoutInflater.from(this.cxt);
         mList = list;
     }
 
-    public void setList(ArrayList<String> list) {
+    public void setList(ArrayList<AdvertisementData> list) {
         mList = list;
         notifyDataSetChanged();
     }
@@ -41,7 +45,7 @@ public class AdvertisementListItemAdapter extends BaseAdapter {
     }
 
     @Override
-    public String getItem(int position) {
+    public AdvertisementData getItem(int position) {
         return mList.get(position);
     }
 
@@ -56,20 +60,27 @@ public class AdvertisementListItemAdapter extends BaseAdapter {
         if (null == v) {
             v = mInflater.inflate(R.layout.advertisement_list_item_adapter, null);
             holder = new HolderView();
-//            holder.tvContent = (TextView) v.findViewById(R.id.tv_content_title);
-//            holder.ivHead = (ImageView) v.findViewById(R.id.iv_head);
-//            holder.rlBg = (RelativeLayout) v.findViewById(R.id.rl_test_bg);
+            holder.ivPic = (ImageView) v.findViewById(R.id.iv_advertisement_center_icon);
+            holder.tvTitle = (TextView) v.findViewById(R.id.tv_advertisement_center_title);
+            holder.tvSee = (TextView) v.findViewById(R.id.tv_see);
+            holder.tvZan = (TextView) v.findViewById(R.id.tv_zan);
             v.setTag(holder);
         } else {
             holder = (HolderView) v.getTag();
         }
+        final AdvertisementData advertisementData = mList.get(position);
+        holder.tvTitle.setText(advertisementData.getTitle());
+        holder.tvSee.setText(advertisementData.getBrowses());
+        holder.tvZan.setText(advertisementData.getLikes());
+        ImageLoader.getInstance().displayImage(advertisementData.getIcon(),holder.ivPic);
         return v;
     }
 
     public class HolderView {
-//        private TextView tvContent;
-//        private ImageView ivHead;
-//        private RelativeLayout rlBg;
+        private TextView tvTitle;
+        private TextView tvSee;
+        private TextView tvZan;
+        private ImageView ivPic;
     }
 
 

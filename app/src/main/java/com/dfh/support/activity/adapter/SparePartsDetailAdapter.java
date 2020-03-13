@@ -5,24 +5,28 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.dfh.support.R;
+import com.dfh.support.entity.PictureVOData;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 
 
 public class SparePartsDetailAdapter extends BaseAdapter {
-    private ArrayList<String> mList = new ArrayList<String>();
+    private ArrayList<PictureVOData> mList = new ArrayList<PictureVOData>();
     protected LayoutInflater mInflater;
     protected Context cxt;
 
-    public SparePartsDetailAdapter(Context context, ArrayList<String> list) {
+    public SparePartsDetailAdapter(Context context, ArrayList<PictureVOData> list) {
         cxt = context;
         mInflater = LayoutInflater.from(this.cxt);
         mList = list;
     }
 
-    public void setList(ArrayList<String> list) {
+    public void setList(ArrayList<PictureVOData> list) {
         mList = list;
         notifyDataSetChanged();
     }
@@ -34,7 +38,7 @@ public class SparePartsDetailAdapter extends BaseAdapter {
     }
 
     @Override
-    public String getItem(int position) {
+    public PictureVOData getItem(int position) {
         return mList.get(position);
     }
 
@@ -49,19 +53,18 @@ public class SparePartsDetailAdapter extends BaseAdapter {
         if (null == v) {
             v = mInflater.inflate(R.layout.spare_parts_detail_adapter, null);
             holder = new HolderView();
-//            holder.tvContent = (TextView) v.findViewById(R.id.tv_content_title);
-//            holder.vLine = (View) v.findViewById(R.id.v_chooes_line);
+            holder.ivPic = (ImageView) v.findViewById(R.id.iv_pic);
             v.setTag(holder);
         } else {
             holder = (HolderView) v.getTag();
         }
+        ImageLoader.getInstance().displayImage(mList.get(position).getSource(),holder.ivPic);
         return v;
     }
 
 
     public class HolderView {
-//        private TextView tvContent;
-//        private View vLine;
+        private ImageView ivPic;
     }
 }
 

@@ -16,6 +16,11 @@ public class BannerPagerAdapter extends PagerAdapter {
 
     }
 
+    public void setList(ArrayList<View> viewList) {
+        this.viewList = viewList;
+        notifyDataSetChanged();
+    }
+
     @Override
     public boolean isViewFromObject(View arg0, Object arg1) {
         // TODO Auto-generated method stub

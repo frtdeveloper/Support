@@ -62,6 +62,7 @@
         android:layout_marginTop="20dp">
 
         <ImageView
+            android:id="@+id/iv_pic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -74,7 +75,7 @@
             android:layout_marginRight="33dp"
             android:src="@mipmap/img_white_more"/>
     </RelativeLayout>
-    <com.dfh.support.activity.widget.ChildrenListView
+    <com.dfh.support.activity.widget.LoadListView
         android:id="@+id/lv_spare_parts_list"
         android:layout_width="match_parent"
         android:layout_marginTop="10dp"

@@ -6,18 +6,22 @@
     android:orientation="horizontal">
 
     <RelativeLayout
+        android:id="@+id/rl_one"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_gravity="center_vertical"
         android:layout_height="wrap_content">
 
         <ImageView
+            android:id="@+id/iv_one"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:src="@mipmap/img_debug_windows"/>
+            android:scaleType="fitXY"
+            android:visibility="gone"/>
     </RelativeLayout>
     <RelativeLayout
+        android:id="@+id/rl_two"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_gravity="center_vertical"
@@ -25,9 +29,11 @@
         android:layout_height="wrap_content">
 
         <ImageView
+            android:id="@+id/iv_two"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:scaleType="fitXY"
             android:layout_centerInParent="true"
-            android:src="@mipmap/img_debug_elc"/>
+            android:visibility="gone"/>
     </RelativeLayout>
 </LinearLayout>

@@ -77,6 +77,7 @@
                 android:text="￥99.99"/>
         </RelativeLayout>
         <TextView
+            android:id="@+id/tv_content"
             android:layout_width="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginTop="25dp"
