@@ -278,18 +278,22 @@ public class HttpJsonAnaly {
                 if (dataJson.has("tips"))
                     partsData.setTips(dataJson.getString("tips"));
 
-                JSONArray pictureArrayJson = dataJson.getJSONArray("pictureVOList");
                 ArrayList<PictureVOData> pictureVODataList = new ArrayList<PictureVOData>();
-                for (int a = 0; a < pictureArrayJson.length(); a++) {
-                    PictureVOData pictureVOData = new PictureVOData();
-                    JSONObject pictureJson = (JSONObject) pictureArrayJson.get(a);
-                    if (pictureJson.has("id"))
-                        pictureVOData.setId(pictureJson.getString("id"));
-                    if (pictureJson.has("source"))
-                        pictureVOData.setSource(pictureJson.getString("source"));
-                    if (pictureJson.has("thumb"))
-                        pictureVOData.setThumb(pictureJson.getString("thumb"));
-                    pictureVODataList.add(pictureVOData);
+                try {
+                    JSONArray pictureArrayJson = dataJson.getJSONArray("pictureVOList");
+                    for (int a = 0; a < pictureArrayJson.length(); a++) {
+                        PictureVOData pictureVOData = new PictureVOData();
+                        JSONObject pictureJson = (JSONObject) pictureArrayJson.get(a);
+                        if (pictureJson.has("id"))
+                            pictureVOData.setId(pictureJson.getString("id"));
+                        if (pictureJson.has("source"))
+                            pictureVOData.setSource(pictureJson.getString("source"));
+                        if (pictureJson.has("thumb"))
+                            pictureVOData.setThumb(pictureJson.getString("thumb"));
+                        pictureVODataList.add(pictureVOData);
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
                 partsData.setPictureVOData(pictureVODataList);
                 partsDataList.add(partsData);
@@ -606,6 +610,8 @@ public class HttpJsonAnaly {
                 debugDetailData.setPublishTime(dataJson.getString("publishTime"));
             if (dataJson.has("title"))
                 debugDetailData.setTitle(dataJson.getString("title"));
+            if (dataJson.has("url"))
+                debugDetailData.setUrl(dataJson.getString("url"));
             debugDetailData.setFlag(true);
             LogUtil.printPushLog("faultFindIdDetail debugDetailData" + debugDetailData.toString());
             return debugDetailData;

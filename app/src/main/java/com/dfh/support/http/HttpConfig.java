@@ -4,8 +4,13 @@ public class HttpConfig {
 	public static boolean DevelopMode=false;
 	private static final String HttpIP="http://101.37.168.242:8080/";//测试
 	//private static final String HttpIP="http://pyex.pymeitan.com/";//正式
+	private static final String HttpPolicyIP="http://101.37.168.242:8080/8848/";
 
 
+	public static String GetHttpPolicyAdress()
+	{
+		return HttpPolicyIP;
+	}
 	public static String GetHttpClientAdress()
 	{
 		return HttpIP;

@@ -17,6 +17,7 @@ import com.dfh.support.R;
 import com.dfh.support.activity.WebViewActivity;
 import com.dfh.support.activity.widget.ChildrenListView;
 import com.dfh.support.entity.AdvertisementData;
+import com.dfh.support.http.HttpConfig;
 import com.dfh.support.utils.LogUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -83,7 +84,9 @@ public class AdvertisementListAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(cxt, WebViewActivity.class);
-                intent.putExtra("url",advertisementData.getLink());
+                intent.putExtra("url",HttpConfig.GetHttpPolicyAdress()+advertisementData.getLink()
+                        +"?links="+advertisementData.getLikes()
+                        +"&browses="+advertisementData.getBrowses());
                 intent.putExtra("id",advertisementData.getId());
                 cxt.startActivity(intent);
             }
@@ -93,7 +96,9 @@ public class AdvertisementListAdapter extends BaseAdapter {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 LogUtil.printPushLog("mItemList i" + i);
                 Intent intent = new Intent(cxt, WebViewActivity.class);
-                intent.putExtra("url",mItemList.get(i).getLink());
+                intent.putExtra("url",HttpConfig.GetHttpPolicyAdress()+mItemList.get(i).getLink()
+                        +"?links="+advertisementData.getLikes()
+                        +"&browses="+advertisementData.getBrowses());
                 intent.putExtra("id",mItemList.get(i).getId());
                 cxt.startActivity(intent);
             }

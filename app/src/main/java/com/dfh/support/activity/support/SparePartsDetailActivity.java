@@ -27,6 +27,7 @@ import com.dfh.support.http.HttpJsonAnaly;
 import com.dfh.support.http.HttpJsonSend;
 import com.dfh.support.utils.ActionBarUtil;
 import com.dfh.support.utils.LogUtil;
+import com.dfh.support.utils.TextUtils;
 import com.dfh.support.utils.ToastUtils;
 
 import java.util.ArrayList;
@@ -59,9 +60,9 @@ public class SparePartsDetailActivity extends AppCompatActivity implements View.
                     //刷新内容
                     tvName.setText(mPartsData.getName());
                     tvValue.setText(mPartsData.getPpPrice());
-                    tvContent.setText(mPartsData.getSpecs());
-                    tvText.setText(mPartsData.getIntro());
-                    tvRemark.setText(mPartsData.getTips());
+                    tvContent.setText(getResources().getString(R.string.common_specs)+mPartsData.getSpecs());
+                    tvText.setText(getResources().getString(R.string.common_explain)+mPartsData.getIntro());
+                    if(!TextUtils.isEmpty(mPartsData.getTips()))tvRemark.setText(mPartsData.getTips());
                     mPicList = mPartsData.getPictureVOData();
                     mSparePartsDetailAdapter.setList(mPicList);
                     break;

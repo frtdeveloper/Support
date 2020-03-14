@@ -30,6 +30,11 @@
     <string name="is_it_helpful_to_you">Is it helpful to you?</string>
     <string name="thank_you_for_your_feedback">Thank you for your feedback！</string>
 
+    <string name="common_name">Name：</string>
+    <string name="common_value">￥</string>
+    <string name="common_specs">Specs：</string>
+    <string name="common_explain">Explain：</string>
+    <string name="common_remark">Remark：</string>
 
 
 
@@ -43,7 +48,7 @@
 
     <string name="check_your_permission">Please check your permission</string>
     <string name="about_company_content">
-    848钛金手机是北京珠穆朗玛移动通信有限公司旗下高端手机品牌，公司是中国500强企业同方股份（股票代码：600100）投资的高科技企业。\n
+    8848钛金手机是北京珠穆朗玛移动通信有限公司旗下高端手机品牌，公司是中国500强企业同方股份（股票代码：600100）投资的高科技企业。\n
         2015年7月28日，8848钛金手机第一代正式对外发布，成为中国第一个定价万元的手机品牌，在中国开创了一个全新的手机领域：
         提出实用奢华主义的产品理念，以奢华的外观，实用的安全功能，一年一款产品的更新迭代，在科技与奢侈之间做到了动态平衡，
         打破了科技与奢侈品难以兼容的悖论。</string>

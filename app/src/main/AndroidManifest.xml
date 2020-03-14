@@ -20,6 +20,7 @@
         <activity android:name=".activity.support.AboutUsActivity" />
         <activity android:name=".activity.support.SparePartsMenuActivity" />
         <activity android:name=".activity.support.DebuggingMenuActivity" />
+        <activity android:name=".activity.support.DebuggingDetailActivity" />
         <activity android:name=".activity.MainActivity" />
 
         <activity android:name=".activity.support.DebuggingListActivity" />

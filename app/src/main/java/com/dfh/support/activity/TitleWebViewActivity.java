@@ -30,8 +30,9 @@ public class TitleWebViewActivity extends AppCompatActivity implements View.OnCl
     private ImageView mIvBack, mIvContactUs;
     private WebView mWebView;
     private WebSettings mWebSettings;
-    private String baseUrl = "http://218.28.95.84:3000";
+    private String baseUrl = "";
     private String id = "";
+
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,12 +53,12 @@ public class TitleWebViewActivity extends AppCompatActivity implements View.OnCl
 
     private void initView() {
         id = getIntent().getStringExtra("id");
-        if(getIntent().hasExtra("url")) baseUrl = getIntent().getStringExtra("url");
+        if (getIntent().hasExtra("url")) baseUrl = getIntent().getStringExtra("url");
         mTitle = getIntent().getStringExtra("title");
         mWebView = (WebView) findViewById(R.id.wv_content);
         mIvBack = (ImageView) findViewById(R.id.iv_back);
         mIvContactUs = (ImageView) findViewById(R.id.iv_contact_us);
-        mTvTitle = (TextView)findViewById(R.id.tv_title);
+        mTvTitle = (TextView) findViewById(R.id.tv_title);
         mTvTitle.setText(mTitle);
     }
 
@@ -74,6 +75,7 @@ public class TitleWebViewActivity extends AppCompatActivity implements View.OnCl
                 break;
         }
     }
+
     @SuppressLint("SetJavaScriptEnabled")
     private void initWebView() {
         mWebSettings = mWebView.getSettings();
@@ -119,9 +121,13 @@ public class TitleWebViewActivity extends AppCompatActivity implements View.OnCl
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK && mWebView.canGoBack()&& !mWebView.getUrl().equals(baseUrl)) {
-            mWebView.goBack();//返回上个页面
-            return true;
+        try {
+            if (keyCode == KeyEvent.KEYCODE_BACK && mWebView.canGoBack() && !mWebView.getUrl().equals(baseUrl)) {
+                mWebView.goBack();//返回上个页面
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return super.onKeyDown(keyCode, event);//退出H5界面
 

@@ -34,28 +34,28 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
     private ImageView mIvCancel, mIvContactUs;
     private WebView mWebView;
     private WebSettings mWebSettings;
-    private String baseUrl = "http://218.28.95.84:3000";
+    private String baseUrl = "";
     private String id = "";
     private static final int AD_BROWSE_SUCCESS = 1;
     private static final int AD_BROWSE_FALSE = 2;
-    private static final int REPECT_GET = 30*1000;
+    private static final int REPECT_GET = 30 * 1000;
     private static final int GET_BROWSE_UP = 3;
     private static final int AD_LIKE_SUCCESS = 4;
     private static final int AD_LIKE_FALSE = 5;
 
-    private RelativeLayout mRlNoZan,mRlHasZan;
-    private RelativeLayout mRlZanNo,mRlZanYes;
+    private RelativeLayout mRlNoZan, mRlHasZan;
+    private RelativeLayout mRlZanNo, mRlZanYes;
 
 
-    private Handler mHandler = new Handler(){
+    private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
-            switch (msg.what){
+            switch (msg.what) {
                 case AD_BROWSE_SUCCESS:
                     break;
                 case AD_BROWSE_FALSE:
-                    mHandler.sendEmptyMessageDelayed(GET_BROWSE_UP,REPECT_GET);
+                    mHandler.sendEmptyMessageDelayed(GET_BROWSE_UP, REPECT_GET);
                     break;
                 case GET_BROWSE_UP:
                     mAdsBrowseInfoTask = new AdsBrowseInfoTask();
@@ -65,14 +65,28 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
                     LoadingProgressDialog.Dissmiss();
                     mRlNoZan.setVisibility(View.GONE);
                     mRlHasZan.setVisibility(View.VISIBLE);
+                    if(baseUrl.contains("browses")){
+                        String topUrl = baseUrl.substring(0,baseUrl.lastIndexOf("=")+1);
+                        String browses = baseUrl.substring(baseUrl.lastIndexOf("=")+1);
+                        LogUtil.printPushLog("AD_LIKE_SUCCESS topUrl:" + topUrl);
+                        LogUtil.printPushLog("AD_LIKE_SUCCESS browses:" + browses);
+                        try {
+                            int dbrowses = Integer.parseInt(browses)+1;
+                            mWebView.loadUrl(topUrl+dbrowses);
+                        }catch (Exception e){
+                            mWebView.loadUrl(baseUrl);
+                            e.printStackTrace();
+                        }
+                    }
                     break;
                 case AD_LIKE_FALSE:
                     LoadingProgressDialog.Dissmiss();
-                    ToastUtils.shortToast(WebViewActivity.this,  HttpJsonAnaly.lastError);
+                    ToastUtils.shortToast(WebViewActivity.this, HttpJsonAnaly.lastError);
                     break;
             }
         }
     };
+
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +103,8 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 
     private void initView() {
         id = getIntent().getStringExtra("id");
-        //if(getIntent().hasExtra("url")) baseUrl = getIntent().getStringExtra("url");
+        if (getIntent().hasExtra("url")) baseUrl = getIntent().getStringExtra("url");
+        LogUtil.printPushLog("initView baseUrl" + baseUrl);
         mIvCancel = (ImageView) findViewById(R.id.iv_cancel);
         mIvContactUs = (ImageView) findViewById(R.id.iv_contact_us);
         mWebView = (WebView) findViewById(R.id.wv_content);
@@ -176,13 +191,18 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK && mWebView.canGoBack()&& !mWebView.getUrl().equals(baseUrl)) {
-            mWebView.goBack();//返回上个页面
-            return true;
+        try {
+            if (keyCode == KeyEvent.KEYCODE_BACK && mWebView.canGoBack() && !mWebView.getUrl().equals(baseUrl)) {
+                mWebView.goBack();//返回上个页面
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return super.onKeyDown(keyCode, event);//退出H5界面
 
     }
+
     private AdvertisementListData advertisementListData;
     private AdsBrowseInfoTask mAdsBrowseInfoTask;
 
@@ -190,7 +210,7 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 
         @Override
         protected Void doInBackground(String... params) {
-            boolean flag =  HttpJsonSend.adsBrowseInfo(WebViewActivity.this,id);
+            boolean flag = HttpJsonSend.adsBrowseInfo(WebViewActivity.this, id);
             if (flag) {
                 mHandler.sendEmptyMessage(AD_BROWSE_SUCCESS);
             } else {
@@ -207,7 +227,7 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 
         @Override
         protected Void doInBackground(String... params) {
-            boolean flag = HttpJsonSend.adsLike(WebViewActivity.this,id);
+            boolean flag = HttpJsonSend.adsLike(WebViewActivity.this, id);
             if (flag) {
                 mHandler.sendEmptyMessage(AD_LIKE_SUCCESS);
             } else {
