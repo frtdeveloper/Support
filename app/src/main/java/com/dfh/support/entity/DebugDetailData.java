@@ -5,7 +5,16 @@ public class DebugDetailData {
     private String id;
     private String publishTime;
     private String title;
+    private String url;
     private boolean flag;
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
     public String getContent() {
         return content;
@@ -54,6 +63,7 @@ public class DebugDetailData {
                 ", id='" + id + '\'' +
                 ", publishTime='" + publishTime + '\'' +
                 ", title='" + title + '\'' +
+                ", url='" + url + '\'' +
                 ", flag=" + flag +
                 '}';
     }

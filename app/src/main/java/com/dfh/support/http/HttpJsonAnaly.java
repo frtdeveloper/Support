@@ -610,6 +610,8 @@ public class HttpJsonAnaly {
                 debugDetailData.setPublishTime(dataJson.getString("publishTime"));
             if (dataJson.has("title"))
                 debugDetailData.setTitle(dataJson.getString("title"));
+            if (dataJson.has("url"))
+                debugDetailData.setUrl(dataJson.getString("url"));
             debugDetailData.setFlag(true);
             LogUtil.printPushLog("faultFindIdDetail debugDetailData" + debugDetailData.toString());
             return debugDetailData;

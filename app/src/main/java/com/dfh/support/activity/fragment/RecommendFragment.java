@@ -166,7 +166,10 @@ public class RecommendFragment extends Fragment implements LoadListView.ILoadLis
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(getActivity(), WebViewActivity.class);
-                    intent.putExtra("url",advertisementListData.getAdvertisementDatas().get(finalI).getLink());
+                    intent.putExtra("url",HttpConfig.GetHttpPolicyAdress()
+                            +advertisementListData.getAdvertisementDatas().get(finalI).getLink()
+                            +"?links="+advertisementListData.getAdvertisementDatas().get(finalI).getLikes()
+                            +"&browses="+advertisementListData.getAdvertisementDatas().get(finalI).getBrowses());
                     intent.putExtra("id",advertisementListData.getAdvertisementDatas().get(finalI).getId());
                     getActivity().startActivity(intent);
                 }
@@ -192,7 +195,10 @@ public class RecommendFragment extends Fragment implements LoadListView.ILoadLis
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(getActivity(), WebViewActivity.class);
-                    intent.putExtra("url",advertisementListData.getAdvertisementDatas().get(finalI).getLink());
+                    intent.putExtra("url",HttpConfig.GetHttpPolicyAdress()+
+                            advertisementListData.getAdvertisementDatas().get(finalI).getLink()
+                            +"? links="+advertisementListData.getAdvertisementDatas().get(finalI).getLikes()
+                            +"&browses="+advertisementListData.getAdvertisementDatas().get(finalI).getBrowses());
                     intent.putExtra("id",advertisementListData.getAdvertisementDatas().get(finalI).getId());
                     getActivity().startActivity(intent);
                 }
