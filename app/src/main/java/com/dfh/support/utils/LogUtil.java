@@ -11,6 +11,8 @@ import android.util.Log;
 import android.widget.Toast;
 import androidx.core.app.ActivityCompat;
 import com.dfh.support.R;
+import com.dfh.support.entity.CityData;
+
 import java.util.List;
 
 public final class LogUtil {
@@ -60,7 +62,8 @@ public final class LogUtil {
         if(NAME_LOG_FLAG)Log.i(tagName, logText);
     }
 
-    public static String getGeo(Context ctx){
+    public static CityData getGeo(Context ctx){
+        CityData cityData = null;
         String geo_info = ctx.getResources().getString(R.string.common_default_city);
         printUtilLog("getGeo::Begin::default_address= " + geo_info);
 
@@ -86,6 +89,10 @@ public final class LogUtil {
                         if (null != found_address_list && found_address_list.size() > 0) {
                             geo_info = found_address_list.get(0).getLocality();
                             printUtilLog("getGeo::latitude= " + latitude + " longitude= " + longitude + " geo_info= " + geo_info);
+                            cityData = new CityData();
+                            cityData.setCityName(geo_info);
+                            cityData.setLatitude(latitude);
+                            cityData.setLongitude(longitude);
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -98,6 +105,6 @@ public final class LogUtil {
                 printUtilLog("getGeo:: the GEO switch is not enabled!!!!");
             }
         }
-        return geo_info;
+        return cityData;
     }
 }

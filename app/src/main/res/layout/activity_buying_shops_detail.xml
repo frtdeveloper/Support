@@ -10,8 +10,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -59,6 +57,8 @@
             android:layout_height="wrap_content"
             android:divider="@color/white"
             android:dividerHeight="8dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:layout_marginTop="15dp"/>
 
         <RelativeLayout
@@ -81,7 +81,7 @@
                 android:textColor="@color/service_list_item_distance"
                 android:textSize="16sp"
                 android:layout_alignParentRight="true"
-                android:text="2.5KM"/>
+                android:text=""/>
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="match_parent"

@@ -17,6 +17,7 @@ public class ChangeOfPurchaseMoreAdapter extends BaseAdapter {
     private ArrayList<ServeData> mList = new ArrayList<ServeData>();
     protected LayoutInflater mInflater;
     protected Context cxt;
+    private boolean mHasLocation = false;
 
     public ChangeOfPurchaseMoreAdapter(Context context, ArrayList<ServeData> list) {
         cxt = context;
@@ -24,7 +25,8 @@ public class ChangeOfPurchaseMoreAdapter extends BaseAdapter {
         mList = list;
     }
 
-    public void setList(ArrayList<ServeData> list) {
+    public void setList(ArrayList<ServeData> list,boolean hasLocation) {
+        mHasLocation = hasLocation;
         mList = list;
         notifyDataSetChanged();
     }
@@ -62,6 +64,11 @@ public class ChangeOfPurchaseMoreAdapter extends BaseAdapter {
         }
         ServeData serveData = mList.get(position);
         holder.tvName.setText(serveData.getName());
+        if(mHasLocation) {
+            holder.tvDistance.setVisibility(View.VISIBLE);
+        }else{
+            holder.tvDistance.setVisibility(View.GONE);
+        }
         holder.tvDistance.setText(serveData.getDistance());
         holder.tvAddress.setText(serveData.getAddress());
         holder.tvTime.setText(serveData.getTime());

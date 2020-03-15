@@ -34,15 +34,18 @@ import com.dfh.support.activity.adapter.AfterSaleMoreAdapter;
 import com.dfh.support.activity.adapter.ChangeOfPurchaseMoreAdapter;
 import com.dfh.support.activity.adapter.TroubleShootingAdapter;
 import com.dfh.support.activity.support.AboutUsActivity;
+import com.dfh.support.activity.support.BuyingShopsDetailActivity;
 import com.dfh.support.activity.support.BuyingShopsListActivity;
 import com.dfh.support.activity.support.CallPhoneActivity;
 import com.dfh.support.activity.support.DebuggingListActivity;
 import com.dfh.support.activity.support.DebuggingMenuActivity;
 import com.dfh.support.activity.support.SearchActivity;
+import com.dfh.support.activity.support.ServiceDetailActivity;
 import com.dfh.support.activity.support.ServiceListActivity;
 import com.dfh.support.activity.support.SparePartsMenuActivity;
 import com.dfh.support.activity.widget.ChildrenGridView;
 import com.dfh.support.activity.widget.LoadingProgressDialog;
+import com.dfh.support.entity.CityData;
 import com.dfh.support.entity.ClassifyListData;
 import com.dfh.support.entity.DebugMenuData;
 import com.dfh.support.entity.DebugMenuListData;
@@ -53,6 +56,7 @@ import com.dfh.support.http.HttpConfig;
 import com.dfh.support.http.HttpJsonAnaly;
 import com.dfh.support.http.HttpJsonSend;
 import com.dfh.support.utils.LogUtil;
+import com.dfh.support.utils.SettingSharedPerferencesUtil;
 import com.dfh.support.utils.TextUtils;
 import com.dfh.support.utils.ToastUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -82,6 +86,7 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
     private LinearLayout mLlSearch;
     private ImageView mIvContactUs, mIvTroubleShootingOne, mIvTroubleShootingTwo;
 
+    private String mCity = "";
     private static final int POLICY_FIND_SUCCESS = 1;
     private static final int POLICY_FIND_FALSE = 2;
     private static final int DEBUG_FIND_SUCCESS = 3;
@@ -149,15 +154,17 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
                 case SERVE_PAGER_SUCCESS:
                     //刷新list.根据type来。同时如果是type=1继续请求接口
                     if(type.equals(HttpJsonSend.SERVE_TYPE_SERVICE)){
+                        LogUtil.printPushLog("CityData type.equals(HttpJsonSend.SERVE_TYPE_SERVICE)");
                         //售后服务列表
                         mAfterSaleServiceList = serveListData.getServeData();
-                        mAfterSaleMoreAdapter.setList(mAfterSaleServiceList);
+                        mAfterSaleMoreAdapter.setList(mAfterSaleServiceList,hasLocation);
                         type = HttpJsonSend.SERVE_TYPE_BUYING;
-                        mHandler.sendEmptyMessage(GET_SERVE_PAGER);
+                        mHandler.sendEmptyMessageDelayed(GET_SERVE_PAGER,2000);
                     }else{
+                        LogUtil.printPushLog("CityData type.equals(HttpJsonSend.SERVE_TYPE_BUYING)");
                         //换购网点列表
                         mChangeOfPurchaseServiceList = serveListData.getServeData();
-                        mChangeOfPurchaseMoreAdapter.setList(mChangeOfPurchaseServiceList);
+                        mChangeOfPurchaseMoreAdapter.setList(mChangeOfPurchaseServiceList,hasLocation);
                     }
                     break;
                 case SERVE_PAGER_FALSE:
@@ -180,6 +187,7 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
         initView();
         initListener();
 //        setGridView();
+        mCityData = LogUtil.getGeo(getActivity());
         mHandler.sendEmptyMessage(GET_POLICY_NAME);
         mHandler.sendEmptyMessage(GET_FAULT_CLASSIFY);
         mHttpReceiver = new HttpReceiver();//广播接受者实例
@@ -223,6 +231,7 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
         mIvTroubleShootingOne = (ImageView) mFragmentView.findViewById(R.id.iv_troubleshooting_one);
         mIvTroubleShootingTwo = (ImageView) mFragmentView.findViewById(R.id.iv_troubleshooting_two);
 
+        mCity = SettingSharedPerferencesUtil.GetSearchCityValueConfig(getActivity());
     }
 
     private void initListener() {
@@ -234,6 +243,33 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
         mRlAboutUs.setOnClickListener(this);
         mRlAfterSales.setOnClickListener(this);
         mIvContactUs.setOnClickListener(this);
+
+        mLvAfterSaleService.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(getActivity(), ServiceDetailActivity.class);
+                intent.putExtra("id",mAfterSaleServiceList.get(i).getId());
+                if(hasLocation){
+                    intent.putExtra("distance",mAfterSaleServiceList.get(i).getDistance());
+                }else{
+                    intent.putExtra("distance","");
+                }
+                startActivity(intent);
+            }
+        });
+        mLvChangeOfPurchaseService.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(getActivity(), BuyingShopsDetailActivity.class);
+                intent.putExtra("id",mChangeOfPurchaseServiceList.get(i).getId());
+                if(hasLocation){
+                    intent.putExtra("distance",mChangeOfPurchaseServiceList.get(i).getDistance());
+                }else{
+                    intent.putExtra("distance","");
+                }
+                startActivity(intent);
+            }
+        });
     }
 
     /**
@@ -309,7 +345,7 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
             case R.id.rl_after_sales_policy:
                 intent = new Intent(getActivity(), TitleWebViewActivity.class);
                 intent.putExtra("title", mPolicyData.getTitle());
-                intent.putExtra("url", HttpConfig.GetHttpPolicyAdress()+mPolicyData.getUrl());
+                intent.putExtra("url", mPolicyData.getUrl());
                 intent.putExtra("id", mPolicyData.getId());
                 startActivity(intent);
                 break;
@@ -358,19 +394,28 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
     }
     private ServePagerTask mServePagerTask;
     private ServeListData serveListData;
-    private String area = "";
-    private String lat = "";
-    private String lng = "";
+    private CityData mCityData;
     private String pageSize = "20";
     private String pageNo = "1";
     private String type = HttpJsonSend.SERVE_TYPE_SERVICE;
+    private boolean hasLocation = false;
 
     private class ServePagerTask extends AsyncTask<String, Void, Void> {
 
         @Override
         protected Void doInBackground(String... params) {
-            HttpJsonSend.servePager(getActivity(), area,
-                    lat, lng, pageSize, pageNo,type);
+            if(mCityData!=null) {
+                hasLocation = true;
+                LogUtil.printPushLog("CityData mCityData:" + mCityData.toString());
+                HttpJsonSend.servePager(getActivity(), mCityData.getCityName(),
+                        String.valueOf(mCityData.getLatitude()), String.valueOf(mCityData.getLongitude())
+                        , pageSize, pageNo, type);
+            }else{
+                hasLocation = false;
+                LogUtil.printPushLog("CityData mCityData=null ");
+                HttpJsonSend.servePager(getActivity(), mCity,
+                        "39.908692", "116.397477", pageSize, pageNo, type);
+            }
             return null;
         }
     }

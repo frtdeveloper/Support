@@ -405,18 +405,22 @@ public class HttpJsonAnaly {
                 if (dataJson.has("tips"))
                     serveData.setTips(dataJson.getString("tips"));
 
-                JSONArray pictureArrayJson = dataJson.getJSONArray("pictureVOList");
                 ArrayList<PictureVOData> pictureVODataList = new ArrayList<PictureVOData>();
-                for (int a = 0; a < pictureArrayJson.length(); a++) {
-                    PictureVOData pictureVOData = new PictureVOData();
-                    JSONObject pictureJson = (JSONObject) pictureArrayJson.get(i);
-                    if (pictureJson.has("id"))
-                        pictureVOData.setId(pictureJson.getString("id"));
-                    if (pictureJson.has("source"))
-                        pictureVOData.setSource(pictureJson.getString("source"));
-                    if (pictureJson.has("thumb"))
-                        pictureVOData.setThumb(pictureJson.getString("thumb"));
-                    pictureVODataList.add(pictureVOData);
+                try {
+                    JSONArray pictureArrayJson = dataJson.getJSONArray("pictureVOList");
+                    for (int a = 0; a < pictureArrayJson.length(); a++) {
+                        PictureVOData pictureVOData = new PictureVOData();
+                        JSONObject pictureJson = (JSONObject) pictureArrayJson.get(i);
+                        if (pictureJson.has("id"))
+                            pictureVOData.setId(pictureJson.getString("id"));
+                        if (pictureJson.has("source"))
+                            pictureVOData.setSource(pictureJson.getString("source"));
+                        if (pictureJson.has("thumb"))
+                            pictureVOData.setThumb(pictureJson.getString("thumb"));
+                        pictureVODataList.add(pictureVOData);
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
                 serveData.setPictureVOData(pictureVODataList);
                 serveDataList.add(serveData);

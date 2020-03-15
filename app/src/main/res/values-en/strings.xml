@@ -35,7 +35,8 @@
     <string name="common_specs">Specs：</string>
     <string name="common_explain">Explain：</string>
     <string name="common_remark">Remark：</string>
-
+    <string name="positioning_failure">Positioning failure</string>
+    <string name="hot_cities">Hot cities</string>
 
 
 

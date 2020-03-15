@@ -23,6 +23,7 @@ import com.dfh.support.http.HttpJsonAnaly;
 import com.dfh.support.http.HttpJsonSend;
 import com.dfh.support.utils.ActionBarUtil;
 import com.dfh.support.utils.LogUtil;
+import com.dfh.support.utils.TextUtils;
 import com.dfh.support.utils.ToastUtils;
 
 import java.util.ArrayList;
@@ -56,7 +57,7 @@ public class BuyingShopsDetailActivity extends AppCompatActivity implements View
                     LoadingProgressDialog.Dissmiss();
                     //刷新内容
                     mTvName.setText(mServeData.getName());
-                    mTvDistance.setText(mServeData.getDistance());
+                    if(!TextUtils.isEmpty(distance)) mTvDistance.setText(distance);
                     mTvAddress.setText(mServeData.getAddress());
                     mTvTime.setText(mServeData.getTime());
                     mTvPhone.setText(mServeData.getTel());
@@ -84,6 +85,7 @@ public class BuyingShopsDetailActivity extends AppCompatActivity implements View
         initListener();
         LoadingProgressDialog.show(BuyingShopsDetailActivity.this, false, true, 30000);
         id = getIntent().getStringExtra("id");
+        distance = getIntent().getStringExtra("distance");
         mServeIdDetailTask = new ServeIdDetailTask();
         mServeIdDetailTask.execute("");
     }
@@ -124,6 +126,7 @@ public class BuyingShopsDetailActivity extends AppCompatActivity implements View
     private ServeData mServeData;
     private ServeIdDetailTask mServeIdDetailTask;
     private String id = "";
+    private String distance = "";
 
     private class ServeIdDetailTask extends AsyncTask<String, Void, Void> {
 

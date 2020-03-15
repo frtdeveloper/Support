@@ -79,6 +79,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
+        android:listSelector="@android:color/transparent"
         android:fadingEdge="none"
         android:stretchMode="columnWidth"
         android:numColumns="auto_fit"

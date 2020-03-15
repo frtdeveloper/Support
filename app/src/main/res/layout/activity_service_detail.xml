@@ -54,6 +54,8 @@
             android:id="@+id/lv_pic"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:divider="@color/white"
             android:dividerHeight="8dp"
             android:layout_marginTop="15dp"/>
@@ -78,7 +80,7 @@
                 android:textColor="@color/service_list_item_distance"
                 android:textSize="16sp"
                 android:layout_alignParentRight="true"
-                android:text="2.5KM"/>
+                android:text=""/>
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="match_parent"

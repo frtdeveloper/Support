@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.dfh.support.R;
 import com.dfh.support.SupportApplication;
@@ -24,6 +25,7 @@ import com.dfh.support.activity.adapter.BuyingShopsListAdapter;
 import com.dfh.support.activity.adapter.ServiceListAdapter;
 import com.dfh.support.activity.widget.LoadListView;
 import com.dfh.support.activity.widget.LoadingProgressDialog;
+import com.dfh.support.entity.CityData;
 import com.dfh.support.entity.ServeData;
 import com.dfh.support.entity.ServeListData;
 import com.dfh.support.http.HttpConfig;
@@ -31,6 +33,7 @@ import com.dfh.support.http.HttpJsonAnaly;
 import com.dfh.support.http.HttpJsonSend;
 import com.dfh.support.utils.ActionBarUtil;
 import com.dfh.support.utils.LogUtil;
+import com.dfh.support.utils.SettingSharedPerferencesUtil;
 import com.dfh.support.utils.TextUtils;
 
 import java.util.ArrayList;
@@ -42,6 +45,8 @@ public class BuyingShopsListActivity extends AppCompatActivity  implements View.
 
     private ImageView mIvBack, mIvContactUs;
     private LinearLayout mLlSearch;
+    private TextView mTvCity;
+    private String mCity = "";
 
     private LoadListView mLvBuyingShops;
     private ArrayList<ServeData> mBuyingShopsList = new ArrayList<ServeData>();
@@ -61,7 +66,7 @@ public class BuyingShopsListActivity extends AppCompatActivity  implements View.
                     LoadingProgressDialog.Dissmiss();
                     //刷新list
                     mBuyingShopsList.addAll(serveListData.getServeData());
-                    mBuyingShopsListAdapter.setList(mBuyingShopsList);
+                    mBuyingShopsListAdapter.setList(mBuyingShopsList,hasLocation);
                     mLvBuyingShops.loadComplete();
                     break;
                 case SERVE_PAGER_FALSE:
@@ -85,6 +90,7 @@ public class BuyingShopsListActivity extends AppCompatActivity  implements View.
         getSupportActionBar().hide();
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_buying_shops_list);
+        mCityData = LogUtil.getGeo(BuyingShopsListActivity.this);
         initView();
         initListener();
         mHttpReceiver = new HttpReceiver();//广播接受者实例
@@ -106,6 +112,11 @@ public class BuyingShopsListActivity extends AppCompatActivity  implements View.
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(BuyingShopsListActivity.this,BuyingShopsDetailActivity.class);
                 intent.putExtra("id",mBuyingShopsList.get(i).getId());
+                if(hasLocation){
+                    intent.putExtra("distance",mBuyingShopsList.get(i).getDistance());
+                }else{
+                    intent.putExtra("distance","");
+                }
                 startActivity(intent);
             }
         });
@@ -121,7 +132,41 @@ public class BuyingShopsListActivity extends AppCompatActivity  implements View.
         mLvBuyingShops = (LoadListView)findViewById(R.id.lv_buying_shops_list);
         mBuyingShopsListAdapter = new BuyingShopsListAdapter(this,mBuyingShopsList);
         mLvBuyingShops.setAdapter(mBuyingShopsListAdapter);
+        mTvCity = (TextView)findViewById(R.id.tv_city);
+        if(mCityData!=null){
+            mTvCity.setText(mCityData.getCityName());
+        }else{
+            mCity = SettingSharedPerferencesUtil.GetSearchCityValueConfig(BuyingShopsListActivity.this);
+            mTvCity.setText(mCity);
+        }
     }
+    // private boolean isFrist = true;
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //LogUtil.printPushLog("honResume isFrist" + isFrist);
+        //if(!isFrist) {
+        //isFrist = false;
+        boolean flag = false;
+        if (mCityData != null) {
+            LogUtil.printPushLog("honResume mCityData!=null");
+            mTvCity.setText(mCityData.getCityName());
+        } else {
+            LogUtil.printPushLog("honResume mCityData==null");
+            mCity = SettingSharedPerferencesUtil.GetSearchCityValueConfig(BuyingShopsListActivity.this);
+            LogUtil.printPushLog("honResume mCity" + mCity);
+            LogUtil.printPushLog("honResume mTvCity.getText().toString()" + mTvCity.getText().toString());
+            if (!mCity.equals(mTvCity.getText().toString())) flag = true;
+            LogUtil.printPushLog("honResume flag" + flag);
+            mTvCity.setText(mCity);
+        }
+        if (flag) {
+            mBuyingShopsList = new ArrayList<ServeData>();
+            mHandler.sendEmptyMessage(GET_SERVE_PAGER);
+        }
+        //}
+    }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -147,18 +192,27 @@ public class BuyingShopsListActivity extends AppCompatActivity  implements View.
 
     private ServePagerTask mServePagerTask;
     private ServeListData serveListData;
-    private String area = "";
-    private String lat = "";
-    private String lng = "";
+    private CityData mCityData;
     private String pageSize = "20";
     private String pageNo = "1";
+    private boolean hasLocation = false;
 
     private class ServePagerTask extends AsyncTask<String, Void, Void> {
 
         @Override
         protected Void doInBackground(String... params) {
-            HttpJsonSend.servePager(BuyingShopsListActivity.this, area,
-                    lat, lng, pageSize, pageNo,HttpJsonSend.SERVE_TYPE_BUYING);
+            if(mCityData!=null) {
+                hasLocation = true;
+                LogUtil.printPushLog("CityData mCityData:" + mCityData.toString());
+                HttpJsonSend.servePager(BuyingShopsListActivity.this, mCityData.getCityName(),
+                        String.valueOf(mCityData.getLatitude()), String.valueOf(mCityData.getLongitude())
+                        , pageSize, pageNo, HttpJsonSend.SERVE_TYPE_BUYING);
+            }else{
+                hasLocation = false;
+                LogUtil.printPushLog("CityData mCityData=null ");
+                HttpJsonSend.servePager(BuyingShopsListActivity.this, mCity,
+                        "39.908692", "116.397477", pageSize, pageNo, HttpJsonSend.SERVE_TYPE_BUYING);
+            }
             return null;
         }
     }

@@ -12,9 +12,7 @@
         <ImageView
             android:id="@+id/iv_pic"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            android:scaleType="fitXY"
-            android:src="@mipmap/show_spare_bg" />
+            android:layout_height="200dp"
+            android:layout_centerInParent="true"/>
     </RelativeLayout>
 </LinearLayout>

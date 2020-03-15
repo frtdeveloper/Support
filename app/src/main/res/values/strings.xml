@@ -43,6 +43,8 @@
     <string name="common_specs">规格：</string>
     <string name="common_explain">说明：</string>
     <string name="common_remark">提醒：</string>
+    <string name="positioning_failure">定位失败</string>
+    <string name="hot_cities">热门城市</string>
 
     <string name="check_your_permission">请检查您的权限是否开启</string>
     <string name="network_connection_failed">网络连接失败</string>

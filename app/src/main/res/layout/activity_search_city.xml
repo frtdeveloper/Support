@@ -62,11 +62,12 @@
             android:layout_gravity="center_vertical"
             android:src="@mipmap/img_gps" />
         <TextView
+            android:id="@+id/tv_city"
             android:layout_width="wrap_content"
             android:layout_gravity="center_vertical"
             android:textSize="16sp"
             android:textColor="@color/black"
-            android:text="广东省 深圳市"
+            android:text="北京市"
             android:layout_marginLeft="5dp"
             android:layout_height="wrap_content"/>
     </LinearLayout>
@@ -83,16 +84,17 @@
             android:layout_height="wrap_content"
             android:textColor="@color/ad_item_title_text"
             android:textSize="18sp"
-            android:text="@string/search_history"/>
+            android:text="@string/hot_cities"/>
     </RelativeLayout>
     <GridView
         android:id="@+id/gv_history"
         android:layout_width="match_parent"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="25dp"
+        android:listSelector="@android:color/transparent"
         android:layout_marginRight="25dp"
         android:fadingEdge="none"
         android:stretchMode="columnWidth"
-        android:numColumns="5"
+        android:numColumns="4"
         android:layout_height="match_parent" />
 </LinearLayout>

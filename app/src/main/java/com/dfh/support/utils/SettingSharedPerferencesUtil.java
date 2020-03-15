@@ -22,4 +22,23 @@ public class SettingSharedPerferencesUtil {
         return history;
     }
 
+    public static final String SEARCH_CITY_PATH = "filepath_search_city_";
+    private static final String SEARCH_CITY_CONFIG = "config_search_city_";
+
+    public static boolean SetSearchCityValue(Context context, String city) {
+        LogUtil.printPushLog("SetSearchHistoryValue city" + city);
+        return PrefsHelper.save(context, SEARCH_CITY_CONFIG, city, SEARCH_CITY_PATH);
+    }
+
+    public static String GetSearchCityValueConfig(Context context) {
+        String city = "";
+        try {
+            city = PrefsHelper.read(context, SEARCH_CITY_CONFIG, SEARCH_CITY_PATH);
+            LogUtil.printPushLog("GetSearchHistoryValueConfig city" + city);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if(TextUtils.isEmpty(city)) city = "北京市";
+        return city;
+    }
 }

@@ -84,6 +84,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         mGvHistory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                LogUtil.printPushLog("keywords mHistoryList.get(i)：" + mHistoryList.get(i));
                 Intent intent = new Intent(SearchActivity.this, DebuggingSearchListActivity.class);
                 intent.putExtra("keywords", mHistoryList.get(i));
                 startActivity(intent);
@@ -96,27 +97,38 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                 if (goSearch) {
                     goSearch = false;
                     String content = mEtSearch.getText().toString();
+                    LogUtil.printPushLog("keywords content：" + content);
                     if (!TextUtils.isEmpty(content)&&!content.contains(",")) {
                         String history = SettingSharedPerferencesUtil.GetSearchHistoryValueConfig(SearchActivity.this);
+                        LogUtil.printPushLog("keywords history：" + history);
                         if (!TextUtils.isEmpty(history)) {
                             if(history.contains(",")){
+                                LogUtil.printPushLog("keywords history.contains(,)");
                                 String[] historyList = history.split(",");
                                 boolean hasHistory = false;
                                 for(int a = 0 ;a<historyList.length;a++){
-                                    if(!historyList[a].equals(content))hasHistory = true;
+                                    LogUtil.printPushLog("keywords historyList[a]:"+historyList[a]);
+                                    if(historyList[a].equals(content))hasHistory = true;
                                 }
+                                LogUtil.printPushLog("keywords hasHistory:"+hasHistory);
                                 if(!hasHistory){
+                                    LogUtil.printPushLog("keywords history1:"+history);
                                     history = history + "," + content;
+                                    LogUtil.printPushLog("keywords history2:"+history);
+                                    SettingSharedPerferencesUtil.SetSearchHistoryValue(SearchActivity.this,history);
                                 }
                             }else{
+                                LogUtil.printPushLog("keywords !history.contains(,)");
                                 if(!history.equals(content)){
                                     history = history + "," + content;
+                                    SettingSharedPerferencesUtil.SetSearchHistoryValue(SearchActivity.this,history);
                                 }
                             }
                         } else {
+                            LogUtil.printPushLog("keywords TextUtils.isEmpty(history)");
                             history = content;
+                            SettingSharedPerferencesUtil.SetSearchHistoryValue(SearchActivity.this,history);
                         }
-                        SettingSharedPerferencesUtil.SetSearchHistoryValue(SearchActivity.this,history);
                     }
                     Intent intent = new Intent(SearchActivity.this, DebuggingSearchListActivity.class);
                     intent.putExtra("keywords", content);

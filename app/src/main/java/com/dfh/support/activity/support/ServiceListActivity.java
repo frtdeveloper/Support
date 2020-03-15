@@ -17,12 +17,14 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.dfh.support.R;
 import com.dfh.support.SupportApplication;
 import com.dfh.support.activity.adapter.ServiceListAdapter;
 import com.dfh.support.activity.widget.LoadListView;
 import com.dfh.support.activity.widget.LoadingProgressDialog;
+import com.dfh.support.entity.CityData;
 import com.dfh.support.entity.PartsListData;
 import com.dfh.support.entity.ServeData;
 import com.dfh.support.entity.ServeListData;
@@ -31,6 +33,7 @@ import com.dfh.support.http.HttpJsonAnaly;
 import com.dfh.support.http.HttpJsonSend;
 import com.dfh.support.utils.ActionBarUtil;
 import com.dfh.support.utils.LogUtil;
+import com.dfh.support.utils.SettingSharedPerferencesUtil;
 import com.dfh.support.utils.TextUtils;
 
 import java.util.ArrayList;
@@ -42,6 +45,8 @@ public class ServiceListActivity extends AppCompatActivity implements View.OnCli
 
     private ImageView mIvBack, mIvContactUs;
     private LinearLayout mLlSearch;
+    private TextView mTvCity;
+    private String mCity = "";
 
     private LoadListView mLvService;
     private ArrayList<ServeData> mServiceList = new ArrayList<ServeData>();
@@ -61,7 +66,7 @@ public class ServiceListActivity extends AppCompatActivity implements View.OnCli
                     LoadingProgressDialog.Dissmiss();
                     //刷新list
                     mServiceList.addAll(serveListData.getServeData());
-                    mServiceListAdapter.setList(mServiceList);
+                    mServiceListAdapter.setList(mServiceList,hasLocation);
                     mLvService.loadComplete();
                     break;
                 case SERVE_PAGER_FALSE:
@@ -86,6 +91,7 @@ public class ServiceListActivity extends AppCompatActivity implements View.OnCli
         getSupportActionBar().hide();
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_service_list);
+        mCityData = LogUtil.getGeo(ServiceListActivity.this);
         initView();
         initListener();
         mHttpReceiver = new HttpReceiver();//广播接受者实例
@@ -107,6 +113,11 @@ public class ServiceListActivity extends AppCompatActivity implements View.OnCli
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(ServiceListActivity.this, ServiceDetailActivity.class);
                 intent.putExtra("id",mServiceList.get(i).getId());
+                if(hasLocation){
+                    intent.putExtra("distance",mServiceList.get(i).getDistance());
+                }else{
+                    intent.putExtra("distance","");
+                }
                 startActivity(intent);
             }
         });
@@ -122,6 +133,39 @@ public class ServiceListActivity extends AppCompatActivity implements View.OnCli
         mLvService = (LoadListView) findViewById(R.id.lv_service_list);
         mServiceListAdapter = new ServiceListAdapter(this, mServiceList);
         mLvService.setAdapter(mServiceListAdapter);
+        mTvCity = (TextView)findViewById(R.id.tv_city);
+        if(mCityData!=null){
+            mTvCity.setText(mCityData.getCityName());
+        }else{
+            mCity = SettingSharedPerferencesUtil.GetSearchCityValueConfig(ServiceListActivity.this);
+            mTvCity.setText(mCity);
+        }
+    }
+   // private boolean isFrist = true;
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //LogUtil.printPushLog("honResume isFrist" + isFrist);
+        //if(!isFrist) {
+            //isFrist = false;
+            boolean flag = false;
+            if (mCityData != null) {
+                LogUtil.printPushLog("honResume mCityData!=null");
+                mTvCity.setText(mCityData.getCityName());
+            } else {
+                LogUtil.printPushLog("honResume mCityData==null");
+                mCity = SettingSharedPerferencesUtil.GetSearchCityValueConfig(ServiceListActivity.this);
+                LogUtil.printPushLog("honResume mCity" + mCity);
+                LogUtil.printPushLog("honResume mTvCity.getText().toString()" + mTvCity.getText().toString());
+                if (!mCity.equals(mTvCity.getText().toString())) flag = true;
+                LogUtil.printPushLog("honResume flag" + flag);
+                mTvCity.setText(mCity);
+            }
+            if (flag) {
+                mServiceList = new ArrayList<ServeData>();
+                mHandler.sendEmptyMessage(GET_SERVE_PAGER);
+            }
+        //}
     }
 
     @Override
@@ -149,18 +193,27 @@ public class ServiceListActivity extends AppCompatActivity implements View.OnCli
 
     private ServePagerTask mServePagerTask;
     private ServeListData serveListData;
-    private String area = "";
-    private String lat = "";
-    private String lng = "";
+    private CityData mCityData;
     private String pageSize = "20";
     private String pageNo = "1";
+    private boolean hasLocation = false;
 
     private class ServePagerTask extends AsyncTask<String, Void, Void> {
 
         @Override
         protected Void doInBackground(String... params) {
-            HttpJsonSend.servePager(ServiceListActivity.this, area,
-                     lat, lng, pageSize, pageNo,HttpJsonSend.SERVE_TYPE_SERVICE);
+            if(mCityData!=null) {
+                hasLocation = true;
+                LogUtil.printPushLog("CityData mCityData:" + mCityData.toString());
+                HttpJsonSend.servePager(ServiceListActivity.this, mCityData.getCityName(),
+                        String.valueOf(mCityData.getLatitude()), String.valueOf(mCityData.getLongitude())
+                        , pageSize, pageNo, HttpJsonSend.SERVE_TYPE_SERVICE);
+            }else{
+                hasLocation = false;
+                LogUtil.printPushLog("CityData mCityData=null ");
+                HttpJsonSend.servePager(ServiceListActivity.this, mCity,
+                        "39.908692", "116.397477", pageSize, pageNo, HttpJsonSend.SERVE_TYPE_SERVICE);
+            }
             return null;
         }
     }

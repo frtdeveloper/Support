@@ -60,6 +60,8 @@ public class LoadingActivity extends AppCompatActivity{ //implements PermissionU
             } else{
                 finish();
             }
+        }else{
+            login();
         }
     }
 

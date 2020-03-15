@@ -51,7 +51,8 @@ public class DebuggingDetailActivity  extends AppCompatActivity implements View.
             switch (msg.what){
                 case FIND_SUCCESS:
                     LoadingProgressDialog.Dissmiss();
-                    mWebView.loadUrl(HttpConfig.GetHttpPolicyAdress()+mDebugDetailData.getUrl());
+                    LogUtil.printPushLog("FIND_SUCCESS url:" + mDebugDetailData.getUrl());
+                    mWebView.loadUrl(mDebugDetailData.getUrl());
                     break;
                 case FIND_FALSE:
                     LoadingProgressDialog.Dissmiss();
