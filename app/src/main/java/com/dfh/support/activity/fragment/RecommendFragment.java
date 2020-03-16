@@ -65,6 +65,7 @@ public class RecommendFragment extends Fragment implements LoadListView.ILoadLis
     private static final int AD_LIST_FALSE = 6;
     private static final int GET_LIST_AD = 7;
     private static final int REPECT_GET = 30*1000;
+    private static final int RECEIVER_UPDATE = 8;
 
     private Handler mHandler = new Handler(){
         @Override
@@ -106,6 +107,12 @@ public class RecommendFragment extends Fragment implements LoadListView.ILoadLis
                     //ToastUtils.shortToast(getActivity(), HttpJsonAnaly.lastError);
                     mAdsFindGeneralPagerTask = new AdsFindGeneralPagerTask();
                     mAdsFindGeneralPagerTask.execute("");
+                    break;
+                case RECEIVER_UPDATE:
+                    mAdvertisementList = new ArrayList<AdvertisementData>();
+                    pageNo = 1;
+                    mHandler.sendEmptyMessage(GET_BANNER_AD);
+                    mHandler.sendEmptyMessage(GET_LIST_AD);
                     break;
             }
         }
@@ -188,24 +195,26 @@ public class RecommendFragment extends Fragment implements LoadListView.ILoadLis
         LayoutInflater inflater = getLayoutInflater();
         mViewList = new ArrayList<View>();
         for(int i = 0 ;i<advertisementListData.getAdvertisementDatas().size();i++) {
-            View view = inflater.inflate(R.layout.banner_layout, null);
-            ImageView ivBanner = (ImageView) view.findViewById(R.id.iv_banner);
-            //ivBanner.setImageResource(R.mipmap.show_banner);
-            ImageLoader.getInstance().displayImage(advertisementListData.getAdvertisementDatas().get(i).getIcon(),ivBanner);
-            final int finalI = i;
-            ivBanner.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(getActivity(), WebViewActivity.class);
-                    intent.putExtra("url",HttpConfig.GetHttpPolicyAdress()+
-                            advertisementListData.getAdvertisementDatas().get(finalI).getLink()
-                            +"? links="+advertisementListData.getAdvertisementDatas().get(finalI).getLikes()
-                            +"&browses="+advertisementListData.getAdvertisementDatas().get(finalI).getBrowses());
-                    intent.putExtra("id",advertisementListData.getAdvertisementDatas().get(finalI).getId());
-                    getActivity().startActivity(intent);
-                }
-            });
-            mViewList.add(view);
+            if(i<5) {
+                View view = inflater.inflate(R.layout.banner_layout, null);
+                ImageView ivBanner = (ImageView) view.findViewById(R.id.iv_banner);
+                //ivBanner.setImageResource(R.mipmap.show_banner);
+                ImageLoader.getInstance().displayImage(advertisementListData.getAdvertisementDatas().get(i).getIcon(), ivBanner);
+                final int finalI = i;
+                ivBanner.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(getActivity(), WebViewActivity.class);
+                        intent.putExtra("url", HttpConfig.GetHttpPolicyAdress() +
+                                advertisementListData.getAdvertisementDatas().get(finalI).getLink()
+                                + "? links=" + advertisementListData.getAdvertisementDatas().get(finalI).getLikes()
+                                + "&browses=" + advertisementListData.getAdvertisementDatas().get(finalI).getBrowses());
+                        intent.putExtra("id", advertisementListData.getAdvertisementDatas().get(finalI).getId());
+                        getActivity().startActivity(intent);
+                    }
+                });
+                mViewList.add(view);
+            }
         }
         mBannerPagerAdapter.setList(mViewList);
         mBannerPosition = 0;
@@ -250,13 +259,13 @@ public class RecommendFragment extends Fragment implements LoadListView.ILoadLis
     private AdsFindGeneralPagerTask mAdsFindGeneralPagerTask;
     private AdvertisementListData adListData;
     private String pageSize = "20";
-    private String pageNo = "1";
+    private int pageNo = 1;
 
     private class AdsFindGeneralPagerTask extends AsyncTask<String, Void, Void> {
 
         @Override
         protected Void doInBackground(String... params) {
-            HttpJsonSend.adsFindGeneralPager(getActivity(), pageSize,pageNo);
+            HttpJsonSend.adsFindGeneralPager(getActivity(), pageSize,String.valueOf(pageNo));
             return null;
         }
     }
@@ -301,9 +310,8 @@ public class RecommendFragment extends Fragment implements LoadListView.ILoadLis
                 //先判断url
                 String message = intent.getStringExtra(UmentBroadcastReceiver.UMENG_MESSAGE);
                 if (message != null && !TextUtils.isEmpty(message)) {
-                    //推送刷新
-                    mHandler.sendEmptyMessage(GET_BANNER_AD);
-                    mHandler.sendEmptyMessage(GET_LIST_AD);
+                    //推送刷新RECEIVER_UPDATE
+                    mHandler.sendEmptyMessage(RECEIVER_UPDATE);
                 }
             }
         }

@@ -181,13 +181,13 @@ public class DebuggingSearchListActivity extends AppCompatActivity implements Vi
     private FaultSearchTask mFaultSearchTask;
     private String keywords = "";
     private String pageSize = "20";
-    private String pageNo = "1";
+    private int pageNo = 1;
 
     private class FaultSearchTask extends AsyncTask<String, Void, Void> {
 
         @Override
         protected Void doInBackground(String... params) {
-            HttpJsonSend.faultSearch(DebuggingSearchListActivity.this,keywords, pageSize,pageNo);
+            HttpJsonSend.faultSearch(DebuggingSearchListActivity.this,keywords, pageSize,String.valueOf(pageNo));
             return null;
         }
     }

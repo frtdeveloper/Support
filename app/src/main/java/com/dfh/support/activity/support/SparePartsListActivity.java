@@ -154,13 +154,13 @@ public class SparePartsListActivity extends AppCompatActivity implements View.On
     private PartsListData partsListData;
     private String partsClassifyId = "";
     private String pageSize = "20";
-    private String pageNo = "1";
+    private int pageNo = 1;
 
     private class PartsFindClassifyIdPagerTask extends AsyncTask<String, Void, Void> {
 
         @Override
         protected Void doInBackground(String... params) {
-            HttpJsonSend.partsFindClassifyIdPager(SparePartsListActivity.this,partsClassifyId, pageSize,pageNo);
+            HttpJsonSend.partsFindClassifyIdPager(SparePartsListActivity.this,partsClassifyId, pageSize,String.valueOf(pageNo));
             return null;
         }
     }

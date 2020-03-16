@@ -194,7 +194,7 @@ public class BuyingShopsListActivity extends AppCompatActivity  implements View.
     private ServeListData serveListData;
     private CityData mCityData;
     private String pageSize = "20";
-    private String pageNo = "1";
+    private int pageNo = 1;
     private boolean hasLocation = false;
 
     private class ServePagerTask extends AsyncTask<String, Void, Void> {
@@ -206,12 +206,12 @@ public class BuyingShopsListActivity extends AppCompatActivity  implements View.
                 LogUtil.printPushLog("CityData mCityData:" + mCityData.toString());
                 HttpJsonSend.servePager(BuyingShopsListActivity.this, mCityData.getCityName(),
                         String.valueOf(mCityData.getLatitude()), String.valueOf(mCityData.getLongitude())
-                        , pageSize, pageNo, HttpJsonSend.SERVE_TYPE_BUYING);
+                        , pageSize, String.valueOf(pageNo), HttpJsonSend.SERVE_TYPE_BUYING);
             }else{
                 hasLocation = false;
                 LogUtil.printPushLog("CityData mCityData=null ");
                 HttpJsonSend.servePager(BuyingShopsListActivity.this, mCity,
-                        "39.908692", "116.397477", pageSize, pageNo, HttpJsonSend.SERVE_TYPE_BUYING);
+                        "39.908692", "116.397477", pageSize, String.valueOf(pageNo), HttpJsonSend.SERVE_TYPE_BUYING);
             }
             return null;
         }

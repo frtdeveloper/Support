@@ -396,7 +396,7 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
     private ServeListData serveListData;
     private CityData mCityData;
     private String pageSize = "20";
-    private String pageNo = "1";
+    private int pageNo = 1;
     private String type = HttpJsonSend.SERVE_TYPE_SERVICE;
     private boolean hasLocation = false;
 
@@ -409,12 +409,12 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
                 LogUtil.printPushLog("CityData mCityData:" + mCityData.toString());
                 HttpJsonSend.servePager(getActivity(), mCityData.getCityName(),
                         String.valueOf(mCityData.getLatitude()), String.valueOf(mCityData.getLongitude())
-                        , pageSize, pageNo, type);
+                        , pageSize, String.valueOf(pageNo), type);
             }else{
                 hasLocation = false;
                 LogUtil.printPushLog("CityData mCityData=null ");
                 HttpJsonSend.servePager(getActivity(), mCity,
-                        "39.908692", "116.397477", pageSize, pageNo, type);
+                        "39.908692", "116.397477", pageSize, String.valueOf(pageNo), type);
             }
             return null;
         }

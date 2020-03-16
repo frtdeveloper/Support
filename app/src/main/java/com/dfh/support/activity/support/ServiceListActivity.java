@@ -195,7 +195,7 @@ public class ServiceListActivity extends AppCompatActivity implements View.OnCli
     private ServeListData serveListData;
     private CityData mCityData;
     private String pageSize = "20";
-    private String pageNo = "1";
+    private int pageNo = 1;
     private boolean hasLocation = false;
 
     private class ServePagerTask extends AsyncTask<String, Void, Void> {
@@ -207,12 +207,12 @@ public class ServiceListActivity extends AppCompatActivity implements View.OnCli
                 LogUtil.printPushLog("CityData mCityData:" + mCityData.toString());
                 HttpJsonSend.servePager(ServiceListActivity.this, mCityData.getCityName(),
                         String.valueOf(mCityData.getLatitude()), String.valueOf(mCityData.getLongitude())
-                        , pageSize, pageNo, HttpJsonSend.SERVE_TYPE_SERVICE);
+                        , pageSize, String.valueOf(pageNo), HttpJsonSend.SERVE_TYPE_SERVICE);
             }else{
                 hasLocation = false;
                 LogUtil.printPushLog("CityData mCityData=null ");
                 HttpJsonSend.servePager(ServiceListActivity.this, mCity,
-                        "39.908692", "116.397477", pageSize, pageNo, HttpJsonSend.SERVE_TYPE_SERVICE);
+                        "39.908692", "116.397477", pageSize, String.valueOf(pageNo), HttpJsonSend.SERVE_TYPE_SERVICE);
             }
             return null;
         }
