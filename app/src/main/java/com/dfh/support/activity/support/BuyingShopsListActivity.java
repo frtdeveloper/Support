@@ -178,7 +178,7 @@ public class BuyingShopsListActivity extends AppCompatActivity  implements View.
                 startActivity(intent);
                 break;
             case R.id.ll_search:
-                intent = new Intent(BuyingShopsListActivity.this, SearchCityActivity.class);
+                intent = new Intent(BuyingShopsListActivity.this, SearchMainActivity.class);
                 startActivity(intent);
                 break;
         }

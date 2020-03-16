@@ -38,7 +38,7 @@ public class SettingSharedPerferencesUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if(TextUtils.isEmpty(city)) city = "北京市";
+        if(TextUtils.isEmpty(city)) city = "北京";
         return city;
     }
 }

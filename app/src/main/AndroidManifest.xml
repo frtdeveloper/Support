@@ -16,6 +16,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".activity.TitleWebViewActivity"></activity>
         <activity android:name=".activity.support.SearchCityActivity" />
+        <activity android:name=".activity.support.SearchMainActivity" />
         <activity android:name=".activity.support.SearchActivity" />
         <activity android:name=".activity.support.CallPhoneActivity" />
         <activity android:name=".activity.support.AboutUsActivity" />

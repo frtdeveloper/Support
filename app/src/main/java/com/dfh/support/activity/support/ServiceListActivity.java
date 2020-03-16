@@ -179,7 +179,7 @@ public class ServiceListActivity extends AppCompatActivity implements View.OnCli
                 startActivity(intent);
                 break;
             case R.id.ll_search:
-                intent = new Intent(ServiceListActivity.this, SearchCityActivity.class);
+                intent = new Intent(ServiceListActivity.this, SearchMainActivity.class);
                 startActivity(intent);
                 break;
         }

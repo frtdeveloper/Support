@@ -14,6 +14,7 @@ import com.dfh.support.activity.support.ServiceListActivity;
 import com.dfh.support.compose.UmentBroadcastReceiver;
 import com.dfh.support.http.HttpJsonSend;
 import com.dfh.support.utils.LogUtil;
+import com.dfh.support.utils.ScreenUtils;
 import com.dfh.support.utils.ToastUtils;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -59,6 +60,7 @@ public class SupportApplication extends Application implements IUmengRegisterCal
         mPushAgent = PushAgent.getInstance(this);
         mPushAgent.register(this);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        ScreenUtils.init(this);
 
     }
 

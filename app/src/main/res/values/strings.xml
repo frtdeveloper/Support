@@ -5,7 +5,7 @@
     <string name="main_nav_policy">政策</string>
     <string name="common_support">服务</string>
     <string name="common_search">搜索</string>
-    <string name="common_default_city">北京市</string>
+    <string name="common_default_city">北京</string>
     <string name="your_personal_cell_phone_assistant">你的私人手机助理</string>
 
     <string name="spare_parts_management">备件管理</string>
@@ -45,6 +45,7 @@
     <string name="common_remark">提醒：</string>
     <string name="positioning_failure">定位失败</string>
     <string name="hot_cities">热门城市</string>
+    <string name="Search_locate_content">输入城市名或拼音查询</string>
 
     <string name="check_your_permission">请检查您的权限是否开启</string>
     <string name="network_connection_failed">网络连接失败</string>
