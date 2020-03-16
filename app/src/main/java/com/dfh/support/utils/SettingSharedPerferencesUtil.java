@@ -34,7 +34,11 @@ public class SettingSharedPerferencesUtil {
         String city = "";
         try {
             city = PrefsHelper.read(context, SEARCH_CITY_CONFIG, SEARCH_CITY_PATH);
-            LogUtil.printPushLog("GetSearchHistoryValueConfig city" + city);
+            if(city.contains("市"))city = city.replace("市","");
+            if(city.contains("县"))city = city.replace("县","");
+            if(!city.equals("景德镇")&&!city.equals("镇江")) {
+                if (city.contains("镇")) city = city.replace("镇", "");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

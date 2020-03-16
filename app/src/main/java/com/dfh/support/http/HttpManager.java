@@ -171,4 +171,63 @@ public class HttpManager {
                 });
     }
 
+
+    public static void postJsonType(final String url, final String json, final Context context,final int type) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.put("authorization", SupportApplication.USER_TOKEN);
+        headers.put("appVersion", VersionUtil.getVersionName(context));
+        headers.put("osVersion", Build.VERSION.RELEASE);
+        headers.put("token", Settings.System.getString(context.getContentResolver(), Settings.System.ANDROID_ID));
+        //headers.put("osVersion", QHApplication.mDeviceUtil.getDeviceData().getDeviceVersion());
+//        headers.put("userId", userId);
+//        headers.put("sessionId", sessionId);
+//        headers.put("Cookie", "JSESSIONID=" + sessionId);
+//        headers.put("Accept-Encoding", "identity");
+//        headers.put("Accept-language","en");//en英文,zh中文
+        headers.put("Content-Type", "application/json");
+        LogUtil.printPushLog("httpPost postJson url:" + url);
+        LogUtil.printPushLog("httpPost postJson json:" + json);
+        LogUtil.printPushLog("httpPost postJson headers:" + headers);
+        OkGo.getInstance().addCommonHeaders(headers);
+        OkGo.getInstance()
+                .setConnectTimeout(10000)
+                .setReadTimeOut(10000)
+                .setWriteTimeOut(10000)
+                .post(url)
+                .upJson(json)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(String data, Call call, Response response) {
+                        LogUtil.printPushLog("httpPost onSuccess data：" + data);
+                        //发广播，记录推s,推url，通过url识别方法，哪个界面调用，哪个界面接收
+                        Intent intent = new Intent();
+                        intent.setAction(SupportApplication.ACTION_HTTP_RESULT);
+                        intent.putExtra("url", url);
+                        intent.putExtra("data", data);
+                        intent.putExtra("type", type);
+                        intent.putExtra("is_success", true);
+                        context.sendBroadcast(intent);
+                    }
+
+                    @Override
+                    public void onError(Call call, Response response, Exception e) {
+                        LogUtil.printPushLog("httpPost onError");
+                        HttpJsonAnaly.lastError = context.getResources().getString(R.string.network_connection_failed);
+                        Intent intent = new Intent();
+                        intent.setAction(SupportApplication.ACTION_HTTP_RESULT);
+                        intent.putExtra("url", url);
+                        intent.putExtra("data", "");
+                        intent.putExtra("type", type);
+                        intent.putExtra("is_success", false);
+                        context.sendBroadcast(intent);
+                        super.onError(call, response, e);
+
+                    }
+
+                    @Override
+                    public void upProgress(long currentSize, long totalSize, float progress, long networkSpeed) {
+
+                    }
+                });
+    }
 }

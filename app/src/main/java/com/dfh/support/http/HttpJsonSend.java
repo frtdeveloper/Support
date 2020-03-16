@@ -216,6 +216,14 @@ public class HttpJsonSend {
     public static final String SERVE_TYPE_SERVICE = "1";
     public static final String SERVE_TYPE_BUYING = "2";
 
+    public static final int COME_FROM_MAIN = 1;
+    public static final int COME_FROM_LIST = 2;
+
+    public static final int TYPE_MAIN_SERVICE = 1;
+    public static final int TYPE_MAIN_BUYING = 2;
+    public static final int TYPE_LIST_SERVICE = 3;
+    public static final int TYPE_LIST_BUYING = 4;
+
     /**
      * 服务分页
      * @param context
@@ -228,7 +236,7 @@ public class HttpJsonSend {
      * @return
      */
     public static boolean servePager(Context context,String area,String lat,String lng
-            , String pageSize, String pageNo,String type) {
+            , String pageSize, String pageNo,String type,int comeFrom) {
         String url = HttpConfig.urL_serve_pager;
         String path = HttpConfig.GetHttpClientAdress() + url;
         try {
@@ -241,7 +249,19 @@ public class HttpJsonSend {
             formJSONObject.put("type", type);
             String form = formJSONObject.toString();
             LogUtil.printPushLog("httpPost servePager form：" + form);
-            HttpManager.postJson(path, form, context);
+            if(comeFrom==COME_FROM_MAIN){
+                if(SERVE_TYPE_SERVICE.equals(type)){
+                    HttpManager.postJsonType(path, form, context,TYPE_MAIN_SERVICE);
+                }else{
+                    HttpManager.postJsonType(path, form, context,TYPE_MAIN_BUYING);
+                }
+            }else{
+                if(SERVE_TYPE_SERVICE.equals(type)){
+                    HttpManager.postJsonType(path, form, context,TYPE_LIST_SERVICE);
+                }else{
+                    HttpManager.postJsonType(path, form, context,TYPE_LIST_BUYING);
+                }
+            }
             LogUtil.printPushLog("httpPost servePager postJson");
         } catch (Exception e) {
             LogUtil.printPushLog("httpPost servePager Exception");

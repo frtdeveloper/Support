@@ -207,12 +207,13 @@ public class ServiceListActivity extends AppCompatActivity implements View.OnCli
                 LogUtil.printPushLog("CityData mCityData:" + mCityData.toString());
                 HttpJsonSend.servePager(ServiceListActivity.this, mCityData.getCityName(),
                         String.valueOf(mCityData.getLatitude()), String.valueOf(mCityData.getLongitude())
-                        , pageSize, String.valueOf(pageNo), HttpJsonSend.SERVE_TYPE_SERVICE);
+                        , pageSize, String.valueOf(pageNo), HttpJsonSend.SERVE_TYPE_SERVICE,HttpJsonSend.COME_FROM_LIST);
             }else{
                 hasLocation = false;
                 LogUtil.printPushLog("CityData mCityData=null ");
                 HttpJsonSend.servePager(ServiceListActivity.this, mCity,
-                        "39.908692", "116.397477", pageSize, String.valueOf(pageNo), HttpJsonSend.SERVE_TYPE_SERVICE);
+                        "39.908692", "116.397477", pageSize, String.valueOf(pageNo),
+                        HttpJsonSend.SERVE_TYPE_SERVICE,HttpJsonSend.COME_FROM_LIST);
             }
             return null;
         }
@@ -231,25 +232,28 @@ public class ServiceListActivity extends AppCompatActivity implements View.OnCli
                 String url = intent.getStringExtra("url");
                 if (url != null && !TextUtils.isEmpty(url)) {
                     if (url.contains(HttpConfig.urL_serve_pager)) {
-                        boolean is_success = intent.getBooleanExtra("is_success", false);
-                        LogUtil.printPushLog("mHttpReceiver urL_serve_pager :" + is_success);
-                        if (is_success) {
-                            //解析data再发送结果
-                            String data = intent.getStringExtra("data");
-                            try {
-                                serveListData = HttpJsonAnaly.servePager(data, ServiceListActivity.this);
-                                if (serveListData.isFlag()) {
-                                    mHandler.sendEmptyMessage(SERVE_PAGER_SUCCESS);
-                                } else {
+                        int type = intent.getIntExtra("type", 0);
+                        if(type==HttpJsonSend.TYPE_LIST_SERVICE) {
+                            boolean is_success = intent.getBooleanExtra("is_success", false);
+                            LogUtil.printPushLog("mHttpReceiver urL_serve_pager :" + is_success);
+                            if (is_success) {
+                                //解析data再发送结果
+                                String data = intent.getStringExtra("data");
+                                try {
+                                    serveListData = HttpJsonAnaly.servePager(data, ServiceListActivity.this);
+                                    if (serveListData.isFlag()) {
+                                        mHandler.sendEmptyMessage(SERVE_PAGER_SUCCESS);
+                                    } else {
+                                        mHandler.sendEmptyMessage(SERVE_PAGER_FALSE);
+                                    }
+                                    LogUtil.printPushLog("mHttpReceiver serveListData.toString :" + serveListData.toString());
+                                } catch (Exception e) {
                                     mHandler.sendEmptyMessage(SERVE_PAGER_FALSE);
+                                    e.printStackTrace();
                                 }
-                                LogUtil.printPushLog("mHttpReceiver serveListData.toString :" + serveListData.toString());
-                            } catch (Exception e) {
+                            } else {
                                 mHandler.sendEmptyMessage(SERVE_PAGER_FALSE);
-                                e.printStackTrace();
                             }
-                        } else {
-                            mHandler.sendEmptyMessage(SERVE_PAGER_FALSE);
                         }
                     }
                 }

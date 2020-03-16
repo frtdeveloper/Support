@@ -93,9 +93,12 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
     private static final int DEBUG_FIND_FALSE = 4;
     private static final int GET_POLICY_NAME = 5;
     private static final int GET_FAULT_CLASSIFY = 6;
-    private static final int SERVE_PAGER_SUCCESS = 7;
-    private static final int SERVE_PAGER_FALSE = 8;
-    private static final int GET_SERVE_PAGER = 9;
+    private static final int SERVICE_SERVE_PAGER_SUCCESS = 7;
+    private static final int SERVICE_SERVE_PAGER_FALSE = 8;
+    private static final int BUYING_SERVE_PAGER_SUCCESS = 9;
+    private static final int BUYING_SERVE_PAGER_FALSE = 10;
+    private static final int GET_SERVICE_SERVE_PAGER = 11;
+    private static final int GET_BUYING_SERVE_PAGER = 12;
     private static final int REPEAT_TIME = 30 * 1000;
     private String mPolicyUrl = "";
     private Handler mHandler = new Handler() {
@@ -112,10 +115,10 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
                     break;
                 case DEBUG_FIND_SUCCESS:
                     LoadingProgressDialog.Dissmiss();
-                    if(mDebugMenuListData.getDebugMenuData().size()>0){
+                    if (mDebugMenuListData.getDebugMenuData().size() > 0) {
                         mIvTroubleShootingOne.setVisibility(View.VISIBLE);
                         final DebugMenuData debugMenuData = mDebugMenuListData.getDebugMenuData().get(0);
-                        ImageLoader.getInstance().displayImage(debugMenuData.getIcon(),mIvTroubleShootingOne);
+                        ImageLoader.getInstance().displayImage(debugMenuData.getIcon(), mIvTroubleShootingOne);
                         mIvTroubleShootingOne.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -125,10 +128,10 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
                             }
                         });
                     }
-                    if(mDebugMenuListData.getDebugMenuData().size()>1){
+                    if (mDebugMenuListData.getDebugMenuData().size() > 1) {
                         mIvTroubleShootingTwo.setVisibility(View.VISIBLE);
                         final DebugMenuData debugMenuData = mDebugMenuListData.getDebugMenuData().get(1);
-                        ImageLoader.getInstance().displayImage(debugMenuData.getIcon(),mIvTroubleShootingTwo);
+                        ImageLoader.getInstance().displayImage(debugMenuData.getIcon(), mIvTroubleShootingTwo);
                         mIvTroubleShootingTwo.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -151,28 +154,32 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
                     mFaultFindClassifyTask = new FaultFindClassifyTask();
                     mFaultFindClassifyTask.execute("");
                     break;
-                case SERVE_PAGER_SUCCESS:
+                case SERVICE_SERVE_PAGER_SUCCESS:
                     //刷新list.根据type来。同时如果是type=1继续请求接口
-                    if(type.equals(HttpJsonSend.SERVE_TYPE_SERVICE)){
-                        LogUtil.printPushLog("CityData type.equals(HttpJsonSend.SERVE_TYPE_SERVICE)");
-                        //售后服务列表
-                        mAfterSaleServiceList = serveListData.getServeData();
-                        mAfterSaleMoreAdapter.setList(mAfterSaleServiceList,hasLocation);
-                        type = HttpJsonSend.SERVE_TYPE_BUYING;
-                        mHandler.sendEmptyMessageDelayed(GET_SERVE_PAGER,2000);
-                    }else{
-                        LogUtil.printPushLog("CityData type.equals(HttpJsonSend.SERVE_TYPE_BUYING)");
-                        //换购网点列表
-                        mChangeOfPurchaseServiceList = serveListData.getServeData();
-                        mChangeOfPurchaseMoreAdapter.setList(mChangeOfPurchaseServiceList,hasLocation);
-                    }
+                    LogUtil.printPushLog("CityData type.equals(HttpJsonSend.SERVE_TYPE_SERVICE)");
+                    //售后服务列表
+                    mAfterSaleServiceList = serviceServeListData.getServeData();
+                    mAfterSaleMoreAdapter.setList(mAfterSaleServiceList, hasLocation);
                     break;
-                case SERVE_PAGER_FALSE:
-                    mHandler.sendEmptyMessageDelayed(GET_SERVE_PAGER, REPEAT_TIME);
+                case SERVICE_SERVE_PAGER_FALSE:
+                    mHandler.sendEmptyMessageDelayed(GET_SERVICE_SERVE_PAGER, REPEAT_TIME);
                     break;
-                case GET_SERVE_PAGER:
-                    mServePagerTask = new ServePagerTask();
-                    mServePagerTask.execute("");
+                case BUYING_SERVE_PAGER_SUCCESS:
+                    LogUtil.printPushLog("CityData type.equals(HttpJsonSend.SERVE_TYPE_BUYING)");
+                    //换购网点列表
+                    mChangeOfPurchaseServiceList = buyingServeListData.getServeData();
+                    mChangeOfPurchaseMoreAdapter.setList(mChangeOfPurchaseServiceList, hasLocation);
+                    break;
+                case BUYING_SERVE_PAGER_FALSE:
+                    mHandler.sendEmptyMessageDelayed(GET_BUYING_SERVE_PAGER, REPEAT_TIME);
+                    break;
+                case GET_SERVICE_SERVE_PAGER:
+                    mServiceServePagerTask = new ServiceServePagerTask();
+                    mServiceServePagerTask.execute("");
+                    break;
+                case GET_BUYING_SERVE_PAGER:
+                    mBuyingServePagerTask = new BuyingServePagerTask();
+                    mBuyingServePagerTask.execute("");
                     break;
 
             }
@@ -194,10 +201,10 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(SupportApplication.ACTION_HTTP_RESULT);
         getActivity().registerReceiver(mHttpReceiver, intentFilter);
-        mHandler.sendEmptyMessage(GET_SERVE_PAGER);
+        mHandler.sendEmptyMessage(GET_SERVICE_SERVE_PAGER);
+        mHandler.sendEmptyMessage(GET_BUYING_SERVE_PAGER);
         return mFragmentView;
     }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -231,7 +238,6 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
         mIvTroubleShootingOne = (ImageView) mFragmentView.findViewById(R.id.iv_troubleshooting_one);
         mIvTroubleShootingTwo = (ImageView) mFragmentView.findViewById(R.id.iv_troubleshooting_two);
 
-        mCity = SettingSharedPerferencesUtil.GetSearchCityValueConfig(getActivity());
     }
 
     private void initListener() {
@@ -248,11 +254,11 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(getActivity(), ServiceDetailActivity.class);
-                intent.putExtra("id",mAfterSaleServiceList.get(i).getId());
-                if(hasLocation){
-                    intent.putExtra("distance",mAfterSaleServiceList.get(i).getDistance());
-                }else{
-                    intent.putExtra("distance","");
+                intent.putExtra("id", mAfterSaleServiceList.get(i).getId());
+                if (hasLocation) {
+                    intent.putExtra("distance", mAfterSaleServiceList.get(i).getDistance());
+                } else {
+                    intent.putExtra("distance", "");
                 }
                 startActivity(intent);
             }
@@ -261,11 +267,11 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(getActivity(), BuyingShopsDetailActivity.class);
-                intent.putExtra("id",mChangeOfPurchaseServiceList.get(i).getId());
-                if(hasLocation){
-                    intent.putExtra("distance",mChangeOfPurchaseServiceList.get(i).getDistance());
-                }else{
-                    intent.putExtra("distance","");
+                intent.putExtra("id", mChangeOfPurchaseServiceList.get(i).getId());
+                if (hasLocation) {
+                    intent.putExtra("distance", mChangeOfPurchaseServiceList.get(i).getDistance());
+                } else {
+                    intent.putExtra("distance", "");
                 }
                 startActivity(intent);
             }
@@ -299,6 +305,8 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
+        mHandler.sendEmptyMessage(GET_SERVICE_SERVE_PAGER);
+        mHandler.sendEmptyMessage(GET_BUYING_SERVE_PAGER);
         LogUtil.printFragmentLog("SupportFragment::onResume================");
     }
 
@@ -392,29 +400,56 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
             return null;
         }
     }
-    private ServePagerTask mServePagerTask;
-    private ServeListData serveListData;
+
+    private ServiceServePagerTask mServiceServePagerTask;
+    private ServeListData serviceServeListData;
     private CityData mCityData;
     private String pageSize = "20";
     private int pageNo = 1;
-    private String type = HttpJsonSend.SERVE_TYPE_SERVICE;
     private boolean hasLocation = false;
 
-    private class ServePagerTask extends AsyncTask<String, Void, Void> {
+    private class ServiceServePagerTask extends AsyncTask<String, Void, Void> {
 
         @Override
         protected Void doInBackground(String... params) {
-            if(mCityData!=null) {
+            if (mCityData != null) {
                 hasLocation = true;
                 LogUtil.printPushLog("CityData mCityData:" + mCityData.toString());
                 HttpJsonSend.servePager(getActivity(), mCityData.getCityName(),
                         String.valueOf(mCityData.getLatitude()), String.valueOf(mCityData.getLongitude())
-                        , pageSize, String.valueOf(pageNo), type);
-            }else{
+                        , pageSize, String.valueOf(pageNo), HttpJsonSend.SERVE_TYPE_SERVICE, HttpJsonSend.COME_FROM_MAIN);
+            } else {
+                mCity = SettingSharedPerferencesUtil.GetSearchCityValueConfig(getActivity());
                 hasLocation = false;
                 LogUtil.printPushLog("CityData mCityData=null ");
                 HttpJsonSend.servePager(getActivity(), mCity,
-                        "39.908692", "116.397477", pageSize, String.valueOf(pageNo), type);
+                        "39.908692", "116.397477", pageSize,
+                        String.valueOf(pageNo), HttpJsonSend.SERVE_TYPE_SERVICE, HttpJsonSend.COME_FROM_MAIN);
+            }
+            return null;
+        }
+    }
+
+    private BuyingServePagerTask mBuyingServePagerTask;
+    private ServeListData buyingServeListData;
+
+    private class BuyingServePagerTask extends AsyncTask<String, Void, Void> {
+
+        @Override
+        protected Void doInBackground(String... params) {
+            if (mCityData != null) {
+                hasLocation = true;
+                LogUtil.printPushLog("CityData mCityData:" + mCityData.toString());
+                HttpJsonSend.servePager(getActivity(), mCityData.getCityName(),
+                        String.valueOf(mCityData.getLatitude()), String.valueOf(mCityData.getLongitude())
+                        , pageSize, String.valueOf(pageNo), HttpJsonSend.SERVE_TYPE_BUYING, HttpJsonSend.COME_FROM_MAIN);
+            } else {
+                mCity = SettingSharedPerferencesUtil.GetSearchCityValueConfig(getActivity());
+                hasLocation = false;
+                LogUtil.printPushLog("CityData mCityData=null ");
+                HttpJsonSend.servePager(getActivity(), mCity,
+                        "39.908692", "116.397477", pageSize,
+                        String.valueOf(pageNo), HttpJsonSend.SERVE_TYPE_BUYING, HttpJsonSend.COME_FROM_MAIN);
             }
             return null;
         }
@@ -433,25 +468,49 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
                 String url = intent.getStringExtra("url");
                 if (url != null && !TextUtils.isEmpty(url)) {
                     if (url.contains(HttpConfig.urL_serve_pager)) {
-                        boolean is_success = intent.getBooleanExtra("is_success", false);
-                        LogUtil.printPushLog("mHttpReceiver urL_serve_pager :" + is_success);
-                        if (is_success) {
-                            //解析data再发送结果
-                            String data = intent.getStringExtra("data");
-                            try {
-                                serveListData = HttpJsonAnaly.servePager(data, getActivity());
-                                if (serveListData.isFlag()) {
-                                    mHandler.sendEmptyMessage(SERVE_PAGER_SUCCESS);
-                                } else {
-                                    mHandler.sendEmptyMessage(SERVE_PAGER_FALSE);
+                        int type = intent.getIntExtra("type", 0);
+                        if(type==HttpJsonSend.TYPE_MAIN_SERVICE) {
+                            boolean is_success = intent.getBooleanExtra("is_success", false);
+                            LogUtil.printPushLog("mHttpReceiver urL_serve_pager :" + is_success);
+                            if (is_success) {
+                                //解析data再发送结果
+                                String data = intent.getStringExtra("data");
+                                try {
+                                    serviceServeListData = HttpJsonAnaly.servePager(data, getActivity());
+                                    if (serviceServeListData.isFlag()) {
+                                        mHandler.sendEmptyMessage(SERVICE_SERVE_PAGER_SUCCESS);
+                                    } else {
+                                        mHandler.sendEmptyMessage(SERVICE_SERVE_PAGER_FALSE);
+                                    }
+                                    LogUtil.printPushLog("mHttpReceiver serviceServeListData.toString :" + serviceServeListData.toString());
+                                } catch (Exception e) {
+                                    mHandler.sendEmptyMessage(SERVICE_SERVE_PAGER_FALSE);
+                                    e.printStackTrace();
                                 }
-                                LogUtil.printPushLog("mHttpReceiver serveListData.toString :" + serveListData.toString());
-                            } catch (Exception e) {
-                                mHandler.sendEmptyMessage(SERVE_PAGER_FALSE);
-                                e.printStackTrace();
+                            } else {
+                                mHandler.sendEmptyMessage(SERVICE_SERVE_PAGER_FALSE);
                             }
-                        } else {
-                            mHandler.sendEmptyMessage(SERVE_PAGER_FALSE);
+                        }else if(type==HttpJsonSend.TYPE_MAIN_BUYING) {
+                            boolean is_success = intent.getBooleanExtra("is_success", false);
+                            LogUtil.printPushLog("mHttpReceiver urL_serve_pager :" + is_success);
+                            if (is_success) {
+                                //解析data再发送结果
+                                String data = intent.getStringExtra("data");
+                                try {
+                                    buyingServeListData = HttpJsonAnaly.servePager(data, getActivity());
+                                    if (buyingServeListData.isFlag()) {
+                                        mHandler.sendEmptyMessage(BUYING_SERVE_PAGER_SUCCESS);
+                                    } else {
+                                        mHandler.sendEmptyMessage(BUYING_SERVE_PAGER_FALSE);
+                                    }
+                                    LogUtil.printPushLog("mHttpReceiver serveListData.toString :" + buyingServeListData.toString());
+                                } catch (Exception e) {
+                                    mHandler.sendEmptyMessage(BUYING_SERVE_PAGER_FALSE);
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                mHandler.sendEmptyMessage(BUYING_SERVE_PAGER_FALSE);
+                            }
                         }
                     }
                 }
