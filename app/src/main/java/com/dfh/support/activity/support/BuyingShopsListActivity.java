@@ -232,7 +232,7 @@ public class BuyingShopsListActivity extends AppCompatActivity  implements View.
                 if (url != null && !TextUtils.isEmpty(url)) {
                     if (url.contains(HttpConfig.urL_serve_pager)) {
                         int type = intent.getIntExtra("type", 0);
-                        if(type==HttpJsonSend.TYPE_LIST_SERVICE) {
+                        if(type==HttpJsonSend.TYPE_LIST_BUYING) {
                             boolean is_success = intent.getBooleanExtra("is_success", false);
                             LogUtil.printPushLog("mHttpReceiver urL_serve_pager :" + is_success);
                             if (is_success) {

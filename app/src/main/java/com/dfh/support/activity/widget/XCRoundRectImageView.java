@@ -19,7 +19,7 @@ import android.widget.ImageView;
  * @author caizhiming
  *
  */
-public class XCRoundRectImageView extends ImageView {
+public class XCRoundRectImageView extends ImageView{
 
     private Paint paint;
 

@@ -42,6 +42,7 @@ import com.dfh.support.utils.ToastUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class RecommendFragment extends Fragment implements LoadListView.ILoadListener2 {
 
@@ -52,6 +53,8 @@ public class RecommendFragment extends Fragment implements LoadListView.ILoadLis
     private ArrayList<AdvertisementData> mAdvertisementList;
     private ArrayList<View> mViewList;
     private BannerPagerAdapter mBannerPagerAdapter;
+    private List<ImageView> mDots;//定义一个集合存储五个dot
+    private int oldPosition;//记录当前点的位置。
 
     private static RecommendFragment s_instance;
     private static final int BANNER_START_SLITHER = 0;
@@ -189,13 +192,48 @@ public class RecommendFragment extends Fragment implements LoadListView.ILoadLis
         mBannerPagerAdapter = new BannerPagerAdapter(mViewList);
         mVpBanner.setAdapter(mBannerPagerAdapter);
         mHandler.sendEmptyMessageDelayed(BANNER_START_SLITHER,slither_time);
+
+        mDots = new ArrayList<ImageView>();
+        ImageView dotOne = (ImageView) mFragmentView.findViewById(R.id.iv_banner_position_one);
+        ImageView dotTwo = (ImageView) mFragmentView.findViewById(R.id.iv_banner_position_two);
+        ImageView dotThree = (ImageView) mFragmentView.findViewById(R.id.iv_banner_position_three);
+        ImageView dotFour = (ImageView) mFragmentView.findViewById(R.id.iv_banner_position_four);
+        ImageView dotFive = (ImageView) mFragmentView.findViewById(R.id.iv_banner_position_five);
+        mDots.add(dotOne);
+        mDots.add(dotTwo);
+        mDots.add(dotThree);
+        mDots.add(dotFour);
+        mDots.add(dotFive);
+        oldPosition = 0;
+        mDots.get(oldPosition).setImageResource(R.mipmap.dot_press);
+
+        mVpBanner.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                mDots.get(oldPosition).setImageResource(R.mipmap.dot_normal);
+                mDots.get(position).setImageResource(R.mipmap.dot_press);
+                oldPosition = position;
+            }
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     private void updateViewPage() {
         LayoutInflater inflater = getLayoutInflater();
         mViewList = new ArrayList<View>();
+        for(int a = 0; a<5;a++){
+            mDots.get(a).setVisibility(View.GONE);
+        }
         for(int i = 0 ;i<advertisementListData.getAdvertisementDatas().size();i++) {
             if(i<5) {
+                mDots.get(i).setVisibility(View.VISIBLE);
                 View view = inflater.inflate(R.layout.banner_layout, null);
                 ImageView ivBanner = (ImageView) view.findViewById(R.id.iv_banner);
                 //ivBanner.setImageResource(R.mipmap.show_banner);

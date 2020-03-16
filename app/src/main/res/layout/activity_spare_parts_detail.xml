@@ -67,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/ad_item_title_text"
                 android:textSize="18sp"
-                android:text="电池"/>
+                android:text=""/>
             <TextView
                 android:id="@+id/tv_value"
                 android:layout_width="wrap_content"
@@ -75,7 +75,7 @@
                 android:textColor="@color/service_list_item_distance"
                 android:textSize="16sp"
                 android:layout_alignParentRight="true"
-                android:text="￥99.99"/>
+                android:text=""/>
         </RelativeLayout>
         <TextView
             android:id="@+id/tv_content"
@@ -90,8 +90,7 @@
         android:id="@+id/tv_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="说明文本说明文本说明文本说明文本说明文本说明文本说明文本说明文本说明文本说明文本说明
-        文本说明文本说明文本说明文本说明文本说明文本说明文本说明文本说明文本"
+        android:text=""
         android:layout_marginTop="15dp"
         android:textColor="@color/service_list_item_title"
         android:textSize="14sp"/>
@@ -100,6 +99,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:divider="@color/white"
+            android:listSelector="@android:color/transparent"
             android:dividerHeight="8dp"
             android:layout_marginTop="15dp"/>
 
@@ -115,8 +115,9 @@
             android:id="@+id/tv_remark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="特别提醒XXXXXXXXXXXXXXXXXXXXXXXXX"
+            android:text=""
             android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
             android:textColor="@color/history_item_text"
             android:textSize="16sp"/>
     </LinearLayout>

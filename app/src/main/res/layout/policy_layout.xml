@@ -6,5 +6,5 @@
         android:id="@+id/policy_info"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="33333333"/>
+        android:text=""/>
 </LinearLayout>

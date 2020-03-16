@@ -24,7 +24,7 @@
                 android:textColor="@color/service_list_item_title"
                 android:textSize="16sp"
                 android:layout_centerVertical="true"
-                android:text="上海徐汇区售后服务中心"/>
+                android:text=""/>
             <TextView
                 android:id="@+id/tv_distance"
                 android:layout_width="wrap_content"
@@ -32,13 +32,13 @@
                 android:textColor="@color/service_list_item_distance"
                 android:textSize="14sp"
                 android:layout_alignParentRight="true"
-                android:text="2.5KM"/>
+                android:text=""/>
         </RelativeLayout>
         <TextView
             android:id="@+id/tv_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="上海徐汇区宜山路23号"
+            android:text=""
             android:layout_marginTop="2dp"
             android:textColor="@color/loading_hint_text"
             android:textSize="14sp"/>
@@ -46,7 +46,7 @@
             android:id="@+id/tv_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="服务时间：9：00-17：00（周一至周日）"
+            android:text=""
             android:layout_marginTop="8dp"
             android:textColor="@color/remark_color"
             android:textSize="13sp"/>
@@ -54,7 +54,7 @@
             android:id="@+id/tv_phone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="服务电话：021-84738392"
+            android:text=""
             android:layout_marginTop="2dp"
             android:layout_marginBottom="10dp"
             android:textColor="@color/remark_color"
