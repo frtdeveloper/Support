@@ -89,6 +89,7 @@ public class SupportApplication extends Application implements IUmengRegisterCal
             public void dealWithNotificationMessage(Context context, UMessage uMessage) {
                 super.dealWithNotificationMessage(context, uMessage);
                 LogUtil.printPushLog("SupportApplication::dealWithNotificationMessage= " + uMessage.text);
+                LogUtil.printPushLog("SupportApplication::dealWithCustomMessage extra= " + uMessage.extra);
                 UmentBroadcastReceiver.sendBroadcast(SupportApplication.this, uMessage.text);
             }
 
@@ -96,6 +97,7 @@ public class SupportApplication extends Application implements IUmengRegisterCal
             public void dealWithCustomMessage(Context context, UMessage uMessage) {
                 super.dealWithCustomMessage(context, uMessage);
                 LogUtil.printPushLog("SupportApplication::dealWithCustomMessage= " + uMessage.text);
+                LogUtil.printPushLog("SupportApplication::dealWithCustomMessage extra= " + uMessage.extra);
                 UmentBroadcastReceiver.sendCBroadcast(SupportApplication.this, uMessage.text);
             }
         };

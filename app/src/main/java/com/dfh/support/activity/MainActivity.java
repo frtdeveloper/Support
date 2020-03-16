@@ -152,6 +152,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 String message = intent.getStringExtra(UmentBroadcastReceiver.UMENG_MESSAGE);
                 if (message != null && !TextUtils.isEmpty(message)) {
                     //推送刷新RECEIVER_UPDATE
+                    LogUtil.printPushLog("SupportApplication::Main RECEIVER_UPDATE");
                     mHandler.sendEmptyMessage(RECEIVER_UPDATE);
                 }
             }
