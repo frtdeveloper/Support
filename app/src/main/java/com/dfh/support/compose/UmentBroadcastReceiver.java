@@ -9,9 +9,9 @@ import com.dfh.support.utils.LogUtil;
 
 public class UmentBroadcastReceiver extends BroadcastReceiver {
 
-    private static String UMENG_MESSAGE = "umeng_msg_key";
-    private static String INTENT_MSG_STR = "com.dfh.support.umeng_message";
-    private static String INTENT_C_MSG_STR = "com.dfh.support.umeng_c_message";
+    public static String UMENG_MESSAGE = "umeng_msg_key";
+    public static String INTENT_MSG_STR = "com.dfh.support.umeng_message";
+    public static String INTENT_C_MSG_STR = "com.dfh.support.umeng_c_message";
 
     @Override
     public void onReceive(Context context, Intent intent) {
