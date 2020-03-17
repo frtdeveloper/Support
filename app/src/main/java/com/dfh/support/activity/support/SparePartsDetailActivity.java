@@ -59,7 +59,7 @@ public class SparePartsDetailActivity extends AppCompatActivity implements View.
                     LoadingProgressDialog.Dissmiss();
                     //刷新内容
                     tvName.setText(mPartsData.getName());
-                    tvValue.setText(mPartsData.getPpPrice());
+                    tvValue.setText(getResources().getString(R.string.common_value)+mPartsData.getPpPrice());
                     tvContent.setText(getResources().getString(R.string.common_specs)+mPartsData.getSpecs());
                     tvText.setText(getResources().getString(R.string.common_explain)+mPartsData.getIntro());
                     if(!TextUtils.isEmpty(mPartsData.getTips()))tvRemark.setText(mPartsData.getTips());
