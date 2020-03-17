@@ -11,6 +11,7 @@ import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -28,6 +29,7 @@ import com.dfh.support.activity.WebViewActivity;
 import com.dfh.support.activity.adapter.AdvertisementListAdapter;
 import com.dfh.support.activity.adapter.BannerPagerAdapter;
 import com.dfh.support.activity.widget.ChildrenListView;
+import com.dfh.support.activity.widget.FixedSpeedScroller;
 import com.dfh.support.activity.widget.LoadListView;
 import com.dfh.support.anmi.ZoomOutPageTransformer;
 import com.dfh.support.compose.UmentBroadcastReceiver;
@@ -42,6 +44,7 @@ import com.dfh.support.utils.ToastUtils;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -136,6 +139,7 @@ public class RecommendFragment extends Fragment implements LoadListView.ILoadLis
                 .cacheOnDisk(true).considerExifParams(true).build();
         initViewPage();
         initView();
+        setViewPagerScrollSpeed();
         mHttpReceiver = new HttpReceiver();//广播接受者实例
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(UmentBroadcastReceiver.INTENT_MSG_STR);
@@ -167,7 +171,20 @@ public class RecommendFragment extends Fragment implements LoadListView.ILoadLis
 
         return s_instance;
     }
-
+    //viewpager的动画播放速度修改
+    private void setViewPagerScrollSpeed( ){
+        try {
+            Field field = ViewPager.class.getDeclaredField("mScroller");
+            field.setAccessible(true);
+            FixedSpeedScroller scroller = new FixedSpeedScroller(mVpBanner.getContext(),
+                    new AccelerateInterpolator());
+            field.set(mVpBanner, scroller);
+            scroller.setmDuration(500);
+        }catch(NoSuchFieldException e){
+        }catch (IllegalArgumentException e){
+        }catch (IllegalAccessException e){
+        }
+    }
     private void initViewPage() {
         mVpBanner = (ViewPager) mFragmentView.findViewById(R.id.vp_banner);
         mVpBanner.setPageTransformer(true,new ZoomOutPageTransformer());
