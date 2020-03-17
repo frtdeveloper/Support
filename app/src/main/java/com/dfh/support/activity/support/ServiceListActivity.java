@@ -66,7 +66,7 @@ public class ServiceListActivity extends AppCompatActivity implements View.OnCli
                     LoadingProgressDialog.Dissmiss();
                     //刷新list
                     mServiceList.addAll(serveListData.getServeData());
-                    mServiceListAdapter.setList(mServiceList,hasLocation);
+                    mServiceListAdapter.setList(mServiceList, hasLocation);
                     mLvService.loadComplete();
                     break;
                 case SERVE_PAGER_FALSE:
@@ -112,11 +112,11 @@ public class ServiceListActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(ServiceListActivity.this, ServiceDetailActivity.class);
-                intent.putExtra("id",mServiceList.get(i).getId());
-                if(hasLocation){
-                    intent.putExtra("distance",mServiceList.get(i).getDistance());
-                }else{
-                    intent.putExtra("distance","");
+                intent.putExtra("id", mServiceList.get(i).getId());
+                if (hasLocation) {
+                    intent.putExtra("distance", mServiceList.get(i).getDistance());
+                } else {
+                    intent.putExtra("distance", "");
                 }
                 startActivity(intent);
             }
@@ -133,38 +133,54 @@ public class ServiceListActivity extends AppCompatActivity implements View.OnCli
         mLvService = (LoadListView) findViewById(R.id.lv_service_list);
         mServiceListAdapter = new ServiceListAdapter(this, mServiceList);
         mLvService.setAdapter(mServiceListAdapter);
-        mTvCity = (TextView)findViewById(R.id.tv_city);
-        if(mCityData!=null){
-            mTvCity.setText(mCityData.getCityName());
-        }else{
-            mCity = SettingSharedPerferencesUtil.GetSearchCityValueConfig(ServiceListActivity.this);
+        mTvCity = (TextView) findViewById(R.id.tv_city);
+        mCity = SettingSharedPerferencesUtil.GetSearchCityValueConfig(ServiceListActivity.this);
+        if (!TextUtils.isEmpty(mCity)) {
             mTvCity.setText(mCity);
+        }else {
+            if (mCityData != null) {
+                mTvCity.setText(mCityData.getCityName());
+            } else {
+                if(TextUtils.isEmpty(mCity)) mCity = getResources().getString(R.string.common_default_city);
+                mTvCity.setText(mCity);
+            }
         }
     }
-   // private boolean isFrist = true;
+
+    // private boolean isFrist = true;
     @Override
     protected void onResume() {
         super.onResume();
-        //LogUtil.printPushLog("honResume isFrist" + isFrist);
-        //if(!isFrist) {
-            //isFrist = false;
-            boolean flag = false;
+        boolean flag = false;
+        mCity = SettingSharedPerferencesUtil.GetSearchCityValueConfig(ServiceListActivity.this);
+        if (!TextUtils.isEmpty(mCity)) {
+            LogUtil.printPushLog("honResume mCity" + mCity);
+            LogUtil.printPushLog("honResume mTvCity.getText().toString()" + mTvCity.getText().toString());
+            if (!mCity.equals(mTvCity.getText().toString())) flag = true;
+            LogUtil.printPushLog("honResume flag" + flag);
+            mTvCity.setText(mCity);
+        }else {
             if (mCityData != null) {
                 LogUtil.printPushLog("honResume mCityData!=null");
+                LogUtil.printPushLog("honResume mCityData.getCityName()" + mCityData.getCityName());
+                LogUtil.printPushLog("honResume mTvCity.getText().toString()" + mTvCity.getText().toString());
+                if (!mCityData.getCityName().equals(mTvCity.getText().toString())) flag = true;
+                LogUtil.printPushLog("honResume flag" + flag);
                 mTvCity.setText(mCityData.getCityName());
             } else {
                 LogUtil.printPushLog("honResume mCityData==null");
-                mCity = SettingSharedPerferencesUtil.GetSearchCityValueConfig(ServiceListActivity.this);
+                if(TextUtils.isEmpty(mCity)) mCity = getResources().getString(R.string.common_default_city);
                 LogUtil.printPushLog("honResume mCity" + mCity);
                 LogUtil.printPushLog("honResume mTvCity.getText().toString()" + mTvCity.getText().toString());
                 if (!mCity.equals(mTvCity.getText().toString())) flag = true;
                 LogUtil.printPushLog("honResume flag" + flag);
                 mTvCity.setText(mCity);
             }
-            if (flag) {
-                mServiceList = new ArrayList<ServeData>();
-                mHandler.sendEmptyMessage(GET_SERVE_PAGER);
-            }
+        }
+        if (flag) {
+            mServiceList = new ArrayList<ServeData>();
+            mHandler.sendEmptyMessage(GET_SERVE_PAGER);
+        }
         //}
     }
 
@@ -202,18 +218,26 @@ public class ServiceListActivity extends AppCompatActivity implements View.OnCli
 
         @Override
         protected Void doInBackground(String... params) {
-            if(mCityData!=null) {
+            if (mCityData != null) {
                 hasLocation = true;
                 LogUtil.printPushLog("CityData mCityData:" + mCityData.toString());
-                HttpJsonSend.servePager(ServiceListActivity.this, mCityData.getCityName(),
-                        String.valueOf(mCityData.getLatitude()), String.valueOf(mCityData.getLongitude())
-                        , pageSize, String.valueOf(pageNo), HttpJsonSend.SERVE_TYPE_SERVICE,HttpJsonSend.COME_FROM_LIST);
-            }else{
+                if (!TextUtils.isEmpty(mCity)) {
+                    HttpJsonSend.servePager(ServiceListActivity.this, mCity,
+                            String.valueOf(mCityData.getLatitude()), String.valueOf(mCityData.getLongitude()), pageSize,
+                            String.valueOf(pageNo), HttpJsonSend.SERVE_TYPE_SERVICE, HttpJsonSend.COME_FROM_LIST);
+                } else {
+                    HttpJsonSend.servePager(ServiceListActivity.this, mCityData.getCityName(),
+                            String.valueOf(mCityData.getLatitude()), String.valueOf(mCityData.getLongitude())
+                            , pageSize, String.valueOf(pageNo), HttpJsonSend.SERVE_TYPE_SERVICE, HttpJsonSend.COME_FROM_LIST);
+
+                }
+            } else {
+                if(TextUtils.isEmpty(mCity)) mCity = getResources().getString(R.string.common_default_city);
                 hasLocation = false;
                 LogUtil.printPushLog("CityData mCityData=null ");
                 HttpJsonSend.servePager(ServiceListActivity.this, mCity,
                         "39.908692", "116.397477", pageSize, String.valueOf(pageNo),
-                        HttpJsonSend.SERVE_TYPE_SERVICE,HttpJsonSend.COME_FROM_LIST);
+                        HttpJsonSend.SERVE_TYPE_SERVICE, HttpJsonSend.COME_FROM_LIST);
             }
             return null;
         }
@@ -233,7 +257,7 @@ public class ServiceListActivity extends AppCompatActivity implements View.OnCli
                 if (url != null && !TextUtils.isEmpty(url)) {
                     if (url.contains(HttpConfig.urL_serve_pager)) {
                         int type = intent.getIntExtra("type", 0);
-                        if(type==HttpJsonSend.TYPE_LIST_SERVICE) {
+                        if (type == HttpJsonSend.TYPE_LIST_SERVICE) {
                             boolean is_success = intent.getBooleanExtra("is_success", false);
                             LogUtil.printPushLog("mHttpReceiver urL_serve_pager :" + is_success);
                             if (is_success) {

@@ -90,6 +90,11 @@ public final class LogUtil {
                             geo_info = found_address_list.get(0).getLocality();
                             printUtilLog("getGeo::latitude= " + latitude + " longitude= " + longitude + " geo_info= " + geo_info);
                             cityData = new CityData();
+                            if(geo_info.contains("市"))geo_info = geo_info.replace("市","");
+                            if(geo_info.contains("县"))geo_info = geo_info.replace("县","");
+                            if(!geo_info.equals("景德镇")&&!geo_info.equals("镇江")) {
+                                if (geo_info.contains("镇")) geo_info = geo_info.replace("镇", "");
+                            }
                             cityData.setCityName(geo_info);
                             cityData.setLatitude(latitude);
                             cityData.setLongitude(longitude);

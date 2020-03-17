@@ -133,32 +133,47 @@ public class BuyingShopsListActivity extends AppCompatActivity  implements View.
         mBuyingShopsListAdapter = new BuyingShopsListAdapter(this,mBuyingShopsList);
         mLvBuyingShops.setAdapter(mBuyingShopsListAdapter);
         mTvCity = (TextView)findViewById(R.id.tv_city);
-        if(mCityData!=null){
-            mTvCity.setText(mCityData.getCityName());
-        }else{
-            mCity = SettingSharedPerferencesUtil.GetSearchCityValueConfig(BuyingShopsListActivity.this);
+        mCity = SettingSharedPerferencesUtil.GetSearchCityValueConfig(BuyingShopsListActivity.this);
+        if (!TextUtils.isEmpty(mCity)) {
             mTvCity.setText(mCity);
+        }else {
+            if (mCityData != null) {
+                mTvCity.setText(mCityData.getCityName());
+            } else {
+                if(TextUtils.isEmpty(mCity)) mCity = getResources().getString(R.string.common_default_city);
+                mTvCity.setText(mCity);
+            }
         }
     }
     // private boolean isFrist = true;
     @Override
     protected void onResume() {
         super.onResume();
-        //LogUtil.printPushLog("honResume isFrist" + isFrist);
-        //if(!isFrist) {
-        //isFrist = false;
         boolean flag = false;
-        if (mCityData != null) {
-            LogUtil.printPushLog("honResume mCityData!=null");
-            mTvCity.setText(mCityData.getCityName());
-        } else {
-            LogUtil.printPushLog("honResume mCityData==null");
-            mCity = SettingSharedPerferencesUtil.GetSearchCityValueConfig(BuyingShopsListActivity.this);
+        mCity = SettingSharedPerferencesUtil.GetSearchCityValueConfig(BuyingShopsListActivity.this);
+        if (!TextUtils.isEmpty(mCity)) {
             LogUtil.printPushLog("honResume mCity" + mCity);
             LogUtil.printPushLog("honResume mTvCity.getText().toString()" + mTvCity.getText().toString());
             if (!mCity.equals(mTvCity.getText().toString())) flag = true;
             LogUtil.printPushLog("honResume flag" + flag);
             mTvCity.setText(mCity);
+        }else {
+            if (mCityData != null) {
+                LogUtil.printPushLog("honResume mCityData!=null");
+                LogUtil.printPushLog("honResume mCityData.getCityName()" + mCityData.getCityName());
+                LogUtil.printPushLog("honResume mTvCity.getText().toString()" + mTvCity.getText().toString());
+                if (!mCityData.getCityName().equals(mTvCity.getText().toString())) flag = true;
+                LogUtil.printPushLog("honResume flag" + flag);
+                mTvCity.setText(mCityData.getCityName());
+            } else {
+                LogUtil.printPushLog("honResume mCityData==null");
+                if(TextUtils.isEmpty(mCity)) mCity = getResources().getString(R.string.common_default_city);
+                LogUtil.printPushLog("honResume mCity" + mCity);
+                LogUtil.printPushLog("honResume mTvCity.getText().toString()" + mTvCity.getText().toString());
+                if (!mCity.equals(mTvCity.getText().toString())) flag = true;
+                LogUtil.printPushLog("honResume flag" + flag);
+                mTvCity.setText(mCity);
+            }
         }
         if (flag) {
             mBuyingShopsList = new ArrayList<ServeData>();
@@ -204,10 +219,17 @@ public class BuyingShopsListActivity extends AppCompatActivity  implements View.
             if(mCityData!=null) {
                 hasLocation = true;
                 LogUtil.printPushLog("CityData mCityData:" + mCityData.toString());
-                HttpJsonSend.servePager(BuyingShopsListActivity.this, mCityData.getCityName(),
-                        String.valueOf(mCityData.getLatitude()), String.valueOf(mCityData.getLongitude())
-                        , pageSize, String.valueOf(pageNo), HttpJsonSend.SERVE_TYPE_BUYING,HttpJsonSend.COME_FROM_LIST);
+                if(!TextUtils.isEmpty(mCity)){
+                    HttpJsonSend.servePager(BuyingShopsListActivity.this, mCity,
+                            String.valueOf(mCityData.getLatitude()), String.valueOf(mCityData.getLongitude()), pageSize,
+                            String.valueOf(pageNo), HttpJsonSend.SERVE_TYPE_BUYING, HttpJsonSend.COME_FROM_LIST);
+                }else {
+                    HttpJsonSend.servePager(BuyingShopsListActivity.this, mCityData.getCityName(),
+                            String.valueOf(mCityData.getLatitude()), String.valueOf(mCityData.getLongitude())
+                            , pageSize, String.valueOf(pageNo), HttpJsonSend.SERVE_TYPE_BUYING,HttpJsonSend.COME_FROM_LIST);
+                }
             }else{
+                if(TextUtils.isEmpty(mCity)) mCity = getResources().getString(R.string.common_default_city);
                 hasLocation = false;
                 LogUtil.printPushLog("CityData mCityData=null ");
                 HttpJsonSend.servePager(BuyingShopsListActivity.this, mCity,

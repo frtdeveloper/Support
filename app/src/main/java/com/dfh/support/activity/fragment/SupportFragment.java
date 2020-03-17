@@ -205,6 +205,7 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
         mHandler.sendEmptyMessage(GET_BUYING_SERVE_PAGER);
         return mFragmentView;
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -412,14 +413,21 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
 
         @Override
         protected Void doInBackground(String... params) {
+            mCity = SettingSharedPerferencesUtil.GetSearchCityValueConfig(getActivity());
             if (mCityData != null) {
                 hasLocation = true;
                 LogUtil.printPushLog("CityData mCityData:" + mCityData.toString());
-                HttpJsonSend.servePager(getActivity(), mCityData.getCityName(),
-                        String.valueOf(mCityData.getLatitude()), String.valueOf(mCityData.getLongitude())
-                        , pageSize, String.valueOf(pageNo), HttpJsonSend.SERVE_TYPE_SERVICE, HttpJsonSend.COME_FROM_MAIN);
+                if(!TextUtils.isEmpty(mCity)){
+                    HttpJsonSend.servePager(getActivity(), mCity,
+                            String.valueOf(mCityData.getLatitude()), String.valueOf(mCityData.getLongitude()), pageSize,
+                            String.valueOf(pageNo), HttpJsonSend.SERVE_TYPE_SERVICE, HttpJsonSend.COME_FROM_MAIN);
+                }else {
+                    HttpJsonSend.servePager(getActivity(), mCityData.getCityName(),
+                            String.valueOf(mCityData.getLatitude()), String.valueOf(mCityData.getLongitude())
+                            , pageSize, String.valueOf(pageNo), HttpJsonSend.SERVE_TYPE_SERVICE, HttpJsonSend.COME_FROM_MAIN);
+                }
             } else {
-                mCity = SettingSharedPerferencesUtil.GetSearchCityValueConfig(getActivity());
+                if(TextUtils.isEmpty(mCity)) mCity = getResources().getString(R.string.common_default_city);
                 hasLocation = false;
                 LogUtil.printPushLog("CityData mCityData=null ");
                 HttpJsonSend.servePager(getActivity(), mCity,
@@ -437,20 +445,28 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
 
         @Override
         protected Void doInBackground(String... params) {
+            mCity = SettingSharedPerferencesUtil.GetSearchCityValueConfig(getActivity());
             if (mCityData != null) {
                 hasLocation = true;
                 LogUtil.printPushLog("CityData mCityData:" + mCityData.toString());
-                HttpJsonSend.servePager(getActivity(), mCityData.getCityName(),
-                        String.valueOf(mCityData.getLatitude()), String.valueOf(mCityData.getLongitude())
-                        , pageSize, String.valueOf(pageNo), HttpJsonSend.SERVE_TYPE_BUYING, HttpJsonSend.COME_FROM_MAIN);
+                if(!TextUtils.isEmpty(mCity)){
+                    HttpJsonSend.servePager(getActivity(), mCity,
+                            String.valueOf(mCityData.getLatitude()), String.valueOf(mCityData.getLongitude()), pageSize,
+                            String.valueOf(pageNo), HttpJsonSend.SERVE_TYPE_BUYING, HttpJsonSend.COME_FROM_MAIN);
+                }else {
+                    HttpJsonSend.servePager(getActivity(), mCityData.getCityName(),
+                            String.valueOf(mCityData.getLatitude()), String.valueOf(mCityData.getLongitude())
+                            , pageSize, String.valueOf(pageNo), HttpJsonSend.SERVE_TYPE_BUYING, HttpJsonSend.COME_FROM_MAIN);
+                }
             } else {
-                mCity = SettingSharedPerferencesUtil.GetSearchCityValueConfig(getActivity());
+                if(TextUtils.isEmpty(mCity)) mCity = getResources().getString(R.string.common_default_city);
                 hasLocation = false;
                 LogUtil.printPushLog("CityData mCityData=null ");
                 HttpJsonSend.servePager(getActivity(), mCity,
                         "39.908692", "116.397477", pageSize,
                         String.valueOf(pageNo), HttpJsonSend.SERVE_TYPE_BUYING, HttpJsonSend.COME_FROM_MAIN);
             }
+
             return null;
         }
     }
@@ -469,7 +485,7 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
                 if (url != null && !TextUtils.isEmpty(url)) {
                     if (url.contains(HttpConfig.urL_serve_pager)) {
                         int type = intent.getIntExtra("type", 0);
-                        if(type==HttpJsonSend.TYPE_MAIN_SERVICE) {
+                        if (type == HttpJsonSend.TYPE_MAIN_SERVICE) {
                             boolean is_success = intent.getBooleanExtra("is_success", false);
                             LogUtil.printPushLog("mHttpReceiver urL_serve_pager :" + is_success);
                             if (is_success) {
@@ -490,7 +506,7 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
                             } else {
                                 mHandler.sendEmptyMessage(SERVICE_SERVE_PAGER_FALSE);
                             }
-                        }else if(type==HttpJsonSend.TYPE_MAIN_BUYING) {
+                        } else if (type == HttpJsonSend.TYPE_MAIN_BUYING) {
                             boolean is_success = intent.getBooleanExtra("is_success", false);
                             LogUtil.printPushLog("mHttpReceiver urL_serve_pager :" + is_success);
                             if (is_success) {
