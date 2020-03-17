@@ -19,6 +19,7 @@ import com.dfh.support.activity.widget.ChildrenListView;
 import com.dfh.support.entity.AdvertisementData;
 import com.dfh.support.http.HttpConfig;
 import com.dfh.support.utils.LogUtil;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
@@ -32,11 +33,17 @@ public class AdvertisementListAdapter extends BaseAdapter {
     protected LayoutInflater mInflater;
     protected Context cxt;
     private AdvertisementListItemAdapter adapter;
+    private DisplayImageOptions options;
 
     public AdvertisementListAdapter(Context context, ArrayList<AdvertisementData> list) {
         cxt = context;
         mInflater = LayoutInflater.from(this.cxt);
         mList = list;
+        options = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.mipmap.bg_loading_center)
+                .showImageForEmptyUri(R.mipmap.bg_load_false_center)
+                .showImageOnFail(R.mipmap.bg_load_false_center).cacheInMemory(true)
+                .cacheOnDisk(true).considerExifParams(true).build();
     }
 
     public void setList(ArrayList<AdvertisementData> list) {
@@ -106,7 +113,7 @@ public class AdvertisementListAdapter extends BaseAdapter {
         holder.tvTitle.setText(advertisementData.getTitle());
         holder.tvSee.setText(advertisementData.getBrowses());
         holder.tvZan.setText(advertisementData.getLikes());
-        ImageLoader.getInstance().displayImage(advertisementData.getIcon(),holder.ivPic);
+        ImageLoader.getInstance().displayImage(advertisementData.getIcon(),holder.ivPic,options);
         return v;
     }
 

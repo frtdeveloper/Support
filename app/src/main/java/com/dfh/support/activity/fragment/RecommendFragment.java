@@ -39,6 +39,7 @@ import com.dfh.support.http.HttpJsonSend;
 import com.dfh.support.utils.LogUtil;
 import com.dfh.support.utils.TextUtils;
 import com.dfh.support.utils.ToastUtils;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
@@ -69,6 +70,7 @@ public class RecommendFragment extends Fragment implements LoadListView.ILoadLis
     private static final int GET_LIST_AD = 7;
     private static final int REPECT_GET = 30*1000;
     private static final int RECEIVER_UPDATE = 8;
+    private DisplayImageOptions options;
 
     private Handler mHandler = new Handler(){
         @Override
@@ -127,6 +129,11 @@ public class RecommendFragment extends Fragment implements LoadListView.ILoadLis
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         LogUtil.printFragmentLog("RecommendFragment::onCreateView================");
         mFragmentView = inflater.inflate(R.layout.recommend_layout, null);
+        options = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.mipmap.bg_loading_top)
+                .showImageForEmptyUri(R.mipmap.bg_load_false_top)
+                .showImageOnFail(R.mipmap.bg_load_false_top).cacheInMemory(true)
+                .cacheOnDisk(true).considerExifParams(true).build();
         initViewPage();
         initView();
         mHttpReceiver = new HttpReceiver();//广播接受者实例
@@ -237,7 +244,7 @@ public class RecommendFragment extends Fragment implements LoadListView.ILoadLis
                 View view = inflater.inflate(R.layout.banner_layout, null);
                 ImageView ivBanner = (ImageView) view.findViewById(R.id.iv_banner);
                 //ivBanner.setImageResource(R.mipmap.show_banner);
-                ImageLoader.getInstance().displayImage(advertisementListData.getAdvertisementDatas().get(i).getIcon(), ivBanner);
+                ImageLoader.getInstance().displayImage(advertisementListData.getAdvertisementDatas().get(i).getIcon(), ivBanner,options);
                 final int finalI = i;
                 ivBanner.setOnClickListener(new View.OnClickListener() {
                     @Override

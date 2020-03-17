@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.dfh.support.R;
 import com.dfh.support.entity.AdvertisementData;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
@@ -22,11 +23,17 @@ public class AdvertisementListItemAdapter extends BaseAdapter {
     protected LayoutInflater mInflater;
     protected Context cxt;
     private HashMap<Integer, Boolean> clickMap = new HashMap<Integer, Boolean>();
+    private DisplayImageOptions options;
 
     public AdvertisementListItemAdapter(Context context, ArrayList<AdvertisementData> list) {
         cxt = context;
         mInflater = LayoutInflater.from(this.cxt);
         mList = list;
+        options = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.mipmap.bg_loading_bottom)
+                .showImageForEmptyUri(R.mipmap.bg_load_false_bottom)
+                .showImageOnFail(R.mipmap.bg_load_false_bottom).cacheInMemory(true)
+                .cacheOnDisk(true).considerExifParams(true).build();
     }
 
     public void setList(ArrayList<AdvertisementData> list) {
@@ -72,7 +79,7 @@ public class AdvertisementListItemAdapter extends BaseAdapter {
         holder.tvTitle.setText(advertisementData.getTitle());
         holder.tvSee.setText(advertisementData.getBrowses());
         holder.tvZan.setText(advertisementData.getLikes());
-        ImageLoader.getInstance().displayImage(advertisementData.getIcon(),holder.ivPic);
+        ImageLoader.getInstance().displayImage(advertisementData.getIcon(),holder.ivPic,options);
         return v;
     }
 
