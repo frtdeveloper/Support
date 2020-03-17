@@ -26,7 +26,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="fitXY" />
-
+                <com.dfh.support.activity.widget.XCRoundRectImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/bg_mb"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
