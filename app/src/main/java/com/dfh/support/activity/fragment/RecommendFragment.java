@@ -179,7 +179,7 @@ public class RecommendFragment extends Fragment implements LoadListView.ILoadLis
             FixedSpeedScroller scroller = new FixedSpeedScroller(mVpBanner.getContext(),
                     new AccelerateInterpolator());
             field.set(mVpBanner, scroller);
-            scroller.setmDuration(500);
+            scroller.setmDuration(300);
         }catch(NoSuchFieldException e){
         }catch (IllegalArgumentException e){
         }catch (IllegalAccessException e){
@@ -187,7 +187,7 @@ public class RecommendFragment extends Fragment implements LoadListView.ILoadLis
     }
     private void initViewPage() {
         mVpBanner = (ViewPager) mFragmentView.findViewById(R.id.vp_banner);
-        mVpBanner.setPageTransformer(true,new ZoomOutPageTransformer());
+        //mVpBanner.setPageTransformer(true,new ZoomOutPageTransformer());
         LayoutInflater inflater = getLayoutInflater();
         mViewList = new ArrayList<View>();
 //        LogUtil.printPushLog("initViewPage advertisementListData.getAdvertisementDatas().size()"
