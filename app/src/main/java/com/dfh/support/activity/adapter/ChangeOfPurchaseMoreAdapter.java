@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.dfh.support.R;
 import com.dfh.support.entity.ServeData;
+import com.dfh.support.utils.LogUtil;
 
 import java.util.ArrayList;
 
@@ -73,6 +74,7 @@ public class ChangeOfPurchaseMoreAdapter extends BaseAdapter {
         holder.tvAddress.setText(serveData.getAddress());
         holder.tvTime.setText(serveData.getTime());
         holder.tvPhone.setText(serveData.getTel());
+        LogUtil.printPushLog("mHttpReceiver ADAPTER serveData.toString :" + serveData.toString());
         return v;
     }
 

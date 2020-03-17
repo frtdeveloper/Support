@@ -386,8 +386,30 @@ public class HttpJsonAnaly {
                     serveData.setAddress(dataJson.getString("address"));
                 if (dataJson.has("contact"))
                     serveData.setContact(dataJson.getString("contact"));
-                if (dataJson.has("distance"))
-                    serveData.setDistance(dataJson.getString("distance"));
+                if (dataJson.has("distance")) {
+                    String distance = "";
+                    try {
+                        distance = dataJson.getString("distance");
+                        LogUtil.printPushLog("distance distance1:"+distance);
+                        if (distance.contains("KM")) distance = distance.replace("KM", "");
+                        LogUtil.printPushLog("distance distance2:"+distance);
+                        if (distance.contains("M")) distance = distance.replace("M", "");
+                        LogUtil.printPushLog("distance distance3:"+distance);
+                        Double d = Double.valueOf(distance);
+                        LogUtil.printPushLog("distance d:"+d);
+                        int dis =new Double(d).intValue();
+                        LogUtil.printPushLog("distance dis:"+dis);
+                        if (dis > 1000) {
+                            distance = dis / 1000 + "KM";
+                        } else {
+                            distance = dis + "M";
+                        }
+                        LogUtil.printPushLog("distance distance:"+distance);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                    serveData.setDistance(distance);
+                }
                 if (dataJson.has("id"))
                     serveData.setId(dataJson.getString("id"));
                 if (dataJson.has("lat"))
