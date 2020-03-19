@@ -49,7 +49,7 @@ public class CallPhoneActivity extends AppCompatActivity  implements View.OnClic
                 finish();
                 break;
             case R.id.ll_call_phone:
-                CallPhoneUtil.callPhoneView(CallPhoneActivity.this,"4001688848");
+                CallPhoneUtil.callPhone(CallPhoneActivity.this,"4001688848");
                 break;
         }
     }
