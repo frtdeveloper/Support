@@ -17,8 +17,10 @@
     <string name="after_sale_service_detail">售后服务详情</string>
     <string name="change_of_purchase_service_detail">换购服务详情</string>
     <string name="service_time">服务时间</string>
+    <string name="service_phone">服务电话</string>
+    <string name="common_contact">联系人</string>
     <string name="after_sales_policy">售后政策</string>
-    <string name="service_content">服务内容</string>
+    <string name="service_scope">服务范围</string>
     <string name="special_reminder">特殊提醒</string>
     <string name="about_us">关于我们</string>
     <string name="about_company">公司简介</string>

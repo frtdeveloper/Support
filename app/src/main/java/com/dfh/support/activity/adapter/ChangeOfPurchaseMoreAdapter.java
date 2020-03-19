@@ -72,8 +72,8 @@ public class ChangeOfPurchaseMoreAdapter extends BaseAdapter {
         }
         holder.tvDistance.setText(serveData.getDistance());
         holder.tvAddress.setText(serveData.getAddress());
-        holder.tvTime.setText(serveData.getTime());
-        holder.tvPhone.setText(serveData.getTel());
+        holder.tvTime.setText(cxt.getResources().getString(R.string.service_time)+"："+serveData.getTime());
+        holder.tvPhone.setText(cxt.getResources().getString(R.string.service_phone)+"："+serveData.getTel());
         LogUtil.printPushLog("mHttpReceiver ADAPTER serveData.toString :" + serveData.toString());
         return v;
     }

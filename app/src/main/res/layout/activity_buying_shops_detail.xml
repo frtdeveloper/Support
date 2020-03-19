@@ -98,6 +98,7 @@
                 android:layout_marginTop="15dp"
                 android:textColor="@color/history_item_text"
                 android:layout_centerVertical="true"
+                android:layout_marginRight="20dp"
                 android:textSize="15sp"/>
             <ImageView
                 android:layout_width="wrap_content"
@@ -107,13 +108,23 @@
                 android:src="@mipmap/img_gps_detail"/>
         </RelativeLayout>
         <TextView
-            android:id="@+id/tv_time"
+            android:id="@+id/tv_contact_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=""
             android:layout_marginTop="10dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
+            android:textColor="@color/history_item_text"
+            android:textSize="15sp"/>
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
             android:textColor="@color/history_item_text"
             android:textSize="15sp"/>
         <TextView
@@ -140,7 +151,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:text="@string/service_content"
+            android:text="@string/service_scope"
             android:layout_height="wrap_content"/>
         <TextView
             android:id="@+id/tv_service_content"

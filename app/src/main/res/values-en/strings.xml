@@ -17,8 +17,10 @@
     <string name="after_sale_service_detail">After sale service detail</string>
     <string name="change_of_purchase_service_detail">Change of purchase service detail</string>
     <string name="service_time">Service time</string>
+    <string name="service_phone">Service phone</string>
+    <string name="common_contact">Contact</string>
     <string name="after_sales_policy">After sale policy</string>
-    <string name="service_content">Service content</string>
+    <string name="service_scope">Service scope</string>
     <string name="special_reminder">Special reminder</string>
     <string name="about_us">About us</string>
     <string name="about_company">About company</string>
