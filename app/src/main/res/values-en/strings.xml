@@ -19,6 +19,7 @@
     <string name="service_time">Service time</string>
     <string name="service_phone">Service phone</string>
     <string name="common_contact">Contact</string>
+    <string name="no_map">First install the map client</string>
     <string name="after_sales_policy">After sale policy</string>
     <string name="service_scope">Service scope</string>
     <string name="special_reminder">Special reminder</string>
