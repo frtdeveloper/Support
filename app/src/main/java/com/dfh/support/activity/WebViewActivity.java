@@ -20,6 +20,7 @@ import android.widget.RelativeLayout;
 import com.dfh.support.R;
 import com.dfh.support.activity.support.CallPhoneActivity;
 import com.dfh.support.activity.widget.LoadingProgressDialog;
+import com.dfh.support.compose.UmentBroadcastReceiver;
 import com.dfh.support.entity.AdvertisementListData;
 import com.dfh.support.http.HttpJsonAnaly;
 import com.dfh.support.http.HttpJsonSend;
@@ -63,6 +64,10 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
                     break;
                 case AD_LIKE_SUCCESS:
                     LoadingProgressDialog.Dissmiss();
+
+                    Intent intent = new Intent(UmentBroadcastReceiver.INTENT_MSG_STR);
+                    intent.putExtra(UmentBroadcastReceiver.UMENG_MESSAGE, "update");
+                    sendBroadcast(intent);
                     mRlNoZan.setVisibility(View.GONE);
                     mRlHasZan.setVisibility(View.VISIBLE);
                     if(baseUrl.contains("browses")){
@@ -191,14 +196,14 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        try {
-            if (keyCode == KeyEvent.KEYCODE_BACK && mWebView.canGoBack() && !mWebView.getUrl().equals(baseUrl)) {
-                mWebView.goBack();//返回上个页面
-                return true;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            if (keyCode == KeyEvent.KEYCODE_BACK && mWebView.canGoBack() && !mWebView.getUrl().equals(baseUrl)) {
+//                mWebView.goBack();//返回上个页面
+//                return true;
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
         return super.onKeyDown(keyCode, event);//退出H5界面
 
     }
