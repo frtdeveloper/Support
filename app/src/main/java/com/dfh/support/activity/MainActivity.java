@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         PushAgent.getInstance(this).onAppStart();
         initView();
-        showRecommendFragment();
+        showSupportFragment();
         mHttpReceiver = new HttpReceiver();//广播接受者实例
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(UmentBroadcastReceiver.INTENT_MSG_STR);
@@ -85,8 +85,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mIvHint = (ImageView)findViewById(R.id.iv_hint);
         mPager = (CustomViewPager) findViewById(R.id.viewpager);
         fragmentList = new ArrayList<Fragment>();
-        fragmentList.add(new RecommendFragment());
         fragmentList.add(new SupportFragment());
+        fragmentList.add(new RecommendFragment());
         MainFragmentAdapter adapter = new MainFragmentAdapter(
                 getSupportFragmentManager(), fragmentList);
         mPager.setAdapter(adapter);
@@ -117,14 +117,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void showRecommendFragment(){
         mIvRecommend.setImageResource(R.mipmap.btn_recommend_press);
         mIvSupport.setImageResource(R.mipmap.btn_support_normal);
-        currentItem = 0;
+        currentItem = 1;
         mPager.setCurrentItem(currentItem);
     }
 
     private void showSupportFragment(){
         mIvRecommend.setImageResource(R.mipmap.btn_recommend_normal);
         mIvSupport.setImageResource(R.mipmap.btn_support_press);
-        currentItem = 1;
+        currentItem = 0;
         mPager.setCurrentItem(currentItem);
     }
 
