@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             super.handleMessage(msg);
             switch (msg.what){
                 case RECEIVER_UPDATE:
-                    if(currentItem!=0){
+                    if(currentItem!=1){
                         mIvHint.setVisibility(View.VISIBLE);
                     }
                     break;
