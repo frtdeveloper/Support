@@ -25,6 +25,7 @@ import com.umeng.message.IUmengCallback;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.PushAgent;
 import com.umeng.message.UmengMessageHandler;
+import com.umeng.message.UmengNotificationClickHandler;
 import com.umeng.message.entity.UMessage;
 
 import java.io.IOException;
@@ -49,6 +50,32 @@ public class SupportApplication extends Application implements IUmengRegisterCal
     private double longitude = 0;
     private String gpsCity = "";
 
+    private UmengNotificationClickHandler mUmengNotificationClickHandler = new UmengNotificationClickHandler() {
+        @Override
+        public void openActivity(Context context, UMessage uMessage) {
+            super.openActivity(context, uMessage);
+            LogUtil.printPushLog("openActivity::json_a = " + uMessage.extra);
+        }
+
+        @Override
+        public void openUrl(Context context, UMessage uMessage) {
+            super.openUrl(context, uMessage);
+            LogUtil.printPushLog("openUrl::json_a = " + uMessage.extra);
+        }
+
+        @Override
+        public void launchApp(Context context, UMessage uMessage) {
+            super.launchApp(context, uMessage);
+            LogUtil.printPushLog("launchApp::json_a = " + uMessage.extra);
+        }
+
+        @Override
+        public void dealWithCustomAction(Context context, UMessage uMessage) {
+            super.dealWithCustomAction(context, uMessage);
+            LogUtil.printPushLog("launchApp::json_a = " + uMessage.extra);
+        }
+    };
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -59,6 +86,8 @@ public class SupportApplication extends Application implements IUmengRegisterCal
         initImageLoader(this);
         mPushAgent = PushAgent.getInstance(this);
         mPushAgent.register(this);
+
+        mPushAgent.setNotificationClickHandler(mUmengNotificationClickHandler);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         ScreenUtils.init(this);
 
