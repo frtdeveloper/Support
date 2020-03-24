@@ -53,25 +53,25 @@ public class SupportApplication extends Application implements IUmengRegisterCal
     private UmengNotificationClickHandler mUmengNotificationClickHandler = new UmengNotificationClickHandler() {
         @Override
         public void openActivity(Context context, UMessage uMessage) {
-            super.openActivity(context, uMessage);
+            //super.openActivity(context, uMessage);
             LogUtil.printPushLog("openActivity::json_a = " + uMessage.extra);
         }
 
         @Override
         public void openUrl(Context context, UMessage uMessage) {
-            super.openUrl(context, uMessage);
+            //super.openUrl(context, uMessage);
             LogUtil.printPushLog("openUrl::json_a = " + uMessage.extra);
         }
 
         @Override
         public void launchApp(Context context, UMessage uMessage) {
-            super.launchApp(context, uMessage);
+            //super.launchApp(context, uMessage);
             LogUtil.printPushLog("launchApp::json_a = " + uMessage.extra);
         }
 
         @Override
         public void dealWithCustomAction(Context context, UMessage uMessage) {
-            super.dealWithCustomAction(context, uMessage);
+            //super.dealWithCustomAction(context, uMessage);
             LogUtil.printPushLog("launchApp::json_a = " + uMessage.extra);
         }
     };
