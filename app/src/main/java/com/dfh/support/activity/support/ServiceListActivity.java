@@ -51,6 +51,7 @@ public class ServiceListActivity extends AppCompatActivity implements View.OnCli
     private LoadListView mLvService;
     private ArrayList<ServeData> mServiceList = new ArrayList<ServeData>();
     private ServiceListAdapter mServiceListAdapter;
+    private ImageView mIvNoService;
 
     private static final int SERVE_PAGER_SUCCESS = 1;
     private static final int SERVE_PAGER_FALSE = 2;
@@ -68,6 +69,11 @@ public class ServiceListActivity extends AppCompatActivity implements View.OnCli
                     mServiceList.addAll(serveListData.getServeData());
                     mServiceListAdapter.setList(mServiceList, hasLocation);
                     mLvService.loadComplete();
+                    if(mServiceList.size()==0){
+                        mIvNoService.setVisibility(View.VISIBLE);
+                    }else{
+                        mIvNoService.setVisibility(View.GONE);
+                    }
                     break;
                 case SERVE_PAGER_FALSE:
                     LoadingProgressDialog.Dissmiss();
@@ -127,6 +133,7 @@ public class ServiceListActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void initView() {
+        mIvNoService = (ImageView) findViewById(R.id.iv_no_service);
         mLlSearch = (LinearLayout) findViewById(R.id.ll_search);
         mIvBack = (ImageView) findViewById(R.id.iv_back);
         mIvContactUs = (ImageView) findViewById(R.id.iv_contact_us);

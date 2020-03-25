@@ -44,6 +44,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class BuyingShopsListActivity extends AppCompatActivity  implements View.OnClickListener, LoadListView.ILoadListener2 {
 
     private ImageView mIvBack, mIvContactUs;
+    private ImageView mIvNoService;
     private LinearLayout mLlSearch;
     private TextView mTvCity;
     private String mCity = "";
@@ -68,6 +69,11 @@ public class BuyingShopsListActivity extends AppCompatActivity  implements View.
                     mBuyingShopsList.addAll(serveListData.getServeData());
                     mBuyingShopsListAdapter.setList(mBuyingShopsList,hasLocation);
                     mLvBuyingShops.loadComplete();
+                    if(mBuyingShopsList.size()==0){
+                        mIvNoService.setVisibility(View.VISIBLE);
+                    }else{
+                        mIvNoService.setVisibility(View.GONE);
+                    }
                     break;
                 case SERVE_PAGER_FALSE:
                     LoadingProgressDialog.Dissmiss();
@@ -126,6 +132,7 @@ public class BuyingShopsListActivity extends AppCompatActivity  implements View.
     }
 
     private void initView() {
+        mIvNoService = (ImageView) findViewById(R.id.iv_no_service);
         mLlSearch = (LinearLayout) findViewById(R.id.ll_search);
         mIvBack = (ImageView) findViewById(R.id.iv_back);
         mIvContactUs = (ImageView) findViewById(R.id.iv_contact_us);
