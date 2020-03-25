@@ -10,6 +10,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 
+import com.dfh.support.activity.WebViewActivity;
 import com.dfh.support.activity.support.ServiceListActivity;
 import com.dfh.support.compose.UmentBroadcastReceiver;
 import com.dfh.support.http.HttpJsonSend;
@@ -55,6 +56,11 @@ public class SupportApplication extends Application implements IUmengRegisterCal
         public void openActivity(Context context, UMessage uMessage) {
             //super.openActivity(context, uMessage);
             LogUtil.printPushLog("openActivity::json_a = " + uMessage.extra);
+            String my_url = uMessage.extra.get("url");
+            String my_likes = uMessage.extra.get("link");
+            String my_browser = uMessage.extra.get("browses");
+            String my_id = uMessage.extra.get("id");
+            WebViewActivity.openMySelf(SupportApplication.this, my_id, my_url, my_likes, my_browser);
         }
 
         @Override
@@ -67,6 +73,11 @@ public class SupportApplication extends Application implements IUmengRegisterCal
         public void launchApp(Context context, UMessage uMessage) {
             //super.launchApp(context, uMessage);
             LogUtil.printPushLog("launchApp::json_a = " + uMessage.extra);
+            String my_url = uMessage.extra.get("url");
+            String my_likes = uMessage.extra.get("link");
+            String my_browser = uMessage.extra.get("browses");
+            String my_id = uMessage.extra.get("id");
+            WebViewActivity.openMySelf(SupportApplication.this, my_id, my_url, my_likes, my_browser);
         }
 
         @Override

@@ -1,6 +1,7 @@
 package com.dfh.support.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
@@ -22,6 +23,7 @@ import com.dfh.support.activity.support.CallPhoneActivity;
 import com.dfh.support.activity.widget.LoadingProgressDialog;
 import com.dfh.support.compose.UmentBroadcastReceiver;
 import com.dfh.support.entity.AdvertisementListData;
+import com.dfh.support.http.HttpConfig;
 import com.dfh.support.http.HttpJsonAnaly;
 import com.dfh.support.http.HttpJsonSend;
 import com.dfh.support.utils.ActionBarUtil;
@@ -47,6 +49,21 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
     private RelativeLayout mRlNoZan, mRlHasZan;
     private RelativeLayout mRlZanNo, mRlZanYes;
 
+    public static boolean openMySelf(Context ctx, String my_id,  String my_link, String my_likes, String my_browser){
+        Intent intent = new Intent(ctx, WebViewActivity.class);
+        intent.putExtra("url", HttpConfig.GetHttpPolicyAdress() +
+                my_link
+                + "? links=" + my_likes
+                + "&browses=" + my_browser);
+        intent.putExtra("id", my_id);
+        try {
+            ctx.startActivity(intent);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
     private Handler mHandler = new Handler() {
         @Override
