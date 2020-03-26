@@ -63,14 +63,16 @@ public final class LogUtil {
     }
 
     public static CityData getGeo(Context ctx){
-        CityData cityData = null;
+        CityData cityData = new CityData();
         String geo_info = ctx.getResources().getString(R.string.common_default_city);
+        cityData.setCityName(geo_info);
         printUtilLog("getGeo::Begin::default_address= " + geo_info);
 
         if (PackageManager.PERMISSION_GRANTED !=
                 ActivityCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_FINE_LOCATION)){
             Toast.makeText(ctx, R.string.check_your_permission, Toast.LENGTH_SHORT).show();
             printUtilLog("getGeo::Permission[" + Manifest.permission.ACCESS_FINE_LOCATION + "] is not granted!!!!");
+            cityData.setStatus(CityData.GEO_NO_PERMISSION);
         } else {
             LocationManager location_manager = (LocationManager) ctx.getSystemService(Context.LOCATION_SERVICE);
             boolean is_loc_open = location_manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
@@ -104,10 +106,12 @@ public final class LogUtil {
                     }
                 } else {
                     printUtilLog("getGeo:: Can not found GEO PROVIDER!!!!");
+                    cityData.setStatus(CityData.GEO_NO_PROVIDER);
                 }
             } else {
                 Toast.makeText(ctx, R.string.check_your_permission, Toast.LENGTH_SHORT).show();
                 printUtilLog("getGeo:: the GEO switch is not enabled!!!!");
+                cityData.setStatus(CityData.GEO_SWITCH_OFF);
             }
         }
         return cityData;
