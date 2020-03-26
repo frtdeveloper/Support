@@ -29,6 +29,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.dfh.support.R;
@@ -113,9 +114,9 @@ public class SearchMainActivity extends AppCompatActivity implements AbsListView
         overlayThread = new OverlayThread();
         searchCityListAdapter = new SearchCityListAdapter(this, searchCityList);
         searchCityLv.setAdapter(searchCityListAdapter);
-        if(mCityData!=null){
+        if (mCityData != null) {
             locationCity = mCityData.getCityName();
-        }else{
+        } else {
             locationCity = getResources().getString(R.string.positioning_failure);
         }
         curSelCity = locationCity;
@@ -361,18 +362,31 @@ public class SearchMainActivity extends AppCompatActivity implements AbsListView
             if (viewType == 0) { // 定位
                 convertView = inflater.inflate(R.layout.select_city_location_item, null);
 
-                LinearLayout noLocationLl = convertView.findViewById(R.id.cur_city_no_data_ll);
+                RelativeLayout noLocationLl = convertView.findViewById(R.id.cur_city_no_data_ll);
                 TextView getLocationTv = convertView.findViewById(R.id.cur_city_re_get_location_tv);
                 curCityNameTv = convertView.findViewById(R.id.cur_city_name_tv);
 
-                if (TextUtils.isEmpty(locationCity)) {
+                if (TextUtils.isEmpty(locationCity) || mCityData.getStatus() != 0) {
                     noLocationLl.setVisibility(View.VISIBLE);
-                    curCityNameTv.setVisibility(View.GONE);
+                    curCityNameTv.setVisibility(View.VISIBLE);
+                    curCityNameTv.setText(getResources().getString(R.string.positioning_failure));
                     getLocationTv.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             //获取定位
+                            mCityData = LogUtil.getGeo(SearchMainActivity.this);
+                            if (mCityData.getStatus() == CityData.GEO_SUCCESS) {
 
+                            } else if (mCityData.getStatus() == CityData.GEO_NO_PERMISSION) {
+                                ToastUtils.shortToast(SearchMainActivity.this, R.string.check_your_permission);
+                            } else if (mCityData.getStatus() == CityData.GEO_SWITCH_OFF) {
+                                ToastUtils.shortToast(SearchMainActivity.this, R.string.check_your_switch);
+                            } else if (mCityData.getStatus() == CityData.GEO_NO_PROVIDER) {
+                                ToastUtils.shortToast(SearchMainActivity.this, R.string.check_your_provider);
+                            } else if (mCityData.getStatus() == CityData.GEO_NO_CITY) {
+                                ToastUtils.shortToast(SearchMainActivity.this, R.string.check_your_city);
+                            }
+                            notifyDataSetChanged();
                         }
                     });
                 } else {
@@ -394,12 +408,12 @@ public class SearchMainActivity extends AppCompatActivity implements AbsListView
 //                                }
 //                                showSetCityDialog(locationCity, cityCode);
 //                            } else {
-                                if(mCityData!=null) {
-                                    SettingSharedPerferencesUtil.SetSearchCityValue(SearchMainActivity.this, curCityNameTv.getText().toString());
-                                    finish();
-                                }else {
-                                    //ToastUtils.shortToast(SearchMainActivity.this, "当前定位城市" + curCityNameTv.getText().toString());
-                                }
+                            if (mCityData != null) {
+                                SettingSharedPerferencesUtil.SetSearchCityValue(SearchMainActivity.this, curCityNameTv.getText().toString());
+                                finish();
+                            } else {
+                                //ToastUtils.shortToast(SearchMainActivity.this, "当前定位城市" + curCityNameTv.getText().toString());
+                            }
 //                            }
                         }
                     });
@@ -629,7 +643,7 @@ public class SearchMainActivity extends AppCompatActivity implements AbsListView
      */
     private void showSetCityDialog(final String curCity, final String cityCode) {
         if (curCity.equals(curSelCity)) {
-            ToastUtils.shortToast(SearchMainActivity.this,"当前定位城市" + curCity);
+            ToastUtils.shortToast(SearchMainActivity.this, "当前定位城市" + curCity);
             return;
         }
 

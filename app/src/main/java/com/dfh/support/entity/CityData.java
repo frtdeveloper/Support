@@ -52,7 +52,8 @@ public class CityData {
     @Override
     public String toString() {
         return "CityData{" +
-                "cityName='" + cityName + '\'' +
+                "status=" + status +
+                ", cityName='" + cityName + '\'' +
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
                 '}';
