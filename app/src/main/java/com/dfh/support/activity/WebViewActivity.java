@@ -72,6 +72,7 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
+            LogUtil.printActivityLog("WebviewActivity::handleMessage::id= " + msg.what);
             super.handleMessage(msg);
             switch (msg.what) {
                 case AD_BROWSE_SUCCESS:
@@ -117,6 +118,7 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        LogUtil.printActivityLog("WebviewActivity::onCreate======================");
         ActionBarUtil.transparencyBarTitleColor(this);
         getSupportActionBar().hide();
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -128,6 +130,7 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void initView() {
+        LogUtil.printActivityLog("WebviewActivity::initView======================");
         id = getIntent().getStringExtra("id");
         if (getIntent().hasExtra("url")) baseUrl = getIntent().getStringExtra("url");
         LogUtil.printPushLog("initView baseUrl" + baseUrl);
@@ -141,6 +144,7 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void initListener() {
+        LogUtil.printActivityLog("WebviewActivity::initListener======================");
         mIvContactUs.setOnClickListener(this);
         mIvCancel.setOnClickListener(this);
         mRlZanYes.setOnClickListener(this);
@@ -173,6 +177,7 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 
     @SuppressLint("SetJavaScriptEnabled")
     private void initWebView() {
+        LogUtil.printActivityLog("WebviewActivity::initWebView======================");
         mWebSettings = mWebView.getSettings();
         mWebSettings.setJavaScriptEnabled(true);                    //  支持Javascript 与js交互
         mWebSettings.setJavaScriptCanOpenWindowsAutomatically(true);//  支持通过JS打开新窗口
@@ -204,6 +209,21 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     protected void onStop() {
+        LogUtil.printActivityLog("WebviewActivity::onStop======================");
+        // 清理缓存
+//        if (mWebView != null) {
+//            mWebView.loadUrl("about:blank");
+//            mWebView.loadDataWithBaseURL(null, "", "text/html", "utf-8", null);
+//            mWebView.clearHistory();
+//            mWebView.destroy();
+//            mWebView = null;
+//        }
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        LogUtil.printActivityLog("WebviewActivity::onDestroy======================");
         // 清理缓存
         if (mWebView != null) {
             mWebView.loadUrl("about:blank");
@@ -212,7 +232,7 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
             mWebView.destroy();
             mWebView = null;
         }
-        super.onStop();
+        super.onDestroy();
     }
 
     @Override

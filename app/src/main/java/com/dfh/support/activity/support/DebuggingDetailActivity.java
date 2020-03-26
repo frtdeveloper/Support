@@ -48,6 +48,7 @@ public class DebuggingDetailActivity  extends AppCompatActivity implements View.
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
+            LogUtil.printActivityLog("DebuggingDetailActivity::handleMessage::id= " + msg.what);
             switch (msg.what){
                 case FIND_SUCCESS:
                     LoadingProgressDialog.Dissmiss();
@@ -66,6 +67,7 @@ public class DebuggingDetailActivity  extends AppCompatActivity implements View.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        LogUtil.printActivityLog("DebuggingDetailActivity::onCreate======================");
         ActionBarUtil.transparencyBarTitleColor(this);
         getSupportActionBar().hide();
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -79,11 +81,13 @@ public class DebuggingDetailActivity  extends AppCompatActivity implements View.
     }
 
     private void initListener() {
+        LogUtil.printActivityLog("DebuggingDetailActivity::initListener======================");
         mIvContactUs.setOnClickListener(this);
         mIvBack.setOnClickListener(this);
     }
 
     private void initView() {
+        LogUtil.printActivityLog("DebuggingDetailActivity::initView======================");
         id = getIntent().getStringExtra("id");
         if (getIntent().hasExtra("url")) baseUrl = getIntent().getStringExtra("url");
         mTitle = getIntent().getStringExtra("title");
@@ -110,6 +114,7 @@ public class DebuggingDetailActivity  extends AppCompatActivity implements View.
 
     @SuppressLint("SetJavaScriptEnabled")
     private void initWebView() {
+        LogUtil.printActivityLog("DebuggingDetailActivity::initWebView======================");
         mWebSettings = mWebView.getSettings();
         mWebSettings.setJavaScriptEnabled(true);                    //  支持Javascript 与js交互
         mWebSettings.setJavaScriptCanOpenWindowsAutomatically(true);//  支持通过JS打开新窗口
@@ -139,6 +144,21 @@ public class DebuggingDetailActivity  extends AppCompatActivity implements View.
 
     @Override
     protected void onStop() {
+        LogUtil.printActivityLog("DebuggingDetailActivity::onStop======================");
+        // 清理缓存
+//        if (mWebView != null) {
+//            mWebView.loadUrl("about:blank");
+//            mWebView.loadDataWithBaseURL(null, "", "text/html", "utf-8", null);
+//            mWebView.clearHistory();
+//            mWebView.destroy();
+//            mWebView = null;
+//        }
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        LogUtil.printActivityLog("DebuggingDetailActivity::onDestroy======================");
         // 清理缓存
         if (mWebView != null) {
             mWebView.loadUrl("about:blank");
@@ -147,7 +167,7 @@ public class DebuggingDetailActivity  extends AppCompatActivity implements View.
             mWebView.destroy();
             mWebView = null;
         }
-        super.onStop();
+        super.onDestroy();
     }
 
     @Override
