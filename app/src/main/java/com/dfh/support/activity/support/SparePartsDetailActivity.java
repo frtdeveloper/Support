@@ -47,32 +47,61 @@ public class SparePartsDetailActivity extends AppCompatActivity implements View.
     private TextView tvContent;
     private TextView tvText;
     private TextView tvRemark;
+    private TextView tvRemarkHint;
 
     private static final int PARTS_FIND_SUCCESS = 1;
     private static final int PARTS_FIND_FALSE = 2;
-    private Handler mHandler = new Handler(){
+    private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
-            switch (msg.what){
+            switch (msg.what) {
                 case PARTS_FIND_SUCCESS:
                     LoadingProgressDialog.Dissmiss();
                     //刷新内容
-                    tvName.setText(mPartsData.getName());
-                    tvValue.setText(getResources().getString(R.string.common_value)+mPartsData.getPpPrice());
-                    tvContent.setText(getResources().getString(R.string.common_specs)+mPartsData.getSpecs());
-                    tvText.setText(getResources().getString(R.string.common_explain)+mPartsData.getIntro());
-                    if(!TextUtils.isEmpty(mPartsData.getTips()))tvRemark.setText(mPartsData.getTips());
+                    if (!TextUtils.isEmpty(mPartsData.getName())) {
+                        tvName.setVisibility(View.VISIBLE);
+                        tvName.setText(mPartsData.getName());
+                    } else {
+                        tvName.setVisibility(View.GONE);
+                    }
+                    if (!TextUtils.isEmpty(mPartsData.getPpPrice())) {
+                        tvValue.setVisibility(View.VISIBLE);
+                        tvValue.setText(getResources().getString(R.string.common_value) + mPartsData.getPpPrice());
+                    } else {
+                        tvValue.setVisibility(View.GONE);
+                    }
+                    if (!TextUtils.isEmpty(mPartsData.getSpecs())) {
+                        tvContent.setVisibility(View.VISIBLE);
+                        tvContent.setText(getResources().getString(R.string.common_specs) + mPartsData.getSpecs());
+                    } else {
+                        tvContent.setVisibility(View.GONE);
+                    }
+                    if (!TextUtils.isEmpty(mPartsData.getIntro())) {
+                        tvText.setVisibility(View.VISIBLE);
+                        tvText.setText(getResources().getString(R.string.common_explain) + mPartsData.getIntro());
+                    } else {
+                        tvText.setVisibility(View.GONE);
+                    }
+                    if (!TextUtils.isEmpty(mPartsData.getTips())) {
+                        tvRemark.setVisibility(View.VISIBLE);
+                        tvRemarkHint.setVisibility(View.VISIBLE);
+                        tvRemark.setText(mPartsData.getTips());
+                    }else{
+                        tvRemark.setVisibility(View.GONE);
+                        tvRemarkHint.setVisibility(View.GONE);
+                    }
                     mPicList = mPartsData.getPictureVOData();
                     mSparePartsDetailAdapter.setList(mPicList);
                     break;
                 case PARTS_FIND_FALSE:
                     LoadingProgressDialog.Dissmiss();
-                    ToastUtils.shortToast(SparePartsDetailActivity.this,  HttpJsonAnaly.lastError);
+                    ToastUtils.shortToast(SparePartsDetailActivity.this, HttpJsonAnaly.lastError);
                     break;
             }
         }
     };
+
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,8 +126,8 @@ public class SparePartsDetailActivity extends AppCompatActivity implements View.
         id = getIntent().getStringExtra("id");
         mIvBack = (ImageView) findViewById(R.id.iv_back);
         mIvContactUs = (ImageView) findViewById(R.id.iv_contact_us);
-        mLvPic = (ChildrenListView)findViewById(R.id.lv_spare_parts_pic_list);
-        mSparePartsDetailAdapter = new SparePartsDetailAdapter(this,mPicList);
+        mLvPic = (ChildrenListView) findViewById(R.id.lv_spare_parts_pic_list);
+        mSparePartsDetailAdapter = new SparePartsDetailAdapter(this, mPicList);
         mLvPic.setAdapter(mSparePartsDetailAdapter);
 
         tvName = (TextView) findViewById(R.id.tv_name);
@@ -106,6 +135,7 @@ public class SparePartsDetailActivity extends AppCompatActivity implements View.
         tvContent = (TextView) findViewById(R.id.tv_content);
         tvText = (TextView) findViewById(R.id.tv_text);
         tvRemark = (TextView) findViewById(R.id.tv_remark);
+        tvRemarkHint = (TextView) findViewById(R.id.tv_remark_hint);
 
     }
 
@@ -121,6 +151,7 @@ public class SparePartsDetailActivity extends AppCompatActivity implements View.
                 break;
         }
     }
+
     private PartsData mPartsData;
     private PartsIdDetailTask mPartsIdDetailTask;
     private String id = "";
@@ -129,7 +160,7 @@ public class SparePartsDetailActivity extends AppCompatActivity implements View.
 
         @Override
         protected Void doInBackground(String... params) {
-            mPartsData =  HttpJsonSend.partsIdDetail(SparePartsDetailActivity.this,id);
+            mPartsData = HttpJsonSend.partsIdDetail(SparePartsDetailActivity.this, id);
             if (mPartsData.isFlag()) {
                 mHandler.sendEmptyMessage(PARTS_FIND_SUCCESS);
             } else {
