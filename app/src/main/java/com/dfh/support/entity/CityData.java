@@ -6,6 +6,7 @@ public class CityData {
     public static int GEO_NO_PERMISSION = GEO_SUCCESS + 1;//没有权限
     public static int GEO_SWITCH_OFF = GEO_SUCCESS + 2;//开关没打开
     public static int GEO_NO_PROVIDER = GEO_SUCCESS + 3;//硬件不支持
+    public static int GEO_NO_CITY = GEO_SUCCESS + 4;//找不到城市
 
     private int    status;
     private String cityName;
