@@ -100,7 +100,11 @@ public final class LogUtil {
                             cityData.setCityName(geo_info);
                             cityData.setLatitude(latitude);
                             cityData.setLongitude(longitude);
+                        } else {
+                            printUtilLog("getGeo:: Can not found city by={" + latitude + ", " + longitude + "}");
+                            cityData.setStatus(CityData.GEO_NO_CITY);
                         }
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
