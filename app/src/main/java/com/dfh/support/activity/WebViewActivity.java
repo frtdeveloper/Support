@@ -51,13 +51,17 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 
     public static boolean openMySelf(Context ctx, String my_id,  String my_link, String my_likes, String my_browser){
         Intent intent = new Intent(ctx, WebViewActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("url", HttpConfig.GetHttpPolicyAdress() +
                 my_link
                 + "? links=" + my_likes
                 + "&browses=" + my_browser);
         intent.putExtra("id", my_id);
+        LogUtil.printActivityLog("openMySelf==========id= " + my_id);
         try {
+            LogUtil.printActivityLog("openMySelf==========end===========");
             ctx.startActivity(intent);
+            LogUtil.printActivityLog("openMySelf==========end11111===========");
             return true;
         } catch (Exception e) {
             e.printStackTrace();
