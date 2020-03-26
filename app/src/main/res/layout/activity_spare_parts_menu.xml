@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/white"
     tools:context=".activity.support.SparePartsMenuActivity">
 
 
@@ -50,10 +51,8 @@
     <ListView
         android:id="@+id/lv_device_list"
         android:layout_width="match_parent"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
         android:layout_height="match_parent"
         android:divider="@color/white"
-        android:dividerHeight="10dp" />
+        android:dividerHeight="6dp" />
 </LinearLayout>
