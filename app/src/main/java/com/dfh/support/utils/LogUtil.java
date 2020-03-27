@@ -83,7 +83,7 @@ public final class LogUtil {
 
         if (PackageManager.PERMISSION_GRANTED !=
                 ActivityCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_FINE_LOCATION)) {
-            Toast.makeText(ctx, R.string.check_your_permission, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(ctx, R.string.check_your_permission, Toast.LENGTH_SHORT).show();
             printUtilLog("getGeo::Permission[" + Manifest.permission.ACCESS_FINE_LOCATION + "] is not granted!!!!");
             cityData.setStatus(CityData.GEO_NO_PERMISSION);
         } else {
@@ -141,7 +141,7 @@ public final class LogUtil {
                     cityData.setStatus(CityData.GEO_NO_PROVIDER);
                 }
             } else {
-                Toast.makeText(ctx, R.string.check_your_permission, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(ctx, R.string.check_your_permission, Toast.LENGTH_SHORT).show();
                 printUtilLog("getGeo:: the GEO switch is not enabled!!!!");
                 cityData.setStatus(CityData.GEO_SWITCH_OFF);
             }
