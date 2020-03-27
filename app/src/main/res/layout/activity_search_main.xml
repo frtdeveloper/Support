@@ -84,7 +84,6 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp"
-            android:gravity="center"
             android:padding="10dp"
             android:text="@string/no_search_city_hint"
             android:lineSpacingExtra="5dp"
