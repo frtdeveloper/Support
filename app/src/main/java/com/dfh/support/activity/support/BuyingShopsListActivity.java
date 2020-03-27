@@ -87,11 +87,26 @@ public class BuyingShopsListActivity extends AppCompatActivity  implements View.
                     mServePagerTask.execute("");
                     break;
                 case GET_GEO:
+                    updateCity();
                     mHandler.sendEmptyMessage(GET_SERVE_PAGER);
                     break;
             }
         }
     };
+    private void updateCity(){
+        mCity = SettingSharedPerferencesUtil.GetSearchCityValueConfig(BuyingShopsListActivity.this);
+        if (!TextUtils.isEmpty(mCity)) {
+            mTvCity.setText(mCity);
+        }else {
+            if (mCityData != null) {
+                mTvCity.setText(mCityData.getCityName());
+            } else {
+                if(TextUtils.isEmpty(mCity)) mCity = getResources().getString(R.string.common_default_city);
+                mTvCity.setText(mCity);
+            }
+        }
+    }
+
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {

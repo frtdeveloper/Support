@@ -82,9 +82,12 @@
             android:id="@+id/no_search_result_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
             android:gravity="center"
             android:padding="10dp"
-            android:text="抱歉,暂时没有找到相关城市"
+            android:text="@string/no_search_city_hint"
+            android:lineSpacingExtra="5dp"
             android:textColor="#000000"
             android:textSize="16sp"
             android:visibility="gone" />

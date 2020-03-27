@@ -57,4 +57,7 @@
     <string name="check_your_switch">请检查您的开关是否开启</string>
     <string name="check_your_provider">请检查您的硬件是否支持</string>
     <string name="check_your_city">无法寻找到对应城市</string>
+
+    <string name="no_search_city_hint">抱歉,您输入的城市当前暂无客服中心，您可以在有服务中心的城市列表中直接选择，或根据定位选择推荐的就近网点</string>
+    <string name="has_city_list">以下城市有服务中心</string>
 </resources>
