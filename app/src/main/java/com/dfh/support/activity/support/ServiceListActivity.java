@@ -56,6 +56,7 @@ public class ServiceListActivity extends AppCompatActivity implements View.OnCli
     private static final int SERVE_PAGER_SUCCESS = 1;
     private static final int SERVE_PAGER_FALSE = 2;
     private static final int GET_SERVE_PAGER = 3;
+    private static final int GET_GEO = 4;
     private static final int REPECT_GET = 30 * 1000;
     private ImageView mIvPic;
     private Handler mHandler = new Handler() {
@@ -85,6 +86,9 @@ public class ServiceListActivity extends AppCompatActivity implements View.OnCli
                     mServePagerTask = new ServePagerTask();
                     mServePagerTask.execute("");
                     break;
+                case GET_GEO:
+                    mHandler.sendEmptyMessage(GET_SERVE_PAGER);
+                    break;
             }
         }
     };
@@ -97,14 +101,27 @@ public class ServiceListActivity extends AppCompatActivity implements View.OnCli
         getSupportActionBar().hide();
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_service_list);
-        mCityData = LogUtil.getGeo(ServiceListActivity.this);
         initView();
         initListener();
         mHttpReceiver = new HttpReceiver();//广播接受者实例
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(SupportApplication.ACTION_HTTP_RESULT);
         registerReceiver(mHttpReceiver, intentFilter);
-        mHandler.sendEmptyMessage(GET_SERVE_PAGER);
+        mGetGeoTask = new GetGeoTask();
+        mGetGeoTask.execute("");
+    }
+
+    private GetGeoTask mGetGeoTask;
+
+    private class GetGeoTask extends AsyncTask<String, Void, Void> {
+
+        @Override
+        protected Void doInBackground(String... params) {
+            mCityData = LogUtil.getGeo(ServiceListActivity.this);
+            mHandler.sendEmptyMessage(GET_GEO);
+            LogUtil.printPushLog("httpGet getGeo mCityData" + mCityData.toString());
+            return null;
+        }
     }
 
     @Override

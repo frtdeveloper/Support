@@ -6,10 +6,12 @@ import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -34,6 +36,7 @@ import android.widget.TextView;
 
 import com.dfh.support.R;
 import com.dfh.support.activity.widget.LetterListView;
+import com.dfh.support.activity.widget.LoadingProgressDialog;
 import com.dfh.support.binding.Bind;
 import com.dfh.support.binding.ViewBinder;
 import com.dfh.support.entity.CityData;
@@ -53,6 +56,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -91,6 +95,37 @@ public class SearchMainActivity extends AppCompatActivity implements AbsListView
     private String locationCity, curSelCity;
     private CityData mCityData;
 
+    private static final int GET_GEO_FIRST = 1;
+    private static final int GET_GEO_REPEAT = 2;
+    private ImageView mIvPic;
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case GET_GEO_FIRST:
+                    initData();
+                    initListener();
+                    break;
+                case GET_GEO_REPEAT:
+                    //获取定位
+                    if (mCityData.getStatus() == CityData.GEO_SUCCESS) {
+                        locationCity = mCityData.getCityName();
+                    } else if (mCityData.getStatus() == CityData.GEO_NO_PERMISSION) {
+                        ToastUtils.shortToast(SearchMainActivity.this, R.string.check_your_permission);
+                    } else if (mCityData.getStatus() == CityData.GEO_SWITCH_OFF) {
+                        ToastUtils.shortToast(SearchMainActivity.this, R.string.check_your_switch);
+                    } else if (mCityData.getStatus() == CityData.GEO_NO_PROVIDER) {
+                        ToastUtils.shortToast(SearchMainActivity.this, R.string.check_your_provider);
+                    } else if (mCityData.getStatus() == CityData.GEO_NO_CITY) {
+                        ToastUtils.shortToast(SearchMainActivity.this, R.string.check_your_city);
+                    }
+                    cityListAdapter.notifyDataSetChanged();
+                    break;
+            }
+        }
+    };
+
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,25 +136,43 @@ public class SearchMainActivity extends AppCompatActivity implements AbsListView
         setContentView(R.layout.activity_search_main);
 
         initView();
-        initData();
-        initListener();
+        mGetGeoTask = new GetGeoTask();
+        mGetGeoTask.execute("");
+    }
+
+    private GetGeoTask mGetGeoTask;
+
+    private class GetGeoTask extends AsyncTask<String, Void, Void> {
+
+        @Override
+        protected Void doInBackground(String... params) {
+            mCityData = LogUtil.getGeo(SearchMainActivity.this);
+            mHandler.sendEmptyMessage(GET_GEO_FIRST);
+            LogUtil.printPushLog("httpGet getGeo mCityData" + mCityData.toString());
+            return null;
+        }
+    }
+    private GetGeoRepeatTask mGetGeoRepeatTask;
+
+    private class GetGeoRepeatTask extends AsyncTask<String, Void, Void> {
+
+        @Override
+        protected Void doInBackground(String... params) {
+            mCityData = LogUtil.getGeo(SearchMainActivity.this);
+            mHandler.sendEmptyMessage(GET_GEO_REPEAT);
+            LogUtil.printPushLog("httpGet getGeo mCityData" + mCityData.toString());
+            return null;
+        }
     }
 
     private void initView() {
         mIvBack = (ImageView) findViewById(R.id.iv_back);
-        mCityData = LogUtil.getGeo(SearchMainActivity.this);
         ViewBinder.bind(this);
 
         handler = new Handler();
         overlayThread = new OverlayThread();
         searchCityListAdapter = new SearchCityListAdapter(this, searchCityList);
         searchCityLv.setAdapter(searchCityListAdapter);
-        if (mCityData != null) {
-            locationCity = mCityData.getCityName();
-        } else {
-            locationCity = getResources().getString(R.string.positioning_failure);
-        }
-        curSelCity = locationCity;
         mIvBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -130,6 +183,12 @@ public class SearchMainActivity extends AppCompatActivity implements AbsListView
 
     private void initData() {
         initTotalCityList();
+        if (mCityData != null) {
+            locationCity = mCityData.getCityName();
+        } else {
+            locationCity = getResources().getString(R.string.positioning_failure);
+        }
+        curSelCity = locationCity;
         cityListAdapter = new CityListAdapter(this, totalCityList, hotCityList);
         totalCityLv.setAdapter(cityListAdapter);
         totalCityLv.setOnScrollListener(this);
@@ -373,20 +432,8 @@ public class SearchMainActivity extends AppCompatActivity implements AbsListView
                     getLocationTv.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            //获取定位
-                            mCityData = LogUtil.getGeo(SearchMainActivity.this);
-                            if (mCityData.getStatus() == CityData.GEO_SUCCESS) {
-                                locationCity = mCityData.getCityName();
-                            } else if (mCityData.getStatus() == CityData.GEO_NO_PERMISSION) {
-                                ToastUtils.shortToast(SearchMainActivity.this, R.string.check_your_permission);
-                            } else if (mCityData.getStatus() == CityData.GEO_SWITCH_OFF) {
-                                ToastUtils.shortToast(SearchMainActivity.this, R.string.check_your_switch);
-                            } else if (mCityData.getStatus() == CityData.GEO_NO_PROVIDER) {
-                                ToastUtils.shortToast(SearchMainActivity.this, R.string.check_your_provider);
-                            } else if (mCityData.getStatus() == CityData.GEO_NO_CITY) {
-                                ToastUtils.shortToast(SearchMainActivity.this, R.string.check_your_city);
-                            }
-                            notifyDataSetChanged();
+                            mGetGeoRepeatTask = new GetGeoRepeatTask();
+                            mGetGeoRepeatTask.execute("");
                         }
                     });
                 } else {

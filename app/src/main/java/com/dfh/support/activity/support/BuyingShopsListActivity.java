@@ -57,6 +57,7 @@ public class BuyingShopsListActivity extends AppCompatActivity  implements View.
     private static final int SERVE_PAGER_FALSE = 2;
     private static final int GET_SERVE_PAGER = 3;
     private static final int REPECT_GET = 30 * 1000;
+    private static final int GET_GEO = 4;
     private ImageView mIvPic;
     private Handler mHandler = new Handler() {
         @Override
@@ -85,6 +86,9 @@ public class BuyingShopsListActivity extends AppCompatActivity  implements View.
                     mServePagerTask = new ServePagerTask();
                     mServePagerTask.execute("");
                     break;
+                case GET_GEO:
+                    mHandler.sendEmptyMessage(GET_SERVE_PAGER);
+                    break;
             }
         }
     };
@@ -96,14 +100,27 @@ public class BuyingShopsListActivity extends AppCompatActivity  implements View.
         getSupportActionBar().hide();
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_buying_shops_list);
-        mCityData = LogUtil.getGeo(BuyingShopsListActivity.this);
         initView();
         initListener();
         mHttpReceiver = new HttpReceiver();//广播接受者实例
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(SupportApplication.ACTION_HTTP_RESULT);
         registerReceiver(mHttpReceiver, intentFilter);
-        mHandler.sendEmptyMessage(GET_SERVE_PAGER);
+        mGetGeoTask = new GetGeoTask();
+        mGetGeoTask.execute("");
+    }
+
+    private GetGeoTask mGetGeoTask;
+
+    private class GetGeoTask extends AsyncTask<String, Void, Void> {
+
+        @Override
+        protected Void doInBackground(String... params) {
+            mCityData = LogUtil.getGeo(BuyingShopsListActivity.this);
+            mHandler.sendEmptyMessage(GET_GEO);
+            LogUtil.printPushLog("httpGet getGeo mCityData" + mCityData.toString());
+            return null;
+        }
     }
 
     @Override

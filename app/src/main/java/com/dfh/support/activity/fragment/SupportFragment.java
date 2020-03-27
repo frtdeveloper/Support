@@ -99,6 +99,7 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
     private static final int BUYING_SERVE_PAGER_FALSE = 10;
     private static final int GET_SERVICE_SERVE_PAGER = 11;
     private static final int GET_BUYING_SERVE_PAGER = 12;
+    private static final int GET_GEO = 13;
     private static final int REPEAT_TIME = 30 * 1000;
     private String mPolicyUrl = "";
     private Handler mHandler = new Handler() {
@@ -181,6 +182,10 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
                     mBuyingServePagerTask = new BuyingServePagerTask();
                     mBuyingServePagerTask.execute("");
                     break;
+                case GET_GEO:
+                    mHandler.sendEmptyMessage(GET_SERVICE_SERVE_PAGER);
+                    mHandler.sendEmptyMessage(GET_BUYING_SERVE_PAGER);
+                    break;
 
             }
         }
@@ -194,15 +199,14 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
         initView();
         initListener();
 //        setGridView();
-        mCityData = LogUtil.getGeo(getActivity());
         mHandler.sendEmptyMessage(GET_POLICY_NAME);
         mHandler.sendEmptyMessage(GET_FAULT_CLASSIFY);
         mHttpReceiver = new HttpReceiver();//广播接受者实例
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(SupportApplication.ACTION_HTTP_RESULT);
         getActivity().registerReceiver(mHttpReceiver, intentFilter);
-        mHandler.sendEmptyMessage(GET_SERVICE_SERVE_PAGER);
-        mHandler.sendEmptyMessage(GET_BUYING_SERVE_PAGER);
+        mGetGeoTask = new GetGeoTask();
+        mGetGeoTask.execute("");
         return mFragmentView;
     }
 
@@ -365,6 +369,19 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    private GetGeoTask mGetGeoTask;
+
+    private class GetGeoTask extends AsyncTask<String, Void, Void> {
+
+        @Override
+        protected Void doInBackground(String... params) {
+            mCityData = LogUtil.getGeo(getActivity());
+            mHandler.sendEmptyMessage(GET_GEO);
+            LogUtil.printPushLog("httpGet getGeo mCityData" + mCityData.toString());
+            return null;
+        }
+    }
+
     private PolicyData mPolicyData;
     private PolicyFindNameTask mPolicyFindNameTask;
     private String policyName = "售后政策";
@@ -414,20 +431,21 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
         @Override
         protected Void doInBackground(String... params) {
             mCity = SettingSharedPerferencesUtil.GetSearchCityValueConfig(getActivity());
-            if (mCityData != null&&mCityData.getLatitude()!=0&&mCityData.getLongitude()!=0) {
+            if (mCityData != null && mCityData.getLatitude() != 0 && mCityData.getLongitude() != 0) {
                 hasLocation = true;
                 LogUtil.printPushLog("CityData mCityData:" + mCityData.toString());
-                if(!TextUtils.isEmpty(mCity)){
+                if (!TextUtils.isEmpty(mCity)) {
                     HttpJsonSend.servePager(getActivity(), mCity,
                             String.valueOf(mCityData.getLatitude()), String.valueOf(mCityData.getLongitude()), pageSize,
                             String.valueOf(pageNo), HttpJsonSend.SERVE_TYPE_SERVICE, HttpJsonSend.COME_FROM_MAIN);
-                }else {
+                } else {
                     HttpJsonSend.servePager(getActivity(), mCityData.getCityName(),
                             String.valueOf(mCityData.getLatitude()), String.valueOf(mCityData.getLongitude())
                             , pageSize, String.valueOf(pageNo), HttpJsonSend.SERVE_TYPE_SERVICE, HttpJsonSend.COME_FROM_MAIN);
                 }
             } else {
-                if(TextUtils.isEmpty(mCity)) mCity = getResources().getString(R.string.common_default_city);
+                if (TextUtils.isEmpty(mCity))
+                    mCity = getResources().getString(R.string.common_default_city);
                 hasLocation = false;
                 LogUtil.printPushLog("CityData mCityData=null ");
                 HttpJsonSend.servePager(getActivity(), mCity,
@@ -446,20 +464,21 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
         @Override
         protected Void doInBackground(String... params) {
             mCity = SettingSharedPerferencesUtil.GetSearchCityValueConfig(getActivity());
-            if (mCityData != null&&mCityData.getLatitude()!=0&&mCityData.getLongitude()!=0) {
+            if (mCityData != null && mCityData.getLatitude() != 0 && mCityData.getLongitude() != 0) {
                 hasLocation = true;
                 LogUtil.printPushLog("CityData mCityData:" + mCityData.toString());
-                if(!TextUtils.isEmpty(mCity)){
+                if (!TextUtils.isEmpty(mCity)) {
                     HttpJsonSend.servePager(getActivity(), mCity,
                             String.valueOf(mCityData.getLatitude()), String.valueOf(mCityData.getLongitude()), pageSize,
                             String.valueOf(pageNo), HttpJsonSend.SERVE_TYPE_BUYING, HttpJsonSend.COME_FROM_MAIN);
-                }else {
+                } else {
                     HttpJsonSend.servePager(getActivity(), mCityData.getCityName(),
                             String.valueOf(mCityData.getLatitude()), String.valueOf(mCityData.getLongitude())
                             , pageSize, String.valueOf(pageNo), HttpJsonSend.SERVE_TYPE_BUYING, HttpJsonSend.COME_FROM_MAIN);
                 }
             } else {
-                if(TextUtils.isEmpty(mCity)) mCity = getResources().getString(R.string.common_default_city);
+                if (TextUtils.isEmpty(mCity))
+                    mCity = getResources().getString(R.string.common_default_city);
                 hasLocation = false;
                 LogUtil.printPushLog("CityData mCityData=null ");
                 HttpJsonSend.servePager(getActivity(), mCity,

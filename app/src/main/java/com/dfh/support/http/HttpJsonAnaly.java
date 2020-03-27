@@ -292,7 +292,7 @@ public class HttpJsonAnaly {
                             pictureVOData.setThumb(pictureJson.getString("thumb"));
                         pictureVODataList.add(pictureVOData);
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 partsData.setPictureVOData(pictureVODataList);
@@ -405,7 +405,7 @@ public class HttpJsonAnaly {
 //                            distance = dis + "M";
 //                        }
 //                        LogUtil.printPushLog("distance distance:"+distance);
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                     serveData.setDistance(distance);
@@ -441,7 +441,7 @@ public class HttpJsonAnaly {
                             pictureVOData.setThumb(pictureJson.getString("thumb"));
                         pictureVODataList.add(pictureVOData);
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 serveData.setPictureVOData(pictureVODataList);
@@ -643,6 +643,7 @@ public class HttpJsonAnaly {
             return debugDetailData;
         }
     }
+
     public static DebugListData faultSearch(String json, Context context) throws JSONException {
         DebugListData debugListData = new DebugListData();
         debugListData.setFlag(false);
@@ -651,7 +652,8 @@ public class HttpJsonAnaly {
         LogUtil.printPushLog("faultSearch code" + code);
         if (code != 0) {
             lastError = resultJson.getString("msg");
-            if(TextUtils.isEmpty(lastError))lastError = context.getResources().getString(R.string.network_connection_failed);
+            if (TextUtils.isEmpty(lastError))
+                lastError = context.getResources().getString(R.string.network_connection_failed);
             return debugListData;
         } else {
             JSONObject dataObjectJson = resultJson.getJSONObject("data");
@@ -675,5 +677,20 @@ public class HttpJsonAnaly {
             LogUtil.printPushLog("faultSearch debugListData" + debugListData.toString());
             return debugListData;
         }
+    }
+
+
+    public static String analyCity(String json) throws JSONException {
+        String city = "";
+        try {
+            JSONObject analyJson = new JSONObject(json);
+            JSONObject resultJson = analyJson.getJSONObject("result");
+            JSONObject addressComponentJson = resultJson.getJSONObject("addressComponent");
+            if (addressComponentJson.has("city"))
+                city = addressComponentJson.getString("city");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return city;
     }
 }

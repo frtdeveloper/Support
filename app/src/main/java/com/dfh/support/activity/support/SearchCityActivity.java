@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.pm.ActivityInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -54,7 +55,20 @@ public class SearchCityActivity extends AppCompatActivity implements View.OnClic
         mGvHistory = (GridView) findViewById(R.id.gv_history);
         mSearchHistoryAdapter = new SearchHistoryAdapter(this, mHistoryList);
         mGvHistory.setAdapter(mSearchHistoryAdapter);
-        mCityData = LogUtil.getGeo(SearchCityActivity.this);
+        mGetGeoTask = new GetGeoTask();
+        mGetGeoTask.execute("");
+    }
+
+    private GetGeoTask mGetGeoTask;
+
+    private class GetGeoTask extends AsyncTask<String, Void, Void> {
+
+        @Override
+        protected Void doInBackground(String... params) {
+            mCityData = LogUtil.getGeo(SearchCityActivity.this);
+            LogUtil.printPushLog("httpGet getGeo mCityData" + mCityData.toString());
+            return null;
+        }
     }
 
     private void initListener() {
