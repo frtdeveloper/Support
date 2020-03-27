@@ -376,7 +376,7 @@ public class SearchMainActivity extends AppCompatActivity implements AbsListView
                             //获取定位
                             mCityData = LogUtil.getGeo(SearchMainActivity.this);
                             if (mCityData.getStatus() == CityData.GEO_SUCCESS) {
-
+                                locationCity = mCityData.getCityName();
                             } else if (mCityData.getStatus() == CityData.GEO_NO_PERMISSION) {
                                 ToastUtils.shortToast(SearchMainActivity.this, R.string.check_your_permission);
                             } else if (mCityData.getStatus() == CityData.GEO_SWITCH_OFF) {
