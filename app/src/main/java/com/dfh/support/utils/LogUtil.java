@@ -83,6 +83,8 @@ public final class LogUtil {
                     double latitude = network_provider.getLatitude(); // 经度
                     double longitude = network_provider.getLongitude(); // 纬度
                     printUtilLog("getGeo::latitude= " + latitude + " longitude= " + longitude);
+                    cityData.setLatitude(latitude);
+                    cityData.setLongitude(longitude);
 
                     Geocoder geo_coder = new Geocoder(ctx);
                     List<Address> found_address_list = null;

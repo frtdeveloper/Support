@@ -223,7 +223,7 @@ public class BuyingShopsListActivity extends AppCompatActivity  implements View.
 
         @Override
         protected Void doInBackground(String... params) {
-            if(mCityData!=null) {
+            if (mCityData != null&&mCityData.getLatitude()!=0&&mCityData.getLongitude()!=0) {
                 hasLocation = true;
                 LogUtil.printPushLog("CityData mCityData:" + mCityData.toString());
                 if(!TextUtils.isEmpty(mCity)){

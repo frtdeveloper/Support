@@ -305,10 +305,11 @@ public class HttpJsonSend {
         policyData.setFlag(false);
         String url = HttpConfig.url_policy_find_name;//policy/find/{name}
         String path = HttpConfig.GetHttpClientAdress() + url + name;
+        LogUtil.printPushLog("httpGet policyFindName path" + path);
         String result = HttpManager.httpGet(path, context);
         try {
             if (result != null && !TextUtils.isEmpty(result)) {
-                LogUtil.printPushLog("httpGet serveIdDetail result" + result);
+                LogUtil.printPushLog("httpGet policyFindName result" + result);
                 //解析json
                 return HttpJsonAnaly.policyFindName(result, context);
             }
