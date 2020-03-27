@@ -21,18 +21,18 @@ public class SparePartsListAdapter extends BaseAdapter {
     private ArrayList<PartsData> mList = new ArrayList<PartsData>();
     protected LayoutInflater mInflater;
     protected Context cxt;
-    private DisplayImageOptions options;
+//    private DisplayImageOptions options;
 
 
     public SparePartsListAdapter(Context context, ArrayList<PartsData> list) {
         cxt = context;
         mInflater = LayoutInflater.from(this.cxt);
         mList = list;
-        options = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.mipmap.bg_loading_bottom)
-                .showImageForEmptyUri(R.mipmap.bg_loading_bottom)
-                .showImageOnFail(R.mipmap.bg_loading_bottom).cacheInMemory(true)
-                .cacheOnDisk(true).considerExifParams(true).build();
+//        options = new DisplayImageOptions.Builder()
+//                .showImageOnLoading(R.mipmap.bg_loading_bottom)
+//                .showImageForEmptyUri(R.mipmap.bg_loading_bottom)
+//                .showImageOnFail(R.mipmap.bg_loading_bottom).cacheInMemory(true)
+//                .cacheOnDisk(true).considerExifParams(true).build();
     }
 
     public void setList(ArrayList<PartsData> list) {
@@ -106,7 +106,7 @@ public class SparePartsListAdapter extends BaseAdapter {
             holder.tvRemark.setVisibility(View.GONE);
             holder.ivLine.setVisibility(View.GONE);
         }
-        ImageLoader.getInstance().displayImage(partsData.getIcon(), holder.ivPic,options);
+        ImageLoader.getInstance().displayImage(partsData.getIcon(), holder.ivPic);
         return v;
     }
 
