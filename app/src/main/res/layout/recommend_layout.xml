@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:background="@color/white"
     android:layout_height="match_parent">
 
     <LinearLayout
@@ -72,8 +73,9 @@
         <com.dfh.support.activity.widget.LoadListView
             android:id="@+id/lv_advertisement"
             android:layout_width="match_parent"
+            android:layout_marginTop="15dp"
             android:layout_height="match_parent"
-            android:divider="#F7F7F7"
+            android:divider="#FFFFFF"
             android:dividerHeight="15dp" />
     </LinearLayout>
 </ScrollView>
