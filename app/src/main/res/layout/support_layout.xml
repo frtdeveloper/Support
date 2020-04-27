@@ -124,7 +124,8 @@
                 android:textSize="16sp"
                 android:textColor="@color/ad_item_title_text"
                 android:layout_centerVertical="true"
-                android:text="@string/common_troubleshooting" />
+                android:text="@string/common_troubleshooting"
+                android:textStyle="bold"/>
             <ImageView
                 android:id="@+id/iv_more_troubleshooting"
                 android:layout_width="wrap_content"
@@ -192,7 +193,8 @@
                 android:textSize="16sp"
                 android:textColor="@color/ad_item_title_text"
                 android:layout_centerVertical="true"
-                android:text="@string/after_sale_service" />
+                android:text="@string/after_sale_service"
+                android:textStyle="bold"/>
             <ImageView
                 android:id="@+id/iv_more_after_sale_service"
                 android:layout_width="wrap_content"
@@ -222,7 +224,8 @@
                 android:textSize="16sp"
                 android:textColor="@color/ad_item_title_text"
                 android:layout_centerVertical="true"
-                android:text="@string/change_of_purchase_service" />
+                android:text="@string/change_of_purchase_service"
+                android:textStyle="bold"/>
             <ImageView
                 android:id="@+id/iv_more_change_of_purchase_service"
                 android:layout_width="wrap_content"

@@ -39,7 +39,8 @@
                     android:layout_toRightOf="@id/iv_back"
                     android:textColor="@color/ad_item_title_text"
                     android:layout_marginLeft="20dp"
-                    android:layout_height="wrap_content" />
+                    android:layout_marginRight="50dp"
+                    android:layout_height="wrap_content"/>
 
                 <ImageView
                     android:id="@+id/iv_contact_us"
