@@ -105,13 +105,26 @@ public class SupportApplication extends Application implements IUmengRegisterCal
     }
 
     private void initImageLoader(Context context) {
+//        ImageLoaderConfiguration.Builder config = new ImageLoaderConfiguration.Builder(context);
+//        config.threadPriority(Thread.NORM_PRIORITY - 2);
+//        config.denyCacheImageMultipleSizesInMemory();
+//        config.diskCacheFileNameGenerator(new Md5FileNameGenerator());
+//        config.diskCacheSize(50 * 1024 * 1024); // 50 MiB
+//        config.tasksProcessingOrder(QueueProcessingType.LIFO);
+//        config.writeDebugLogs(); // Remove for release app
+//        // Initialize ImageLoader with configuration.
+//        ImageLoader.getInstance().init(config.build());
+
         ImageLoaderConfiguration.Builder config = new ImageLoaderConfiguration.Builder(context);
         config.threadPriority(Thread.NORM_PRIORITY - 2);
         config.denyCacheImageMultipleSizesInMemory();
-        config.diskCacheFileNameGenerator(new Md5FileNameGenerator());
-        config.diskCacheSize(50 * 1024 * 1024); // 50 MiB
+//        config.diskCacheFileNameGenerator(new Md5FileNameGenerator());
+//        config.diskCacheSize(50 * 1024 * 1024); // 50 MiB
         config.tasksProcessingOrder(QueueProcessingType.LIFO);
-        config.writeDebugLogs(); // Remove for release app
+        config.writeDebugLogs(); // Re
+        config.discCacheFileCount(200); //缓存的文件数量   move for release app
+
+
         // Initialize ImageLoader with configuration.
         ImageLoader.getInstance().init(config.build());
     }
