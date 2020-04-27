@@ -125,6 +125,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mIvSupport.setImageResource(R.mipmap.btn_support_normal);
         currentItem = 1;
         mPager.setCurrentItem(currentItem);
+        LogUtil.setUnReadCount(MainActivity.this, 0);
     }
 
     private void showSupportFragment(){

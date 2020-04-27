@@ -131,6 +131,9 @@ public class SupportApplication extends Application implements IUmengRegisterCal
                 LogUtil.printPushLog("SupportApplication::dealWithNotificationMessage= " + uMessage.text);
                 LogUtil.printPushLog("SupportApplication::dealWithCustomMessage extra= " + uMessage.extra);
                 UmentBroadcastReceiver.sendBroadcast(SupportApplication.this, uMessage.text);
+                int current_count = LogUtil.getUnReadCount(context);
+                current_count = current_count + 1;
+                LogUtil.setUnReadCount(context, current_count);
             }
 
             @Override
@@ -139,6 +142,9 @@ public class SupportApplication extends Application implements IUmengRegisterCal
                 LogUtil.printPushLog("SupportApplication::dealWithCustomMessage= " + uMessage.text);
                 LogUtil.printPushLog("SupportApplication::dealWithCustomMessage extra= " + uMessage.extra);
                 UmentBroadcastReceiver.sendCBroadcast(SupportApplication.this, uMessage.text);
+                int current_count = LogUtil.getUnReadCount(context);
+                current_count = current_count + 1;
+                LogUtil.setUnReadCount(context, current_count);
             }
         };
         mPushAgent.setMessageHandler(mUmengMessageHandler);

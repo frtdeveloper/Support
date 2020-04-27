@@ -2,6 +2,7 @@ package com.dfh.support.utils;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -209,5 +210,20 @@ public final class LogUtil {
 
         LogUtil.printPushLog("reverseGeocode localityName2:" + localityName);
         return localityName;
+    }
+
+
+    private static final String SP_FILE_NAME = "dfh_config";
+    private static final String UNREAD_KEY = "UNREAD_COUNT";
+    public static int getUnReadCount(Context ctx){
+        SharedPreferences sp = ctx.getSharedPreferences(SP_FILE_NAME, Context.MODE_PRIVATE);
+        int current_count = sp.getInt(UNREAD_KEY, 0);
+        return current_count;
+    }
+
+    public static void setUnReadCount(Context ctx, int current_count){
+        SharedPreferences.Editor sp_editor = ctx.getSharedPreferences(SP_FILE_NAME, Context.MODE_PRIVATE).edit();
+        sp_editor.putInt(UNREAD_KEY, current_count);
+        sp_editor.commit();
     }
 }
