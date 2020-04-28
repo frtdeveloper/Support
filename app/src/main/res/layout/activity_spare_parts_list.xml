@@ -68,8 +68,7 @@
             android:layout_centerInParent="true"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:scaleType="fitXY"
-            android:src="@mipmap/show_spare_bg" />
+            android:scaleType="fitXY" />
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
