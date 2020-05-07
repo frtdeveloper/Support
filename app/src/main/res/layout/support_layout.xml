@@ -81,21 +81,6 @@
                     android:text="@string/spare_parts_management" />
             </RelativeLayout>
             <RelativeLayout
-                android:id="@+id/rl_about_us"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_marginLeft="8dp"
-                android:layout_height="80dp"
-                android:background="@mipmap/show_service_center">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:textSize="15sp"
-                    android:textColor="@color/white"
-                    android:text="@string/about_us" />
-            </RelativeLayout>
-            <RelativeLayout
                 android:id="@+id/rl_after_sales_policy"
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -109,6 +94,21 @@
                     android:textSize="15sp"
                     android:textColor="@color/white"
                     android:text="@string/after_sales_policy" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/rl_about_us"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_marginLeft="8dp"
+                android:layout_height="80dp"
+                android:background="@mipmap/show_service_center">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:textSize="15sp"
+                    android:textColor="@color/white"
+                    android:text="@string/about_us" />
             </RelativeLayout>
         </LinearLayout>
 
