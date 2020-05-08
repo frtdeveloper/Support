@@ -74,7 +74,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         PushAgent.getInstance(this).onAppStart();
         initView();
-        showSupportFragment();
+        //showSupportFragment();
+        showRecommendFragment();
         mHttpReceiver = new HttpReceiver();//广播接受者实例
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(UmentBroadcastReceiver.INTENT_MSG_STR);
