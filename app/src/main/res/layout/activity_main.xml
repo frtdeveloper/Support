@@ -20,21 +20,6 @@
         android:layout_height="50dp"
         android:background="@color/main_bottom"
         android:orientation="horizontal">
-
-        <RelativeLayout
-            android:id="@+id/main_nav_support"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:onClick="onClick">
-
-            <ImageView
-                android:id="@+id/iv_main_nav_support"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:src="@mipmap/btn_support_normal" />
-        </RelativeLayout>
         <RelativeLayout
             android:id="@+id/main_nav_recommend"
             android:layout_width="0dp"
@@ -62,6 +47,21 @@
                 android:scaleType="fitXY"
                 android:src="@mipmap/img_red_circle"/>
             </RelativeLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/main_nav_support"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="onClick">
+
+            <ImageView
+                android:id="@+id/iv_main_nav_support"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@mipmap/btn_support_normal" />
         </RelativeLayout>
 
 
