@@ -92,14 +92,16 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
                     sendBroadcast(intent);
                     mRlNoZan.setVisibility(View.GONE);
                     mRlHasZan.setVisibility(View.VISIBLE);
-                    if(baseUrl.contains("browses")){
-                        String topUrl = baseUrl.substring(0,baseUrl.lastIndexOf("=")+1);
-                        String browses = baseUrl.substring(baseUrl.lastIndexOf("=")+1);
+                    if(baseUrl.contains("links")){
+                        String topUrl = baseUrl.substring(0,baseUrl.indexOf("=")+1);
+                        String links = baseUrl.substring(baseUrl.indexOf("=")+1,baseUrl.indexOf("&"));
+                        String endUrl = baseUrl.substring(baseUrl.indexOf("&"));
                         LogUtil.printPushLog("AD_LIKE_SUCCESS topUrl:" + topUrl);
-                        LogUtil.printPushLog("AD_LIKE_SUCCESS browses:" + browses);
+                        LogUtil.printPushLog("AD_LIKE_SUCCESS links:" + links);
+                        LogUtil.printPushLog("AD_LIKE_SUCCESS endUrl:" + endUrl);
                         try {
-                            int dbrowses = Integer.parseInt(browses)+1;
-                            mWebView.loadUrl(topUrl+dbrowses);
+                            int dlinks = Integer.parseInt(links)+1;
+                            mWebView.loadUrl(topUrl+dlinks+endUrl);
                         }catch (Exception e){
                             mWebView.loadUrl(baseUrl);
                             e.printStackTrace();
