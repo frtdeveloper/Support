@@ -54,7 +54,7 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("url", HttpConfig.GetHttpPolicyAdress() +
                 my_link
-                + "? links=" + my_likes
+                + "?links=" + my_likes
                 + "&browses=" + my_browser);
         intent.putExtra("id", my_id);
         LogUtil.printActivityLog("openMySelf==========id= " + my_id);

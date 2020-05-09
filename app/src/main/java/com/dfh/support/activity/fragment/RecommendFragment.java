@@ -269,7 +269,7 @@ public class RecommendFragment extends Fragment implements LoadListView.ILoadLis
                         Intent intent = new Intent(getActivity(), WebViewActivity.class);
                         intent.putExtra("url", HttpConfig.GetHttpPolicyAdress() +
                                 advertisementListData.getAdvertisementDatas().get(finalI).getLink()
-                                + "? links=" + advertisementListData.getAdvertisementDatas().get(finalI).getLikes()
+                                + "?links=" + advertisementListData.getAdvertisementDatas().get(finalI).getLikes()
                                 + "&browses=" + advertisementListData.getAdvertisementDatas().get(finalI).getBrowses());
                         intent.putExtra("id", advertisementListData.getAdvertisementDatas().get(finalI).getId());
                         getActivity().startActivity(intent);
