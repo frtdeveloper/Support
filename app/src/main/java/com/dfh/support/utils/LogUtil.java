@@ -92,7 +92,8 @@ public final class LogUtil {
             boolean is_loc_open = location_manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
             printUtilLog("getGeo::is_loc_open= " + is_loc_open);
             if (is_loc_open) {
-                Location network_provider = location_manager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                //Location network_provider = location_manager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                Location network_provider = getBestLocal(ctx, location_manager);
                 if (null != network_provider) {
                     final double latitude = network_provider.getLatitude(); // 经度
                     final double longitude = network_provider.getLongitude(); // 纬度
@@ -124,7 +125,8 @@ public final class LogUtil {
                                 if (cityname.contains("市")) cityname = cityname.replace("市", "");
                                 if (cityname.contains("县")) cityname = cityname.replace("县", "");
                                 if (!cityname.equals("景德镇") && !cityname.equals("镇江")) {
-                                    if (cityname.contains("镇")) cityname = cityname.replace("镇", "");
+                                    if (cityname.contains("镇"))
+                                        cityname = cityname.replace("镇", "");
                                 }
                                 cityData.setCityName(cityname);
                                 cityData.setLatitude(latitude);
@@ -148,6 +150,38 @@ public final class LogUtil {
             }
         }
         return cityData;
+    }
+
+    private static final Location getBestLocal(Context ctx, LocationManager l_manager) {
+        if (ActivityCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return null;
+        }
+        List<String> all_provider = l_manager.getAllProviders();
+        if (null != all_provider && all_provider.size() > 0) {
+            Location bestLocation = null;
+            for (String current_provider : all_provider) {
+                Location l = l_manager.getLastKnownLocation(current_provider);
+                printUtilLog("getBestLocal::current_provider= " + current_provider);
+                if (l == null) {
+                    printUtilLog("getBestLocal::current_provider= " + current_provider + " reusult is null");
+                    continue;
+                }
+                float current_acc = l.getAccuracy();
+                float pre_acc = (null == bestLocation) ? -1f : bestLocation.getAccuracy();
+
+                printUtilLog("getBestLocal::current_provider= " + current_provider + " current_acc= " + current_acc + " pre_acc= " + pre_acc);
+                if (bestLocation == null || current_acc < pre_acc) {
+                    bestLocation = l;
+                }
+            }
+            printUtilLog("getBestLocal::Best local is " + bestLocation.getProvider());
+            return bestLocation;
+        } else {
+            printUtilLog("getBestLocal::Not Any providers here========================");
+            Toast.makeText(ctx, "Not found any providers", Toast.LENGTH_LONG).show();
+        }
+        return null;
     }
 
 
