@@ -69,4 +69,5 @@
 
     <string name="no_search_city_hint">Sorry, the city you entered does not currently have a customer service center, you can choose directly in the list of cities with service centers, or according to the location of the choice of of the nearest network</string>
     <string name="has_city_list">Service centres in the following cities</string>
+    <string name="clipper_service">Clipper service</string>
 </resources>

@@ -63,7 +63,7 @@ public class RecommendFragment extends Fragment implements LoadListView.ILoadLis
     private static RecommendFragment s_instance;
     private static final int BANNER_START_SLITHER = 0;
     private static final int BANNER_STOP_SLITHER = 1;
-    private static int slither_time = 6 * 1000;//5S
+    private static int slither_time = 5 * 1000;//5S
     private int mBannerPosition = 0;
     private static final int AD_BANNER_SUCCESS = 2;
     private static final int AD_BANNER_FALSE = 3;

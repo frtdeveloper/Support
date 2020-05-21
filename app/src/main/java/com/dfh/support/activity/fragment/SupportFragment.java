@@ -12,6 +12,7 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
 import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -25,12 +26,14 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import com.dfh.support.R;
 import com.dfh.support.SupportApplication;
 import com.dfh.support.activity.TitleWebViewActivity;
 import com.dfh.support.activity.WebViewActivity;
 import com.dfh.support.activity.adapter.AfterSaleMoreAdapter;
+import com.dfh.support.activity.adapter.BannerPagerAdapter;
 import com.dfh.support.activity.adapter.ChangeOfPurchaseMoreAdapter;
 import com.dfh.support.activity.adapter.TroubleShootingAdapter;
 import com.dfh.support.activity.support.AboutUsActivity;
@@ -44,7 +47,9 @@ import com.dfh.support.activity.support.ServiceDetailActivity;
 import com.dfh.support.activity.support.ServiceListActivity;
 import com.dfh.support.activity.support.SparePartsMenuActivity;
 import com.dfh.support.activity.widget.ChildrenGridView;
+import com.dfh.support.activity.widget.FixedSpeedScroller;
 import com.dfh.support.activity.widget.LoadingProgressDialog;
+import com.dfh.support.entity.AdvertisementListData;
 import com.dfh.support.entity.CityData;
 import com.dfh.support.entity.ClassifyListData;
 import com.dfh.support.entity.DebugMenuData;
@@ -59,10 +64,13 @@ import com.dfh.support.utils.LogUtil;
 import com.dfh.support.utils.SettingSharedPerferencesUtil;
 import com.dfh.support.utils.TextUtils;
 import com.dfh.support.utils.ToastUtils;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class SupportFragment extends Fragment implements View.OnClickListener {
 
@@ -82,7 +90,7 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
     private ImageView mIvTroubleShooting, mIvAfterSaleService, mIvChangeOfPurchaseService;
     private static SupportFragment s_instance;
 
-    private RelativeLayout mRlSpareParts, mRlAboutUs, mRlAfterSales;
+    private RelativeLayout mRlSpareParts, mRlAboutUs, mRlAfterSales,mRlTroubleShooting;
     private LinearLayout mLlSearch;
     private ImageView mIvContactUs, mIvTroubleShootingOne, mIvTroubleShootingTwo;
 
@@ -102,11 +110,46 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
     private static final int GET_GEO = 13;
     private static final int REPEAT_TIME = 30 * 1000;
     private String mPolicyUrl = "";
+    private ViewPager mVpBanner;
+    private ArrayList<View> mViewList;
+    private BannerPagerAdapter mBannerPagerAdapter;
+    private List<ImageView> mDots;//定义一个集合存储五个dot
+    private int oldPosition;//记录当前点的位置。
+    private int mBannerPosition = 0;
+    private static final int BANNER_START_SLITHER = 14;
+    private static final int BANNER_STOP_SLITHER = 15;
+    private static final int AD_BANNER_SUCCESS = 16;
+    private static final int AD_BANNER_FALSE = 17;
+    private static final int GET_BANNER_AD = 18;
+    private static int slither_time = 5 * 1000;//5S
+    private static final int REPECT_GET = 30*1000;
+    private DisplayImageOptions options;
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
+                case AD_BANNER_SUCCESS:
+                    //刷新banner
+                    //updateViewPage();
+                    updateViewPage();
+                    break;
+                case AD_BANNER_FALSE:
+                    mHandler.sendEmptyMessageDelayed(GET_BANNER_AD,REPECT_GET);
+                    break;
+                case GET_BANNER_AD:
+                    mAdsFindCarouselAllTask = new AdsFindCarouselAllTask();
+                    mAdsFindCarouselAllTask.execute("");
+                    break;
+                case BANNER_START_SLITHER:
+                    if(mBannerPosition == mViewList.size()-1){
+                        mBannerPosition = 0;
+                    }else{
+                        mBannerPosition = mBannerPosition + 1;
+                    }
+                    mVpBanner.setCurrentItem(mBannerPosition);
+                    mHandler.sendEmptyMessageDelayed(BANNER_START_SLITHER,slither_time);
+                    break;
                 case POLICY_FIND_SUCCESS:
                     mPolicyUrl = mPolicyData.getUrl();
                     break;
@@ -196,17 +239,25 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         LogUtil.printFragmentLog("SupportFragment::onCreateView================");
         mFragmentView = inflater.inflate(R.layout.support_layout, null);
+        options = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.mipmap.bg_loading_top)
+                .showImageForEmptyUri(R.mipmap.bg_load_false_top)
+                .showImageOnFail(R.mipmap.bg_load_false_top).cacheInMemory(true)
+                .cacheOnDisk(true).considerExifParams(true).build();
         initView();
         initListener();
+        initViewPage();
+        setViewPagerScrollSpeed();
 //        setGridView();
         mHandler.sendEmptyMessage(GET_POLICY_NAME);
-        mHandler.sendEmptyMessage(GET_FAULT_CLASSIFY);
+        //mHandler.sendEmptyMessage(GET_FAULT_CLASSIFY);
         mHttpReceiver = new HttpReceiver();//广播接受者实例
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(SupportApplication.ACTION_HTTP_RESULT);
         getActivity().registerReceiver(mHttpReceiver, intentFilter);
         mGetGeoTask = new GetGeoTask();
         mGetGeoTask.execute("");
+        mHandler.sendEmptyMessage(GET_BANNER_AD);
         return mFragmentView;
     }
 
@@ -232,6 +283,7 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
         mLvChangeOfPurchaseService.setAdapter(mChangeOfPurchaseMoreAdapter);
 
         mIvTroubleShooting = (ImageView) mFragmentView.findViewById(R.id.iv_more_troubleshooting);
+        mRlTroubleShooting= (RelativeLayout) mFragmentView.findViewById(R.id.rl_common_troubleshooting);
         mIvAfterSaleService = (ImageView) mFragmentView.findViewById(R.id.iv_more_after_sale_service);
         mIvChangeOfPurchaseService = (ImageView) mFragmentView.findViewById(R.id.iv_more_change_of_purchase_service);
 
@@ -247,6 +299,7 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
 
     private void initListener() {
         mIvTroubleShooting.setOnClickListener(this);
+        mRlTroubleShooting.setOnClickListener(this);
         mIvAfterSaleService.setOnClickListener(this);
         mIvChangeOfPurchaseService.setOnClickListener(this);
         mLlSearch.setOnClickListener(this);
@@ -333,6 +386,10 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
         switch (view.getId()) {
             case R.id.iv_more_troubleshooting:
                 Intent intent = new Intent(getActivity(), DebuggingMenuActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.rl_common_troubleshooting:
+                intent = new Intent(getActivity(), DebuggingMenuActivity.class);
                 startActivity(intent);
                 break;
             case R.id.iv_more_after_sale_service:
@@ -552,5 +609,139 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
             }
         }
 
+    }
+
+    //viewpager的动画播放速度修改
+    private void setViewPagerScrollSpeed( ){
+        try {
+            Field field = ViewPager.class.getDeclaredField("mScroller");
+            field.setAccessible(true);
+            FixedSpeedScroller scroller = new FixedSpeedScroller(mVpBanner.getContext(),
+                    new AccelerateInterpolator());
+            field.set(mVpBanner, scroller);
+            scroller.setmDuration(300);
+        }catch(NoSuchFieldException e){
+        }catch (IllegalArgumentException e){
+        }catch (IllegalAccessException e){
+        }
+    }
+    private void initViewPage() {
+        mVpBanner = (ViewPager) mFragmentView.findViewById(R.id.vp_banner);
+        //mVpBanner.setPageTransformer(true,new ZoomOutPageTransformer());
+        LayoutInflater inflater = getLayoutInflater();
+        mViewList = new ArrayList<View>();
+//        LogUtil.printPushLog("initViewPage advertisementListData.getAdvertisementDatas().size()"
+//                + advertisementListData.getAdvertisementDatas().size());
+//        for(int i = 0 ;i<advertisementListData.getAdvertisementDatas().size();i++) {
+//            View view = inflater.inflate(R.layout.banner_layout, null);
+//            ImageView ivBanner = (ImageView) view.findViewById(R.id.iv_banner);
+//            //ivBanner.setImageResource(R.mipmap.show_banner);
+//            ImageLoader.getInstance().displayImage(advertisementListData.getAdvertisementDatas().get(i).getIcon(),ivBanner);
+//            final int finalI = i;
+//            ivBanner.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    Intent intent = new Intent(getActivity(), WebViewActivity.class);
+//                    intent.putExtra("url",HttpConfig.GetHttpPolicyAdress()
+//                            +advertisementListData.getAdvertisementDatas().get(finalI).getLink()
+//                            +"?links="+advertisementListData.getAdvertisementDatas().get(finalI).getLikes()
+//                            +"&browses="+advertisementListData.getAdvertisementDatas().get(finalI).getBrowses());
+//                    intent.putExtra("id",advertisementListData.getAdvertisementDatas().get(finalI).getId());
+//                    getActivity().startActivity(intent);
+//                }
+//            });
+//            mViewList.add(view);
+//        }
+        LogUtil.printPushLog("SinitViewPage mViewList.size()" + mViewList.size());
+        mBannerPagerAdapter = new BannerPagerAdapter(mViewList);
+        mVpBanner.setAdapter(mBannerPagerAdapter);
+        mHandler.sendEmptyMessageDelayed(BANNER_START_SLITHER,slither_time);
+
+        mDots = new ArrayList<ImageView>();
+        ImageView dotOne = (ImageView) mFragmentView.findViewById(R.id.iv_banner_position_one);
+        ImageView dotTwo = (ImageView) mFragmentView.findViewById(R.id.iv_banner_position_two);
+        ImageView dotThree = (ImageView) mFragmentView.findViewById(R.id.iv_banner_position_three);
+        ImageView dotFour = (ImageView) mFragmentView.findViewById(R.id.iv_banner_position_four);
+        ImageView dotFive = (ImageView) mFragmentView.findViewById(R.id.iv_banner_position_five);
+        mDots.add(dotOne);
+        mDots.add(dotTwo);
+        mDots.add(dotThree);
+        mDots.add(dotFour);
+        mDots.add(dotFive);
+        LogUtil.printPushLog("SinitViewPage mDots.size()" + mDots.size());
+        oldPosition = 0;
+        mDots.get(oldPosition).setImageResource(R.mipmap.dot_press);
+
+        mVpBanner.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                mDots.get(oldPosition).setImageResource(R.mipmap.dot_normal);
+                mDots.get(position).setImageResource(R.mipmap.dot_press);
+                oldPosition = position;
+            }
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+    }
+
+    private void updateViewPage() {
+        LayoutInflater inflater = getLayoutInflater();
+        mViewList = new ArrayList<View>();
+        for(int a = 0; a<5;a++){
+            mDots.get(a).setVisibility(View.GONE);
+        }
+        for(int i = 0 ;i<advertisementListData.getAdvertisementDatas().size();i++) {
+            if(i<5) {
+                mDots.get(i).setVisibility(View.VISIBLE);
+                View view = inflater.inflate(R.layout.banner_layout, null);
+                ImageView ivBanner = (ImageView) view.findViewById(R.id.iv_banner);
+                //ivBanner.setImageResource(R.mipmap.show_banner);
+                ImageLoader.getInstance().displayImage(advertisementListData.getAdvertisementDatas().get(i).getIcon(), ivBanner,options);
+                final int finalI = i;
+                ivBanner.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(getActivity(), WebViewActivity.class);
+                        intent.putExtra("url", HttpConfig.GetHttpPolicyAdress() +
+                                advertisementListData.getAdvertisementDatas().get(finalI).getLink()
+                                + "?links=" + advertisementListData.getAdvertisementDatas().get(finalI).getLikes()
+                                + "&browses=" + advertisementListData.getAdvertisementDatas().get(finalI).getBrowses());
+                        intent.putExtra("id", advertisementListData.getAdvertisementDatas().get(finalI).getId());
+                        getActivity().startActivity(intent);
+                    }
+                });
+                mViewList.add(view);
+            }
+        }
+        mBannerPagerAdapter.setList(mViewList);
+        mBannerPosition = 0;
+    }
+
+    private AdvertisementListData advertisementListData;
+    private AdsFindCarouselAllTask mAdsFindCarouselAllTask;
+
+    private class AdsFindCarouselAllTask extends AsyncTask<String, Void, Void> {
+
+        @Override
+        protected Void doInBackground(String... params) {
+            try {
+                advertisementListData = HttpJsonSend.adsFindCarouselAll(getActivity());
+                if (advertisementListData.isFlag()) {
+                    mHandler.sendEmptyMessage(AD_BANNER_SUCCESS);
+                } else {
+                    mHandler.sendEmptyMessage(AD_BANNER_FALSE);
+                }
+                LogUtil.printPushLog("httpGet adsFindCarouselAll advertisementListData" + advertisementListData.toString());
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            return null;
+        }
     }
 }
