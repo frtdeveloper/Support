@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.provider.Settings;
+import android.text.TextUtils;
 
 import com.dfh.support.R;
 import com.dfh.support.SupportApplication;
@@ -24,6 +25,18 @@ import okhttp3.Call;
 import okhttp3.Response;
 
 public class HttpManager {
+    private static String NETWORK_ERROR_INFO = "";
+
+    public static String getErrorInfo(Context context){
+        if(TextUtils.isEmpty(NETWORK_ERROR_INFO)){
+            if(null == context){
+                NETWORK_ERROR_INFO = "网络连接失败";
+            } else {
+                NETWORK_ERROR_INFO = context.getResources().getString(R.string.network_connection_failed);
+            }
+        }
+        return NETWORK_ERROR_INFO;
+    }
 
     public static String httpPut(String path, String json, Context context) {
         String result = "";
@@ -61,7 +74,7 @@ public class HttpManager {
                 return data;
             } else {
                 //请求失败
-                HttpJsonAnaly.lastError = context.getResources().getString(R.string.network_connection_failed);
+                HttpJsonAnaly.lastError = getErrorInfo(context);
                 LogUtil.printPushLog("httpPut 请求失败");
                 InputStream in = connection.getInputStream();
                 byte[] databyte = StreamUtils.read(in);
@@ -70,7 +83,7 @@ public class HttpManager {
             }
 
         } catch (Exception e) {
-            HttpJsonAnaly.lastError = context.getResources().getString(R.string.network_connection_failed);
+            HttpJsonAnaly.lastError = getErrorInfo(context);
         }
         return null;
     }
@@ -99,7 +112,7 @@ public class HttpManager {
                 return data;
             } else {
                 //请求失败
-                HttpJsonAnaly.lastError = context.getResources().getString(R.string.network_connection_failed);
+                HttpJsonAnaly.lastError = getErrorInfo(context);
                 LogUtil.printPushLog("httpGet 请求失败");
                 InputStream in = connection.getInputStream();
                 byte[] databyte = StreamUtils.read(in);
@@ -107,7 +120,7 @@ public class HttpManager {
                 return data;
             }
         } catch (Exception e) {
-            HttpJsonAnaly.lastError = context.getResources().getString(R.string.network_connection_failed);
+            HttpJsonAnaly.lastError = getErrorInfo(context);
             e.printStackTrace();
         }
         return null;
@@ -153,7 +166,7 @@ public class HttpManager {
                     @Override
                     public void onError(Call call, Response response, Exception e) {
                         LogUtil.printPushLog("httpPost onError");
-                        HttpJsonAnaly.lastError = context.getResources().getString(R.string.network_connection_failed);
+                        HttpJsonAnaly.lastError = getErrorInfo(context);
                         Intent intent = new Intent();
                         intent.setAction(SupportApplication.ACTION_HTTP_RESULT);
                         intent.putExtra("url", url);
@@ -212,7 +225,7 @@ public class HttpManager {
                     @Override
                     public void onError(Call call, Response response, Exception e) {
                         LogUtil.printPushLog("httpPost onError");
-                        HttpJsonAnaly.lastError = context.getResources().getString(R.string.network_connection_failed);
+                        HttpJsonAnaly.lastError = getErrorInfo(context);
                         Intent intent = new Intent();
                         intent.setAction(SupportApplication.ACTION_HTTP_RESULT);
                         intent.putExtra("url", url);
