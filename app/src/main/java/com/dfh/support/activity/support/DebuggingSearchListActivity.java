@@ -119,6 +119,10 @@ public class DebuggingSearchListActivity extends AppCompatActivity implements Vi
         mLvDebuggingList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if(null == mDebuggingList || mDebuggingList.size() <= 0) {
+                    return;
+                }
+
                 Intent intent = new Intent(DebuggingSearchListActivity.this, DebuggingDetailActivity.class);
                 intent.putExtra("title",mTitle);
                 intent.putExtra("id",mDebuggingList.get(i).getId());
