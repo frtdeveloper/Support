@@ -90,7 +90,7 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
     private ImageView mIvTroubleShooting, mIvAfterSaleService, mIvChangeOfPurchaseService;
     private static SupportFragment s_instance;
 
-    private RelativeLayout mRlSpareParts, mRlAboutUs, mRlAfterSales,mRlTroubleShooting;
+    private RelativeLayout mRlSpareParts, mRlAboutUs, mRlAfterSales, mRlTroubleShooting;
     private LinearLayout mLlSearch;
     private ImageView mIvContactUs, mIvTroubleShootingOne, mIvTroubleShootingTwo;
 
@@ -122,7 +122,7 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
     private static final int AD_BANNER_FALSE = 17;
     private static final int GET_BANNER_AD = 18;
     private static int slither_time = 5 * 1000;//5S
-    private static final int REPECT_GET = 30*1000;
+    private static final int REPECT_GET = 30 * 1000;
     private DisplayImageOptions options;
     private Handler mHandler = new Handler() {
         @Override
@@ -135,20 +135,20 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
                     updateViewPage();
                     break;
                 case AD_BANNER_FALSE:
-                    mHandler.sendEmptyMessageDelayed(GET_BANNER_AD,REPECT_GET);
+                    mHandler.sendEmptyMessageDelayed(GET_BANNER_AD, REPECT_GET);
                     break;
                 case GET_BANNER_AD:
                     mAdsFindCarouselAllTask = new AdsFindCarouselAllTask();
                     mAdsFindCarouselAllTask.execute("");
                     break;
                 case BANNER_START_SLITHER:
-                    if(mBannerPosition == mViewList.size()-1){
+                    if (mBannerPosition == mViewList.size() - 1) {
                         mBannerPosition = 0;
-                    }else{
+                    } else {
                         mBannerPosition = mBannerPosition + 1;
                     }
                     mVpBanner.setCurrentItem(mBannerPosition);
-                    mHandler.sendEmptyMessageDelayed(BANNER_START_SLITHER,slither_time);
+                    mHandler.sendEmptyMessageDelayed(BANNER_START_SLITHER, slither_time);
                     break;
                 case POLICY_FIND_SUCCESS:
                     mPolicyUrl = mPolicyData.getUrl();
@@ -283,7 +283,7 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
         mLvChangeOfPurchaseService.setAdapter(mChangeOfPurchaseMoreAdapter);
 
         mIvTroubleShooting = (ImageView) mFragmentView.findViewById(R.id.iv_more_troubleshooting);
-        mRlTroubleShooting= (RelativeLayout) mFragmentView.findViewById(R.id.rl_common_troubleshooting);
+        mRlTroubleShooting = (RelativeLayout) mFragmentView.findViewById(R.id.rl_common_troubleshooting);
         mIvAfterSaleService = (ImageView) mFragmentView.findViewById(R.id.iv_more_after_sale_service);
         mIvChangeOfPurchaseService = (ImageView) mFragmentView.findViewById(R.id.iv_more_change_of_purchase_service);
 
@@ -501,13 +501,19 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
                             , pageSize, String.valueOf(pageNo), HttpJsonSend.SERVE_TYPE_SERVICE, HttpJsonSend.COME_FROM_MAIN);
                 }
             } else {
-                if (TextUtils.isEmpty(mCity))
-                    mCity = getResources().getString(R.string.common_default_city);
+                if (TextUtils.isEmpty(mCity)) {
+                    if (getActivity() != null) {
+                        mCity = getActivity().getResources().getString(R.string.common_default_city);
+                    } else {
+                        mCity = "北京";
+                    }
+                }
                 hasLocation = false;
                 LogUtil.printPushLog("CityData mCityData=null ");
                 HttpJsonSend.servePager(getActivity(), mCity,
                         "39.908692", "116.397477", pageSize,
                         String.valueOf(pageNo), HttpJsonSend.SERVE_TYPE_SERVICE, HttpJsonSend.COME_FROM_MAIN);
+
             }
             return null;
         }
@@ -612,7 +618,7 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
     }
 
     //viewpager的动画播放速度修改
-    private void setViewPagerScrollSpeed( ){
+    private void setViewPagerScrollSpeed() {
         try {
             Field field = ViewPager.class.getDeclaredField("mScroller");
             field.setAccessible(true);
@@ -620,11 +626,12 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
                     new AccelerateInterpolator());
             field.set(mVpBanner, scroller);
             scroller.setmDuration(300);
-        }catch(NoSuchFieldException e){
-        }catch (IllegalArgumentException e){
-        }catch (IllegalAccessException e){
+        } catch (NoSuchFieldException e) {
+        } catch (IllegalArgumentException e) {
+        } catch (IllegalAccessException e) {
         }
     }
+
     private void initViewPage() {
         mVpBanner = (ViewPager) mFragmentView.findViewById(R.id.vp_banner);
         //mVpBanner.setPageTransformer(true,new ZoomOutPageTransformer());
@@ -655,7 +662,7 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
         LogUtil.printPushLog("SinitViewPage mViewList.size()" + mViewList.size());
         mBannerPagerAdapter = new BannerPagerAdapter(mViewList);
         mVpBanner.setAdapter(mBannerPagerAdapter);
-        mHandler.sendEmptyMessageDelayed(BANNER_START_SLITHER,slither_time);
+        mHandler.sendEmptyMessageDelayed(BANNER_START_SLITHER, slither_time);
 
         mDots = new ArrayList<ImageView>();
         ImageView dotOne = (ImageView) mFragmentView.findViewById(R.id.iv_banner_position_one);
@@ -679,10 +686,12 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
                 mDots.get(position).setImageResource(R.mipmap.dot_press);
                 oldPosition = position;
             }
+
             @Override
             public void onPageSelected(int position) {
 
             }
+
             @Override
             public void onPageScrollStateChanged(int state) {
 
@@ -693,16 +702,16 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
     private void updateViewPage() {
         LayoutInflater inflater = getLayoutInflater();
         mViewList = new ArrayList<View>();
-        for(int a = 0; a<5;a++){
+        for (int a = 0; a < 5; a++) {
             mDots.get(a).setVisibility(View.GONE);
         }
-        for(int i = 0 ;i<advertisementListData.getAdvertisementDatas().size();i++) {
-            if(i<5) {
+        for (int i = 0; i < advertisementListData.getAdvertisementDatas().size(); i++) {
+            if (i < 5) {
                 mDots.get(i).setVisibility(View.VISIBLE);
                 View view = inflater.inflate(R.layout.banner_layout, null);
                 ImageView ivBanner = (ImageView) view.findViewById(R.id.iv_banner);
                 //ivBanner.setImageResource(R.mipmap.show_banner);
-                ImageLoader.getInstance().displayImage(advertisementListData.getAdvertisementDatas().get(i).getIcon(), ivBanner,options);
+                ImageLoader.getInstance().displayImage(advertisementListData.getAdvertisementDatas().get(i).getIcon(), ivBanner, options);
                 final int finalI = i;
                 ivBanner.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -738,7 +747,7 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
                     mHandler.sendEmptyMessage(AD_BANNER_FALSE);
                 }
                 LogUtil.printPushLog("httpGet adsFindCarouselAll advertisementListData" + advertisementListData.toString());
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             return null;
