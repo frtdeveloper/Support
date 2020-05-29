@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.dfh.support.R;
+import com.dfh.support.SupportApplication;
 import com.dfh.support.activity.support.CallPhoneActivity;
 import com.dfh.support.activity.widget.LoadingProgressDialog;
 import com.dfh.support.compose.UmentBroadcastReceiver;
@@ -226,6 +227,10 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onDestroy() {
         LogUtil.printActivityLog("WebviewActivity::onDestroy======================");
+        if(!SupportApplication.isOpenMain){
+            Intent intent = new Intent(WebViewActivity.this, MainActivity.class);
+            startActivity(intent);
+        }
         // 清理缓存
         if (mWebView != null) {
             mWebView.loadUrl("about:blank");

@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
         PushAgent.getInstance(this).onAppStart();
+        SupportApplication.isOpenMain = true;
         initView();
         //showSupportFragment();
         showRecommendFragment();
@@ -86,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onDestroy() {
         super.onDestroy();
+        SupportApplication.isOpenMain = false;
         unregisterReceiver(mHttpReceiver);
     }
     private void initView() {

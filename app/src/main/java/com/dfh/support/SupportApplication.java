@@ -50,6 +50,7 @@ public class SupportApplication extends Application implements IUmengRegisterCal
     private double latitude = 0;
     private double longitude = 0;
     private String gpsCity = "";
+    public static boolean isOpenMain = false;
 
     private UmengNotificationClickHandler mUmengNotificationClickHandler = new UmengNotificationClickHandler() {
         @Override
@@ -57,10 +58,10 @@ public class SupportApplication extends Application implements IUmengRegisterCal
             //super.openActivity(context, uMessage);
             LogUtil.printPushLog("openActivity::json_a = " + uMessage.extra);
             String my_url = uMessage.extra.get("url");
-            String my_likes = uMessage.extra.get("link");
+            String my_likes = uMessage.extra.get("links");
             String my_browser = uMessage.extra.get("browses");
             String my_id = uMessage.extra.get("id");
-            WebViewActivity.openMySelf(SupportApplication.this, my_id, my_url, my_likes, my_browser);
+            WebViewActivity.openMySelf(SupportApplication.this, my_id, my_url, my_browser, my_likes);
         }
 
         @Override
@@ -74,12 +75,11 @@ public class SupportApplication extends Application implements IUmengRegisterCal
             //super.launchApp(context, uMessage);
             LogUtil.printPushLog("launchApp::json_a = " + uMessage.extra);
             String my_url = uMessage.extra.get("url");
-            String my_likes = uMessage.extra.get("link");
+            String my_likes = uMessage.extra.get("links");
             String my_browser = uMessage.extra.get("browses");
             String my_id = uMessage.extra.get("id");
-            WebViewActivity.openMySelf(SupportApplication.this, my_id, my_url, my_likes, my_browser);
+            WebViewActivity.openMySelf(SupportApplication.this, my_id, my_url, my_browser, my_likes);
         }
-
         @Override
         public void dealWithCustomAction(Context context, UMessage uMessage) {
             //super.dealWithCustomAction(context, uMessage);
