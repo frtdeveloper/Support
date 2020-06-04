@@ -34,13 +34,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <TextView
-                            android:id="@+id/tv_name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/ad_item_title_text"
-                            android:textSize="15sp"
-                            android:text="备件名称"/>
-                        <TextView
                             android:id="@+id/tv_value"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -48,6 +41,15 @@
                             android:textSize="15sp"
                             android:layout_alignParentRight="true"
                             android:text="￥99.99"/>
+                        <TextView
+                            android:id="@+id/tv_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_toLeftOf="@id/tv_value"
+                            android:textColor="@color/ad_item_title_text"
+                            android:textSize="15sp"
+                            android:layout_marginRight="5dp"
+                            android:text="备件名称"/>
                     </RelativeLayout>
                     <TextView
                         android:id="@+id/tv_content"

@@ -148,12 +148,13 @@ public class SparePartsListActivity extends AppCompatActivity implements View.On
     @Override
     public void onLoad() {
         pageNo = pageNo+1;
+        LogUtil.printPushLog("mHttpReceiver pageNo :" + pageNo);
         mHandler.sendEmptyMessage(GET_LIST_PD);
     }
     private PartsFindClassifyIdPagerTask mPartsFindClassifyIdPagerTask;
     private PartsListData partsListData;
     private String partsClassifyId = "";
-    private String pageSize = "20";
+    private String pageSize = "200";
     private int pageNo = 1;
 
     private class PartsFindClassifyIdPagerTask extends AsyncTask<String, Void, Void> {
