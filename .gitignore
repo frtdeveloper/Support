@@ -17,3 +17,5 @@ app/release/8848support-release.aab
 app/release/8848support-release.apk
 app/build.gradle
 *.apk
+.idea/jarRepositories.xml
+.idea/jarRepositories.xml

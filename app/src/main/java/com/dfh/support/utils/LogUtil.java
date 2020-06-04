@@ -175,7 +175,7 @@ public final class LogUtil {
                     bestLocation = l;
                 }
             }
-            printUtilLog("getBestLocal::Best local is " + bestLocation.getProvider());
+            printUtilLog("getBestLocal::Best local is " + ((null == bestLocation) ? "null" : bestLocation.getProvider()));
             return bestLocation;
         } else {
             printUtilLog("getBestLocal::Not Any providers here========================");
