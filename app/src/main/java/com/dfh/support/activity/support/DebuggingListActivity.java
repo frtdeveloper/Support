@@ -97,12 +97,16 @@ public class DebuggingListActivity extends AppCompatActivity implements View.OnC
         mLvDebuggingList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(DebuggingListActivity.this, DebuggingDetailActivity.class);
-                //intent.putExtra("title",mDebuggingList.get(i).getTitle());
+                try {
+                    Intent intent = new Intent(DebuggingListActivity.this, DebuggingDetailActivity.class);
+                    //intent.putExtra("title",mDebuggingList.get(i).getTitle());
                     intent.putExtra("title", mTitle);
-                intent.putExtra("id",mDebuggingList.get(i).getId());
-                //intent.putExtra("url",mDebuggingList.get(i).get());
-                startActivity(intent);
+                    intent.putExtra("id",mDebuggingList.get(i).getId());
+                    //intent.putExtra("url",mDebuggingList.get(i).get());
+                    startActivity(intent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
         mIvContactUs.setOnClickListener(this);
