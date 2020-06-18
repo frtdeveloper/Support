@@ -104,7 +104,8 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
                             int dlinks = Integer.parseInt(links)+1;
                             mWebView.loadUrl(topUrl+dlinks+endUrl);
                         }catch (Exception e){
-                            mWebView.loadUrl(baseUrl);
+                            if (null != mWebView)
+                                mWebView.loadUrl(baseUrl);
                             e.printStackTrace();
                         }
                     }
