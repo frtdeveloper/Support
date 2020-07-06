@@ -526,27 +526,29 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
 
         @Override
         protected Void doInBackground(String... params) {
-            mCity = SettingSharedPerferencesUtil.GetSearchCityValueConfig(getActivity());
-            if (mCityData != null && mCityData.getLatitude() != 0 && mCityData.getLongitude() != 0) {
-                hasLocation = true;
-                LogUtil.printPushLog("CityData mCityData:" + mCityData.toString());
-                if (!TextUtils.isEmpty(mCity)) {
-                    HttpJsonSend.servePager(getActivity(), mCity,
-                            String.valueOf(mCityData.getLatitude()), String.valueOf(mCityData.getLongitude()), pageSize,
-                            String.valueOf(pageNo), HttpJsonSend.SERVE_TYPE_BUYING, HttpJsonSend.COME_FROM_MAIN);
+            if(isAdded()){
+                mCity = SettingSharedPerferencesUtil.GetSearchCityValueConfig(getActivity());
+                if (mCityData != null && mCityData.getLatitude() != 0 && mCityData.getLongitude() != 0) {
+                    hasLocation = true;
+                    LogUtil.printPushLog("CityData mCityData:" + mCityData.toString());
+                    if (!TextUtils.isEmpty(mCity)) {
+                        HttpJsonSend.servePager(getActivity(), mCity,
+                                String.valueOf(mCityData.getLatitude()), String.valueOf(mCityData.getLongitude()), pageSize,
+                                String.valueOf(pageNo), HttpJsonSend.SERVE_TYPE_BUYING, HttpJsonSend.COME_FROM_MAIN);
+                    } else {
+                        HttpJsonSend.servePager(getActivity(), mCityData.getCityName(),
+                                String.valueOf(mCityData.getLatitude()), String.valueOf(mCityData.getLongitude())
+                                , pageSize, String.valueOf(pageNo), HttpJsonSend.SERVE_TYPE_BUYING, HttpJsonSend.COME_FROM_MAIN);
+                    }
                 } else {
-                    HttpJsonSend.servePager(getActivity(), mCityData.getCityName(),
-                            String.valueOf(mCityData.getLatitude()), String.valueOf(mCityData.getLongitude())
-                            , pageSize, String.valueOf(pageNo), HttpJsonSend.SERVE_TYPE_BUYING, HttpJsonSend.COME_FROM_MAIN);
+                    if (TextUtils.isEmpty(mCity))
+                        mCity = getResources().getString(R.string.common_default_city);
+                    hasLocation = false;
+                    LogUtil.printPushLog("CityData mCityData=null ");
+                    HttpJsonSend.servePager(getActivity(), mCity,
+                            "39.908692", "116.397477", pageSize,
+                            String.valueOf(pageNo), HttpJsonSend.SERVE_TYPE_BUYING, HttpJsonSend.COME_FROM_MAIN);
                 }
-            } else {
-                if (TextUtils.isEmpty(mCity))
-                    mCity = getResources().getString(R.string.common_default_city);
-                hasLocation = false;
-                LogUtil.printPushLog("CityData mCityData=null ");
-                HttpJsonSend.servePager(getActivity(), mCity,
-                        "39.908692", "116.397477", pageSize,
-                        String.valueOf(pageNo), HttpJsonSend.SERVE_TYPE_BUYING, HttpJsonSend.COME_FROM_MAIN);
             }
 
             return null;

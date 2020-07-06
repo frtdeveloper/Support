@@ -72,9 +72,13 @@ public class LoadingActivity extends AppCompatActivity{ //implements PermissionU
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         LogUtil.printActivityLog("onRequestPermissionsResult");
         if (PERMISSION_CODE == requestCode) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                login();
-            } else {
+            if(grantResults.length>0) {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    login();
+                } else {
+                    finish();
+                }
+            }else{
                 finish();
             }
         }

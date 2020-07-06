@@ -98,12 +98,14 @@ public class DebuggingListActivity extends AppCompatActivity implements View.OnC
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 try {
-                    Intent intent = new Intent(DebuggingListActivity.this, DebuggingDetailActivity.class);
+                    if (mDebuggingList.size()>i){
+                        Intent intent = new Intent(DebuggingListActivity.this, DebuggingDetailActivity.class);
                     //intent.putExtra("title",mDebuggingList.get(i).getTitle());
                     intent.putExtra("title", mTitle);
-                    intent.putExtra("id",mDebuggingList.get(i).getId());
+                    intent.putExtra("id", mDebuggingList.get(i).getId());
                     //intent.putExtra("url",mDebuggingList.get(i).get());
                     startActivity(intent);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
