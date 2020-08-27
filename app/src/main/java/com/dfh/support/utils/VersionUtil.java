@@ -5,9 +5,12 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 
-public class VersionUtil {
-    public static String getVersionName(Context context) {
+import java.lang.reflect.Method;
 
+public class VersionUtil {
+
+    public static final String SN_PRO = "gsm.scril.sn";
+    public static String getVersionName(Context context) {
         try {
             PackageManager packageManager = context.getPackageManager();
             PackageInfo packInfo;
@@ -30,5 +33,19 @@ public class VersionUtil {
             return false;
         }
         return true;
+    }
+
+    public static String getSnNumber(String input_property){
+        String result_sn = null;
+        try {
+            Class clazz = Class.forName("android.os.SystemProperties");
+            Method getter = clazz.getDeclaredMethod("get", String.class);
+            result_sn = (String) getter.invoke(null, input_property);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        LogUtil.printUtilLog("VersionUtil::getSnNumber::get_sn_reult= " + result_sn + " param= " + input_property);
+        return result_sn;
     }
 }

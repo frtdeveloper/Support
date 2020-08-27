@@ -9,6 +9,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.widget.Toast;
 
 import com.dfh.support.activity.WebViewActivity;
 import com.dfh.support.activity.support.ServiceListActivity;
@@ -17,6 +18,7 @@ import com.dfh.support.http.HttpJsonSend;
 import com.dfh.support.utils.LogUtil;
 import com.dfh.support.utils.ScreenUtils;
 import com.dfh.support.utils.ToastUtils;
+import com.dfh.support.utils.VersionUtil;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -101,7 +103,8 @@ public class SupportApplication extends Application implements IUmengRegisterCal
         mPushAgent.setNotificationClickHandler(mUmengNotificationClickHandler);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         ScreenUtils.init(this);
-
+        String current_sn = VersionUtil.getSnNumber(VersionUtil.SN_PRO);
+        Toast.makeText(this, (" sn= " + current_sn), Toast.LENGTH_LONG).show();
     }
 
     private void initImageLoader(Context context) {
